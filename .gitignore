@@ -1,0 +1,19 @@
+# Claude Code: machine-local settings stay local; the rest of .claude/ is committed
+.claude/settings.local.json
+
+# Dependencies & build output
+node_modules/
+dist/
+coverage/
+target/
+*.tsbuildinfo
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+
+# Env
+.env
+.env.*

@@ -1,0 +1,45 @@
+# FretSense Threat Model
+
+Status: initial draft (constitution v2.0.0, Principle IX). Owner: project owner. Reviewed by:
+`privacy-auditor` and `security-reviewer`. Update this file whenever a feature adds a network
+call, stored media, a new permission or a new trust boundary.
+
+## Assets
+
+| Asset | Sensitivity | Where it lives |
+|-------|-------------|----------------|
+| Live camera frames | High (images of the owner and their home) | Memory only (workers) [008+] |
+| Live microphone audio | High | Memory only (AudioWorklet / native callback) [015+] |
+| Device preferences and calibration values | Low | IndexedDB [015] |
+| Derived signals (hand landmarks, pitch tracks, technique events) | Medium (behavioural/biometric) | Memory; persisted only as aggregate scores unless the owner opts in |
+| Opt-in recordings and labels | High | IndexedDB/OPFS on the device; `data/` by reference [007] |
+| Progress, mastery and settings | Low–medium | IndexedDB [001, 006] |
+| Sync account and tokens | High | Backend + secure storage on the client [013] |
+| Model artefacts | Low (integrity matters) | Static assets, checksummed [009+] |
+
+## Trust boundaries
+
+1. Browser sandbox ↔ device sensors (permission prompts).
+2. Main thread ↔ workers/worklets (same origin; SharedArrayBuffer needs COOP/COEP).
+3. Client ↔ static host (Vercel): code and model integrity.
+4. Client ↔ sync backend (opt-in only) [013].
+5. Owner's machine ↔ `ml/` training environment (local; datasets by reference).
+
+## Threats (STRIDE) and controls
+
+| # | Threat | Category | Control | Feature |
+|---|--------|----------|---------|---------|
+| T1 | Camera or mic data leaves the device through telemetry, error reports or third-party scripts | Info disclosure | No third-party scripts; strict CSP `connect-src` allowlist; error tracking scrubs payloads and is opt-in; privacy-auditor gate | all |
+| T2 | Recording without the owner knowing | Info disclosure | Permission requested only when a feature is used; visible recording indicator; per-recording opt-in | 007, 008+ |
+| T3 | A malicious lesson, chord sheet or progress import (XSS, prototype pollution, DoS) | Tampering / EoP | Schema validation with size limits; markdown rendered without raw HTML; parser fuzz/property tests | 001, 005 |
+| T4 | A tampered model or WASM artefact | Tampering | Hash-pinned artefacts in the registry manifest; SRI where possible; served same-origin | 002, 009 |
+| T5 | Leakage of dataset contributions or withdrawn consent | Info disclosure | Revocable consent record; deletion propagates; metadata stripped | 007, 013 |
+| T6 | Account takeover or IDOR on the sync API | Spoofing / EoP | OAuth/OIDC + short-lived JWT; per-user authorization on every route; rate limiting | 013 |
+| T7 | Supply-chain compromise | Tampering | Lockfiles, Dependabot/audit in CI, Actions pinned by SHA, minimal Docker images | all |
+| T8 | Secrets committed | Info disclosure | `.env` gitignored; secret scanning in CI; scoped CI secrets | all |
+| T9 | Mic left live in the background or without the user knowing | Info disclosure | Streams opened only by features that need them and stopped when they're done; always-visible "listening" indicator; privacy-auditor stream-lifetime tests | 015 |
+| T10 | Cross-origin isolation (COOP/COEP) misconfigured, which breaks isolation or blocks shared memory | Tampering / DoS | Headers set on the deploy target and tested in CI; message-passing fallback | 015 |
+| T11 | Native desktop app (Tauri) supply chain or IPC abuse | Tampering / EoP | Signed installers; minimal IPC allowlist; pinned Rust crates; `cargo audit`; security-reviewer gate | 015 |
+
+## Out of scope (for now)
+Physical access to an unlocked device, and compromise of the browser itself.
