@@ -63,14 +63,14 @@ highest authority. If this file disagrees with it, the constitution wins and thi
 | # | Step | Output | Gate before the next step |
 |---|------|--------|---------------------------|
 | 0 | `/speckit-constitution` | `.specify/memory/constitution.md` | Owner approval + ADR + version bump |
-| 1 | `/speckit-specify` | `specs/NNN-*/spec.md`, `checklists/requirements.md` | **spec-reviewer** |
-| 2 | `/speckit-clarify` | `## Clarifications` in the spec | **spec-reviewer** has no BLOCKERs + owner approves the spec |
+| 1 | `/speckit-specify` | `specs/NNN-*/spec.md`, `checklists/requirements.md` | **spec-reviewer**; team loop A (**product-owner** review → **user-tester** Mode A → **product-owner** triage) |
+| 2 | `/speckit-clarify` | `## Clarifications` in the spec | **product-owner** proposes answers, the owner answers every NEEDS MAHMOUD item; **spec-reviewer** has no BLOCKERs; **product-owner** verdict APPROVE + owner approves the spec |
 | 3 | `/speckit-plan` | `plan.md`, `research.md`, `data-model.md`, `contracts/`, `quickstart.md` | **architecture-reviewer**; ADRs written; **privacy-auditor** if camera/mic/network is involved; **security-reviewer** if auth/input/backend is involved; owner approves |
 | 4 | `/speckit-checklist` | `checklists/*.md` | Items resolved or explicitly deferred |
 | 5 | `/speckit-tasks` | `tasks.md` (test-first, `[P]`, FR tags, gate tags) | — |
 | 6 | `/speckit-analyze` | Consistency report | No CRITICAL or HIGH findings; owner approves |
-| 7 | `/speckit-implement` | One task at a time | Per task: **test-writer** (red) → owner OK → implement → green → **code-reviewer**, plus by area: **theory-checker** (theory/fingering), **perf-auditor** (DSP/vision/inference/hot paths), **ml-evaluator** (models/exports), **dataset-curator** (data/), **privacy-auditor** (media/network), **security-reviewer** (auth/input/deps/CI), **architecture-reviewer** (new modules or deps) |
-| 8 | `/speckit-converge` | Remaining work added to `tasks.md` | **code-reviewer** on the full diff + the relevant area gates; **docs-keeper** syncs the docs |
+| 7 | `/speckit-implement` | One task at a time | Per task: **test-writer** (red) → owner OK → implement → green → **code-reviewer**, plus by area: **theory-checker** (theory/fingering), **perf-auditor** (DSP/vision/inference/hot paths), **ml-evaluator** (models/exports), **dataset-curator** (data/), **privacy-auditor** (media/network), **security-reviewer** (auth/input/deps/CI), **architecture-reviewer** (new modules or deps). After each user-facing task group: team loop B (**user-tester** Mode B → **product-owner** triage) |
+| 8 | `/speckit-converge` | Remaining work added to `tasks.md` | **code-reviewer** on the full diff + the relevant area gates; **docs-keeper** syncs the docs; team loop B before a release |
 
 ### Subagents (`.claude/agents/`)
 
@@ -87,9 +87,48 @@ highest authority. If this file disagrees with it, the constitution wins and thi
 | `privacy-auditor` | read-only | camera, mic, recording, storage, telemetry, network, sync; confirms the mic and camera are active only when needed, with a visible "listening" / "camera on" indicator |
 | `security-reviewer` | read-only | auth, input parsing, secrets, dependencies, CI/CD, Docker |
 | `docs-keeper` | **`README.md` and `docs/` only** | after plan, tasks and converge; keeps SKILLS-MATRIX, roadmap and ADR index in sync |
+| `product-owner` | read-only | the owner's stand-in on WHAT and WHY: reviews every new or changed spec (APPROVE / REVISE / REJECT), proposes `/speckit-clarify` answers, triages user-tester feedback; APPROVE required before `/speckit-plan`; never writes code |
+| `user-tester` | read-only + **`docs/feedback/` only** | simulated personas: Mode A (spec walkthrough) after every specify or spec change; Mode B (hands-on) after each user-facing task group or release |
 
-Subagents report findings. Only the three writers (test-writer, dataset-curator, docs-keeper)
-change files, and only inside their scope. The owner decides what to act on.
+Subagents report findings. Only the four writers (test-writer, dataset-curator, docs-keeper,
+user-tester) change files, and only inside their scope. The owner decides what to act on.
+**product-owner decisions are proposals**: the owner has final approval on all of them.
+
+## Team loop (product-owner + user-tester; always follow)
+
+Claude runs these loops itself and applies only what the loop allows. Nothing here replaces an
+owner approval in the workflow table.
+
+**A. After every `/speckit-specify` or spec change**
+1. **product-owner** reviews the spec.
+2. **user-tester** runs Mode A (spec walkthrough) and writes its report to `docs/feedback/`.
+3. **product-owner** triages that report into fix now / backlog / won't do.
+4. Claude applies product-owner's exact edits and "fix now" items to the spec (spec text only),
+   then reports them to the owner. Anything marked NEEDS MAHMOUD is not applied; it waits.
+
+**B. At `/speckit-clarify`**
+1. **product-owner** proposes an answer to every question (Decision / Why / Confidence).
+2. Claude shows the owner **all** proposed answers and **waits**. Nothing is written into the
+   spec until the owner responds.
+3. The owner answers every **NEEDS MAHMOUD** item personally. Claude never fills one in, never
+   picks a default for one, and never lets product-owner's proposal stand in for it.
+
+**C. At spec approval**
+- **product-owner** must return **APPROVE** before `/speckit-plan`. REVISE or REJECT sends the
+  spec back through loop A. The owner's own approval is still required as well.
+
+**D. After each user-facing task group or release**
+1. **user-tester** runs Mode B (hands-on test) and writes its report to `docs/feedback/`.
+2. **product-owner** sorts the feedback into **fix now / backlog / won't do**.
+3. Each "fix now" item becomes a **spec change request** (FR wording + acceptance criteria) for
+   the owner. **No code changes** until the owner approves it; an approved change then goes
+   through the normal spec → tasks → implement flow. Backlog items are listed with their
+   suggested spec number; won't-do items keep their reason.
+
+**After every loop**, give the owner a short summary:
+- **Decisions:** what product-owner decided or proposed, and what was applied.
+- **Feedback:** the user-tester report path, star rating and top findings by severity.
+- **Needs your approval:** every NEEDS MAHMOUD item, change request and unapproved verdict.
 
 ## Commands
 
@@ -153,7 +192,7 @@ FretSense/
 ├── data/                             # dataset manifests, splits and cards (media by reference) [007+]
 ├── fixtures/                         # theory JSON, golden audio/video clips
 ├── bench/                            # latency/accuracy/fps harnesses + baselines
-├── docs/{adr/,AI-WORKFLOW.md,SKILLS-MATRIX.md,THREAT-MODEL.md,ARCHITECTURE.md}
+├── docs/{adr/,feedback/,AI-WORKFLOW.md,SKILLS-MATRIX.md,THREAT-MODEL.md,ARCHITECTURE.md}
 └── .github/workflows/
 ```
 

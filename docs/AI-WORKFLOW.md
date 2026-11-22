@@ -28,9 +28,18 @@ These are summarised from [the constitution](../.specify/memory/constitution.md)
 flowchart LR
     C[constitution] --> S[specify]
     S --> SR{{spec-reviewer}}
-    SR --> CL[clarify]
-    CL --> SR2{{spec-reviewer<br/>no BLOCKERs}}
-    SR2 --> P[plan]
+    SR --> LA
+
+    subgraph LA [team loop A: after every specify or spec change]
+      direction LR
+      PO1{{product-owner<br/>review}} --> UTA{{user-tester<br/>Mode A walkthrough}} --> PO2{{product-owner<br/>triage}} --> ED[apply spec edits]
+    end
+
+    LA --> CL[clarify]
+    CL --> PO3{{product-owner<br/>proposes answers}} --> OWN[owner answers<br/>NEEDS MAHMOUD]
+    OWN --> SR2{{spec-reviewer<br/>no BLOCKERs}}
+    SR2 --> PO4{{product-owner<br/>APPROVE}} --> P[plan]
+    PO4 -.REVISE/REJECT.-> LA
     P --> AR{{architecture-reviewer}}
     P -.camera/mic/network.-> PA{{privacy-auditor}}
     P -.auth/input/backend.-> SE{{security-reviewer}}
@@ -48,17 +57,33 @@ flowchart LR
       CR -.auth/deps/CI.-> SE2{{security-reviewer}}
     end
 
+    IMPL -.user-facing task group.-> LB
+
+    subgraph LB [team loop B: after each user-facing task group or release]
+      direction LR
+      UTB{{user-tester<br/>Mode B hands-on}} --> PO5{{product-owner<br/>fix now / backlog / won't do}} --> CRQ[spec change requests<br/>owner approves before code]
+    end
+
+    LB -.approved change.-> S
     IMPL --> CV[converge] --> DK{{docs-keeper}} --> PR[PR + AI involvement]
 ```
+
+The two team loops add a product view to the technical gates. **product-owner** is a stand-in
+for me on *what* to build and *why*: its decisions are proposals, and anything it marks
+**NEEDS MAHMOUD** is answered by me, never by an agent. **user-tester** plays five personas
+(beginner guitarist, intermediate bassist, self-taught book learner, recruiter with no guitar,
+accessibility user) and writes its reports to [`docs/feedback/`](feedback/). Feedback never turns
+into code directly: a "fix now" item becomes a spec change request that I approve first.
 
 | Step | Skill | Gated by | What gets checked |
 |------|-------|----------|-------------------|
 | Principles | `/speckit-constitution` | Owner + ADR | Non-negotiable rules, version bump |
-| Requirements | `/speckit-specify`, `/speckit-clarify` | **spec-reviewer** + owner | Testable, measurable, per instrument, no conflicts |
+| Requirements | `/speckit-specify`, `/speckit-clarify` | **spec-reviewer**, **product-owner** (APPROVE), **user-tester** (Mode A) + owner | Testable, measurable, per instrument, no conflicts; real user value, scope, personalisation, works gear-free |
 | Design | `/speckit-plan` | **architecture-reviewer**, **privacy-auditor**, **security-reviewer**, ADRs | Layering, alternatives, data flows, threat model |
 | Requirement quality | `/speckit-checklist` | Owner | Domain checklists (theory, UX/a11y, performance, ML, privacy) |
 | Work breakdown | `/speckit-tasks`, `/speckit-analyze` | Owner | Every task → FR, every FR → test or eval, no CRITICAL/HIGH findings |
 | Build | `/speckit-implement` | **test-writer** → **code-reviewer** + area gates | Red/green, spec drift, ownership, correctness, regressions |
+| Usability | after each user-facing task group or release | **user-tester** (Mode B) → **product-owner** triage → owner | Persona flows, first impression, demo mode, guitar/bass parity, accessibility; "fix now" → spec change request |
 | Close-out | `/speckit-converge` | **code-reviewer**, area gates, **docs-keeper** | Nothing unbuilt; docs and skills matrix in sync |
 
 ### Subagent roles
@@ -76,6 +101,8 @@ flowchart LR
 | [`privacy-auditor`](../.claude/agents/privacy-auditor.md) | Read-only | No camera or mic data leaves the device without opt-in |
 | [`security-reviewer`](../.claude/agents/security-reviewer.md) | Read-only | Auth, input validation, secrets, supply chain |
 | [`docs-keeper`](../.claude/agents/docs-keeper.md) | `README.md` and `docs/` only | Keeps the README, skills matrix, ADR index and diagrams in sync |
+| [`product-owner`](../.claude/agents/product-owner.md) | Read-only | My stand-in on WHAT and WHY: reviews specs (APPROVE / REVISE / REJECT), proposes clarify answers, triages feedback; flags NEEDS MAHMOUD; never writes code |
+| [`user-tester`](../.claude/agents/user-tester.md) | Read-only + `docs/feedback/` only | Five simulated personas; Mode A spec walkthroughs, Mode B hands-on tests |
 
 ## 3. Roadmap: one spec per feature
 

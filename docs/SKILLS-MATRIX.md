@@ -117,3 +117,9 @@ personalised for every user (ADR-0006).
 | Dependency scanning, secrets handling | CI → security-reviewer | Planned |
 | WCAG 2.2 AA, keyboard, screen readers, colour-blind-safe fretboard | → 001 FR-013, FR-047–FR-049 | Specified |
 | ADRs, C4 architecture doc, API reference, contributing guide | `docs/adr/` (0001–0005), `docs/ARCHITECTURE.md` (planned at 001 plan) | ADRs drafted |
+
+## AI-assisted engineering process
+
+| Skill | Where | Why | How tested / evidenced | Status |
+|-------|-------|-----|------------------------|--------|
+| Multi-agent orchestration: role-scoped subagents with least-privilege tools, sequenced as gates and feedback loops | `.claude/agents/` (13 agents), `CLAUDE.md` workflow table + "Team loop", `docs/AI-WORKFLOW.md` §2 | Catch spec, design, privacy and usability problems before code, while every decision stays with the owner | Gate verdicts recorded in each PR; caught mistakes logged in `docs/AI-WORKFLOW.md` §5; persona reports in `docs/feedback/` | Process defined; no team-loop run yet |
