@@ -1,6 +1,7 @@
 # 0001. Constitution v2.0.0: Scope Expansion to Bass, Vision, ML and Engineering Showcase
 
-- Status: Proposed (pending owner approval in the clarify batch of 2026-11-21)
+- Status: Proposed (pending owner approval). Its "book part → lesson track" mapping is replaced by
+  curriculum packs in ADR-0006.
 - Date: 2026-11-21
 - Deciders: owner
 - Related: `.specify/memory/constitution.md`, ADR-0002, ADR-0003, specs 001, 006–013

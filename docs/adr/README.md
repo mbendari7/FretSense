@@ -17,7 +17,12 @@ more than one package, it adds a dependency, or it trades off accuracy, latency 
 | [0002](0002-per-instrument-latency-budgets.md) | Per-instrument latency budgets (onset ≤ 30 ms; pitch 50/80/90 ms) | Proposed | 2026-11-21 |
 | [0003](0003-instrument-profile-abstraction.md) | InstrumentProfile as the single source of instrument geometry | Proposed | 2026-11-21 |
 | [0004](0004-constitution-v2-1-audio-io-and-git-governance.md) | Constitution v2.1.0: audio I/O ownership, single-performer leakage rule, device indicators, no AI authorship | Proposed | 2026-11-21 |
-| [0005](0005-audio-backend-webaudio-vs-native.md) | AudioBackend: WebAudio (default) vs native Tauri + Rust/cpal | Proposed (measurements pending) | 2026-11-21 |
+| [0005](0005-audio-backend-webaudio-vs-native.md) | AudioBackend: WebAudio (default) vs native Tauri + Rust/cpal | Proposed (native = stretch goal) | 2026-11-21 |
+| [0006](0006-personalised-unlocked-curriculum.md) | Constitution v2.2.0: personalised for every user, no locked content, curriculum packs | Proposed | 2026-11-21 |
+| [0007](0007-web-stack-and-workspace.md) | Workspace, web stack and test toolchain (001) | Proposed | 2026-11-21 |
+| [0008](0008-local-persistence-and-sync-ready-records.md) | Local persistence and sync-ready records (IndexedDB, UUID + HLC, tombstones, geometry ids) | Proposed | 2026-11-21 |
+| [0009](0009-content-pipeline.md) | Content pipeline: lessons, curriculum packs, tags | Proposed | 2026-11-21 |
+| [0010](0010-svg-fretboard.md) | SVG fretboard rendering | Proposed | 2026-11-21 |
 
 ## Template
 

@@ -8,7 +8,7 @@
 
 **Input**: User description: "Picking or strumming hand: strum direction, pick vs fingerstyle, and which string is being picked. Posture and technique: wrist angle, thumb position and tension cues, using pose estimation. Technique events from video: bends, slides, hammer-ons, pull-offs, vibrato and palm muting, detected with a temporal model over landmark sequences. Robustness: lighting, camera angle, left-handed players, guitar vs bass neck geometry."
 
-**Practice-session value**: the owner gets feedback a mirror can't give: "you're strumming all
+**Practice-session value**: the user gets feedback a mirror can't give: "you're strumming all
 downstrokes", "your wrist is bent sharply", "that was a slide, not a hammer-on". It also adds
 technique scores over time to the dashboard (006).
 

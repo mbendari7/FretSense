@@ -6,8 +6,9 @@
 > requirement exists in an approved or draft spec. Paths are the target layout from `CLAUDE.md` and
 > don't exist until their tasks land. Kept in sync by the `docs-keeper` subagent.
 
-Status as of 2026-11-21: **no code yet**. Specs exist for 001, 006, 007, 008 and 015 (reviewed;
-clarify pending) and 009–013 (specify-only drafts).
+Status as of 2026-11-21: **no code yet**. 001 is in planning. 006, 007, 008, 015 and 016 are
+specified and reviewed, and 009–013 are specify-only drafts. Constitution v2.2.0 makes the app
+personalised for every user (ADR-0006).
 
 ## Data structures and algorithms
 
@@ -66,6 +67,25 @@ clarify pending) and 009–013 (specify-only drafts).
 | Markerless keypoint model | → 008 FR-019–FR-021 | No stickers | Markerless held-out set vs classical baseline and v1 (008 FR-020) | Specified |
 | Picking hand, posture, technique events | → 011 | Technique feedback | Event F1 vs rules baseline (011 SC-002) | Specified (draft) |
 | A/V clock-offset calibration (human-owned estimator) | `packages/audio-io` → 015 FR-015 | Align audio and video events for fusion | Synthetic ±5 ms, hardware ±10 ms (015 SC-008) | Specified |
+
+## User modelling, personalisation and configurable architecture
+
+| Skill | Where | Why | How tested | Status |
+|-------|-------|-----|------------|--------|
+| Learner model: miss-count weighting with an off switch | `packages/learner` or `apps/web/application` → 001 FR-041, FR-067 | Weak-spot drills, user-controllable | Seeded distribution tests (001 US7-1, US7-5) | Specified |
+| Knowledge tracing with user-adjustable mastery | `packages/learner` → 006 FR-004–FR-010 | Recommend, never lock | Fixed-default SCs, gate (006 SC-002–SC-004) | Specified |
+| Goal-driven path generation (rule-based) | → 016 FR-010–FR-013 | Personal starting point from onboarding | 30+ answer-set fixtures, determinism (016 SC-003) | Specified |
+| Configurable architecture: content and behaviour as data (packs, paths, stage order, gear presets) | `content/packs`, → 001 FR-063–FR-064, 016 FR-005–FR-014 | Personalisation without code changes (Constitution XIII) | Schema validation fixtures, "no lock" crawl (001 SC-012) | Specified |
+| Instrument geometry as a value with a deterministic id | `packages/theory` → 001 FR-051, FR-053 | Any instrument; stats never mix tunings | Property tests over 100+ random instruments (001 SC-011) | Specified |
+
+## Schema design and data modelling
+
+| Skill | Where | Why | How tested | Status |
+|-------|-------|-----|------------|--------|
+| Sync-ready local schema (global ids, timestamps, schema versions, tombstones) | `apps/web/infrastructure` → 001 FR-066, 016 FR-019 | Later sync with no migration (013) | Schema check over all stores (001 SC-013) | Specified |
+| Pure, convergent merge function (restore vs LWW, immutable attempts) | → 001 FR-066a, 016 FR-004, FR-012 | Restore, copy, future sync | Property tests: convergence, no id collisions (001 SC-013, 016 SC-005) | Specified |
+| Versioned, validated file formats (lessons, packs, profile export) with migrations | → 001 FR-023, FR-043, FR-063, 016 FR-004, FR-014 | Untrusted imports, old exports | Malformed and oversized fixture rejection (016 SC-006), migration tests | Specified |
+| Order keys for user-reorderable lists | → 016 FR-012 | Drag-reorder that merges deterministically | Merge property tests (016 SC-005) | Specified (scheme in 016 plan) |
 
 ## Backend and databases
 

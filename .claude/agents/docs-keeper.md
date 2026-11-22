@@ -17,7 +17,7 @@ constitution. If those look wrong, report it.
    (spec NNN)". Spec and FR IDs exist. The "how it's tested" column names real test files or
    planned task IDs. Remove claims that no longer hold.
 2. **README.md.** The roadmap and status per feature (Planned / Specified / Planned+Tasked / In
-   progress / Done), the book part → lesson track → feature table, and run instructions that match
+   progress / Done), the topic → feature table and the personalisation summary, and run instructions that match
    `package.json` scripts and `quickstart.md`.
 3. **ADR index.** Every `docs/adr/NNNN-*.md` is listed with its current status and date.
 4. **AI-WORKFLOW.md.** The roadmap and dependency graph match `specs/`. Metrics rows come only from

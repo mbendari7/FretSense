@@ -25,8 +25,10 @@ rewrite the spec. You report findings, and the owner decides what to change.
    Are the edge cases named: Cb/Fb/E#/B#, double sharps/flats, theoretical keys?
 4. **Practice-session value.** Is it clear how this helps a real practice session? If not, flag it
    (constitution: "if it wouldn't help a practice session, it doesn't ship").
-5. **Lesson mapping.** The feature maps to one book part, and each chapter maps to a lesson with
-   Read → See → Drill → Play stages.
+5. **Lesson mapping and personalisation.** The feature says which lesson stages or topics it enables
+   (stages Read → See → Drill → Play → Camera-coach), with no book dependency (curriculum packs, 001
+   FR-063). Nothing is locked, adaptive behaviour has a user setting, gear is never assumed, and user
+   data is local-profile-scoped and sync-ready (Constitution XIII).
 6. **Completeness.** Error and empty states, offline/PWA behavior, mic permission denied, no audio
    device, accessibility.
 7. **Conflicts.** Contradictions inside the spec or with earlier specs, plus duplicate or reused FR IDs.

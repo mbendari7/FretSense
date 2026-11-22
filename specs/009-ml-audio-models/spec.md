@@ -8,7 +8,7 @@
 
 **Input**: User description: "Audio models: polyphonic note transcription and chord classification (a small CNN on CQT or log-mel features), compared against the DSP baselines (YIN, chromagram templates). Export to ONNX, quantize to int8, benchmark size, speed and accuracy before vs after. Run in the browser with onnxruntime-web (WebGPU with a WASM fallback)."
 
-**Practice-session value**: the owner strums a chord or plays a double-stop, and the app recognises
+**Practice-session value**: the user strums a chord or plays a double-stop, and the app recognises
 *what* sounded more reliably than the DSP baselines, including on bass and in a noisy room. Chord
 drills, play-along (003) and transcription (012) all get more trustworthy feedback.
 
@@ -80,7 +80,7 @@ compare against the committed numbers.
 
 ### User Story 4 - Detector Selection (Priority: P2)
 
-The owner can switch between the DSP and ML detectors per task in settings, and see each
+The user can switch between the DSP and ML detectors per task in settings, and see each
 detector's measured accuracy and latency from the latest evaluation.
 
 **Why this priority**: Graceful degradation, and honest comparison in the product itself.
@@ -90,7 +90,7 @@ change source, with no errors or dropped frames.
 
 **Acceptance Scenarios**:
 
-1. **Given** an ML model loaded, **When** the owner selects the DSP detector, **Then** it switches
+1. **Given** an ML model loaded, **When** the user selects the DSP detector, **Then** it switches
    within 1 s without interrupting the session.
 
 ---

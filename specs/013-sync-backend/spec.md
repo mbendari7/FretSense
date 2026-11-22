@@ -4,11 +4,13 @@
 
 **Created**: 2026-11-21
 
-**Status**: Draft (specify only; clarify/plan pending; scope this term is in Clarifications)
+**Status**: Draft (specify only). **Out of scope this term** (owner, 2026-11-21). Until then, 001 FR-066 and
+016 FR-019 keep every client record sync-ready (stable global ids, timestamps, schema versions,
+tombstones), so this feature adds no client migration. (specify only; clarify/plan pending; scope this term is in Clarifications)
 
 **Input**: User description: "Backend and databases (optional sync, the app stays offline-first): a FastAPI service with PostgreSQL for opt-in progress sync and dataset contributions, SQL migrations, indexes, auth (OAuth or JWT), rate limiting and an OpenAPI contract. IndexedDB on the client."
 
-**Practice-session value**: the owner practises on a phone in the music room and a laptop at the
+**Practice-session value**: the user practises on a phone in the music room and a laptop at the
 desk. Opt-in sync keeps progress, mastery and plans consistent across devices, without making any
 feature depend on the network.
 
@@ -19,7 +21,7 @@ feature depend on the network.
 
 ### User Story 1 - Opt-In Account and Device Linking (Priority: P1)
 
-The owner explicitly opts in, signs in with an external identity provider, and links devices.
+The user explicitly opts in, signs in with an external identity provider, and links devices.
 Without opt-in, the app makes no backend calls.
 
 **Why this priority**: Constitution VI and IX. Sync must be invisible unless chosen.
@@ -30,9 +32,9 @@ Then opt in, sign in, link a second device, and sign out.
 **Acceptance Scenarios**:
 
 1. **Given** sync is off, **Then** there are no network requests to the backend.
-2. **Given** the owner opts in, **When** they sign in, **Then** a session is established with
+2. **Given** the user opts in, **When** they sign in, **Then** a session is established with
    short-lived tokens, and the device is listed under the account.
-3. **Given** the owner deletes the account, **Then** all server-side data is deleted within 24 h,
+3. **Given** the user deletes the account, **Then** all server-side data is deleted within 24 h,
    and local data remains.
 
 ---
@@ -51,8 +53,9 @@ the identical state.
 
 1. **Given** concurrent offline attempts on two devices, **When** both sync, **Then** both devices
    hold the union of attempts, with no duplicates and identical derived mastery.
-2. **Given** a conflicting settings change, **Then** last-writer-wins applies per field, by server
-   receive time, and the overwritten value is visible in the sync log.
+2. **Given** a conflicting settings change, **Then** last-writer-wins applies per field, by each field's
+   hybrid-logical-clock `updated` (001 FR-066a; never server receive time), and the overwritten value
+   is visible in the sync log.
 
 ---
 
@@ -93,7 +96,7 @@ propagation to dataset builds.
 - **FR-003**: The API MUST be defined by a versioned OpenAPI contract. Client and server MUST pass
   contract tests against it.
 - **FR-004**: Sync MUST be incremental (cursor-based) and idempotent. It merges attempts by id,
-  lesson completion as a union, and settings per field with last-writer-wins and a sync log.
+  lesson completion as a union, and settings per field with last-writer-wins on the per-field HLC (001 FR-066a) and a sync log.
 - **FR-005**: The database schema MUST be managed by versioned, reversible migrations, with indexes
   justified by the documented query patterns.
 - **FR-006**: Rate limiting MUST apply per user and per IP, with documented limits and standard
@@ -129,5 +132,6 @@ propagation to dataset builds.
 
 ## Assumptions
 
-- Single owner initially. Multi-user is supported by design but not a goal.
+- One account per user; each local profile (016) can be linked to at most one account. Several
+  users are supported by design.
 - Hosting choice and cost limits are decided at plan time via ADR.

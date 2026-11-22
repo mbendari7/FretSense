@@ -1,6 +1,6 @@
 # FretSense Threat Model
 
-Status: initial draft (constitution v2.0.0, Principle IX). Owner: project owner. Reviewed by:
+Status: initial draft (constitution v2.2.0, Principles IX and XIII). Owner: project owner. Reviewed by:
 `privacy-auditor` and `security-reviewer`. Update this file whenever a feature adds a network
 call, stored media, a new permission or a new trust boundary.
 
@@ -13,15 +13,21 @@ call, stored media, a new permission or a new trust boundary.
 | Device preferences and calibration values | Low | IndexedDB [015] |
 | Derived signals (hand landmarks, pitch tracks, technique events) | Medium (behavioural/biometric) | Memory; persisted only as aggregate scores unless the owner opts in |
 | Opt-in recordings and labels | High | IndexedDB/OPFS on the device; `data/` by reference [007] |
-| Progress, mastery and settings | Low–medium | IndexedDB [001, 006] |
+| Progress, mastery and settings | Low–medium | IndexedDB, per local profile [001, 006, 016] |
+| Local profiles, My Gear, onboarding answers, paths, packs | Low–medium (goals and gear are personal) | IndexedDB, per local profile [001, 016] |
+| Active-learning corrections | Medium | On the device, per profile; shared only by explicit export [007] |
 | Sync account and tokens | High | Backend + secure storage on the client [013] |
+| Profile export files | Low–medium (unencrypted; leave the browser sandbox) | User's filesystem, user-controlled [001, 016] |
+| HLC writer ids | Low (random per profile per device; not a device identifier) | Inside every record's timestamps [001] |
 | Model artefacts | Low (integrity matters) | Static assets, checksummed [009+] |
 
 ## Trust boundaries
 
 1. Browser sandbox ↔ device sensors (permission prompts).
 2. Main thread ↔ workers/worklets (same origin; SharedArrayBuffer needs COOP/COEP).
-3. Client ↔ static host (Vercel): code and model integrity.
+3. Client ↔ static host (host chosen in a later ADR): code and model integrity.
+6. Browser sandbox ↔ local filesystem (profile export/import, user-supplied files) [001, 016].
+7. Build toolchain ↔ content (owner-authored markdown and YAML processed in CI) [001].
 4. Client ↔ sync backend (opt-in only) [013].
 5. Owner's machine ↔ `ml/` training environment (local; datasets by reference).
 
@@ -39,7 +45,13 @@ call, stored media, a new permission or a new trust boundary.
 | T8 | Secrets committed | Info disclosure | `.env` gitignored; secret scanning in CI; scoped CI secrets | all |
 | T9 | Mic left live in the background or without the user knowing | Info disclosure | Streams opened only by features that need them and stopped when they're done; always-visible "listening" indicator; privacy-auditor stream-lifetime tests | 015 |
 | T10 | Cross-origin isolation (COOP/COEP) misconfigured, which breaks isolation or blocks shared memory | Tampering / DoS | Headers set on the deploy target and tested in CI; message-passing fallback | 015 |
-| T11 | Native desktop app (Tauri) supply chain or IPC abuse | Tampering / EoP | Signed installers; minimal IPC allowlist; pinned Rust crates; `cargo audit`; security-reviewer gate | 015 |
+| T11 | Native desktop app (Tauri) supply chain or IPC abuse | Tampering / EoP | Signed installers; minimal IPC allowlist; pinned Rust crates; `cargo audit`; security-reviewer gate | 015 (stretch) |
+| T12 | One local profile reads another's data on a shared device, or an export file is left on a shared device | Info disclosure | Accepted risk: profiles are not a security boundary, and the UI says so; the export screen lists the contents and says the file is unencrypted (001 FR-043); reset says it hides rather than erases (001 FR-044); strict profile scoping prevents accidental mixing (016 SC-001) | 001, 016 |
+| T13 | A malicious curriculum pack or profile import (XSS, oversize, prototype pollution) | Tampering / DoS | Strict schema validation, size checked before reading, depth pre-scan, array caps, prototype-key rejection, Map lookups, plain-text rendering, fuzz tests | 001, 016 |
+| T14 | A crafted or corrupt import causes data loss or HLC poisoning (far-future timestamps) | Tampering | HLC future bound (24 h); local clock never advances past it; preview + confirm with "hidden" counts; whole-file rejection; one transaction | 001 |
+| T15 | Clickjacking or framing of reset/import | Tampering | `frame-ancestors 'none'` header; destructive actions hidden when framed | 001 |
+| T16 | A compromised or stale service worker keeps a bad build alive | Tampering | Prompt-to-reload updates; `navigateFallbackDenylist`; bundled Workbox; same-origin only | 001 |
+| T17 | Storage-quota exhaustion from repeated large imports | DoS | 20 MB file cap; array caps; quota errors abort the transaction with a readable message | 001 |
 
 ## Out of scope (for now)
 Physical access to an unlocked device, and compromise of the browser itself.

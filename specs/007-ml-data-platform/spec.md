@@ -8,7 +8,7 @@
 
 **Input**: User description: "ML data platform: labelling tool, dataset versioning, training pipeline, experiment tracking, model registry. A Python training area (ml/) with reproducible pipelines, config files, fixed seeds and pinned dependencies. Versioned datasets with dataset cards; sources GuitarSet, other public datasets, and my own recordings labelled with a labelling tool we build; plan how to get bass data. Experiment tracking (MLflow or W&B), and a model registry with model cards. Held-out test sets, confusion matrices, per-instrument metrics, baseline comparisons, all committed; a model ships only if it beats its baseline. Export to ONNX, quantize to int8, and benchmark size, speed and accuracy before vs after. Active learning: the app flags low-confidence predictions, I correct them, and they feed the next dataset version. Model evaluation runs in CI on a small fixed test set."
 
-**Practice-session value**: indirect, but essential. Every ML-powered feedback the owner later
+**Practice-session value**: indirect, but essential. Every ML-powered feedback users later
 gets in practice (chord recognition, note transcription, finger tracking) is trained and checked
 here, on recordings of *their* instruments, and is proven better than the DSP baseline before it
 is switched on.
@@ -187,12 +187,13 @@ with a readable diff of metrics.
 
 ### User Story 8 - Active Learning Loop (Priority: P3)
 
-When a production model's prediction has low confidence during practice, the app can (with
-opt-in) keep that short clip and its prediction for review. The owner corrects it in the
-labelling tool, and corrections enter the **next** dataset version.
+When a production model's prediction has low confidence during practice, the app can (with the
+user's opt-in) keep that short clip and its prediction for review. Any user can correct it in a
+simple in-app correction view. Corrections stay on that user's device unless they explicitly choose
+to share them (Constitution IX). The owner's own corrections, and any explicitly shared ones, can
+enter the **next** dataset version.
 
-**Why this priority**: It improves the models on the owner's real playing, with minimal labelling
-effort.
+**Why this priority**: It improves the models on real playing, with minimal labelling effort.
 
 **Independent Test**: With a fixture model and threshold, run a clip through, verify it is queued
 only with opt-in, correct it, build a new version, and verify the test split of the previous
@@ -290,7 +291,10 @@ version is untouched.
   refuse incompatible ones.
 - **FR-015**: The platform MUST support these source types: GuitarSet; other public guitar/bass
   datasets selected in research.md; owner bundles; and synthesised or augmented data (labelled as
-  such in the card). The bass data strategy is set in Clarifications.
+  such in the card). Bass data strategy (Clarifications): public bass datasets, synthesised bass
+  audio, and pitch-shifted guitar recordings (each pitch-shifted clip stays in its source clip's
+  split group, FR-011). Every bass result is marked **"unvalidated"** until real bass recordings
+  exist.
 
 **Training pipeline**
 
@@ -358,14 +362,19 @@ version is untouched.
 
 **Active learning**
 
-- **FR-027**: With the global active-learning opt-in on, the app MUST temporarily hold clips (≤ 10 s,
+- **FR-027**: With the user's active-learning opt-in on (per local profile, default off), the app
+  MUST temporarily hold clips (≤ 10 s,
   daily cap configurable, default 20) whose prediction confidence is below a per-model threshold
   (set on validation data). At the end of the session it MUST ask, per clip, whether to keep it.
   Only confirmed clips are stored, each with a consent record. Unconfirmed clips are discarded, and
   uncorrected stored clips expire after 14 days. Capture MUST NOT affect the real-time budgets
   (Constitution V): no allocation or locking in the audio or vision hot path.
-- **FR-028**: Corrected queue items MUST enter only the next dataset version's train/val splits,
-  with provenance.
+- **FR-028**: Users MUST be able to correct queued items in an in-app correction view (a simplified
+  labelling view at 390 px). Corrections stay on the device, profile-scoped, unless the user
+  explicitly chooses to share a specific correction (a separate, revocable consent per item; no
+  sharing channel is built this term, so sharing means an explicit export file). Only the owner's
+  own corrections and explicitly shared ones MAY enter the next dataset version's train/val
+  splits, with provenance; never an existing version or a test split.
 
 **Cross-cutting**
 
@@ -404,7 +413,9 @@ version is untouched.
   placeholder card values, or failing the baseline margin, and promotes 100% of the valid fixture
   candidates.
 - **SC-006**: Labelling throughput is measured and reported (minutes of labelling per minute of
-  media, per label type). The target is set from the owner's time budget in Clarifications.
+  media, per label type). The owner's labelling budget is about 2 hours a week (Clarifications);
+  dataset-size plans in research.md MUST fit that budget, stating the expected labelled minutes
+  per month.
 - **SC-007**: CI ML evaluation finishes in < 10 min on a CPU runner and fails on 100% of the
   injected-regression fixtures.
 - **SC-008**: For the reference model, exported-vs-original outputs agree within tolerance on 100%
@@ -422,10 +433,22 @@ version is untouched.
 - The owner runs training on their own machine (GPU per Clarifications). CI never trains.
 - Public datasets are downloaded by the owner under their licences; the repo stores only
   manifests and checksums.
-- The owner does not own a bass yet. Until then, bass data comes from public and synthesised
-  sources, and bass metrics are flagged "no real owner bass data".
+- The owner does not own a bass yet. Until then, bass data comes from public datasets, synthesised
+  audio and pitch-shifted guitar recordings, and bass metrics are flagged "unvalidated".
 - The labelling tool is part of the web app (behind a developer/owner flag), reusing the
   fretboard and theory engine. It is a desktop, owner-only tool: exempt from the 390 px rule, but
   fully keyboard-operable.
 - Frame-level hand labelling lives here (not in 008) because the same labelling tool and dataset
   machinery serve 008, 010 and 011.
+
+## Clarifications
+
+### Session 2026-11-21 (owner answers, constitution v2.2.0)
+
+- Q: Bass data without owning a bass? → A: Public datasets + synthetic data + pitch-shifted guitar
+  recordings; bass is marked "unvalidated" until real recordings exist (FR-015).
+- Q: Labelling time budget? → A: About 2 hours a week from the owner. Users can opt in to correct
+  low-confidence predictions; corrections stay local unless explicitly shared (FR-027, FR-028,
+  SC-006).
+- Q: Training hardware? → A: The owner's laptop is the development machine (details recorded in
+  plan.md); CI never trains.

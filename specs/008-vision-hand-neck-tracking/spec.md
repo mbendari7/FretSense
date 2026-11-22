@@ -8,12 +8,14 @@
 
 **Input**: User description: "Webcam-based, real time, entirely on the device. Fretting hand: 21-point hand landmarks, which finger is on which string and fret, fingertip → (string, fret) through a homography. Neck and fretboard: detect the neck, frets and strings; version 1 uses ArUco fiducial markers, version 2 a custom-trained keypoint model with no markers. Robustness: lighting, camera angle, left-handed players, guitar vs bass neck geometry. Camera and ML features sit behind feature flags, off by default."
 
-**Practice-session value**: the owner can answer fretboard drills *silently*, by fretting the note
-instead of tapping the screen. They see their fingers mapped onto the on-screen neck, building the
+**Practice-session value**: vision is an **assistant the user can turn on** (Constitution XI,
+XIII). With it on, a user can answer fretboard drills *silently*, by fretting the note instead of
+tapping the screen, and sees live fretboard highlighting of their fingers on the on-screen neck, building the
 link between the diagram and the real instrument. This also provides the "where on the neck" half
 needed later for fusion and camera coaching (010).
 
-**Depends on**: 001 (InstrumentProfile, scale length, drills, handedness setting FR-017), 007
+**Depends on**: 001 (InstrumentProfile, scale length, drills, handedness setting FR-017), 016 (My Gear
+camera entry, quality tiers), 007
 (labelled video datasets, evaluation harness, registry for the v2 keypoint model), 015 (audio
 onsets, used for "pressed" ground truth; A/V offset calibration). **Lesson tracks**: the Drill
 stage of the notes-on-the-neck track gains silent answers first. **Human-owned** (Constitution IV): the
@@ -21,15 +23,42 @@ homography estimation and the pixel → (string, fret) mapping math.
 
 ## User Scenarios & Testing *(mandatory)*
 
+### User Story 0 - Guided Camera Setup (Priority: P1)
+
+The user turns the camera assistant on. A setup wizard shows a live preview, checks camera angle,
+lighting and neck visibility (and the fretting hand), suggests fixes, asks which neck mode they want
+(markers: most accurate; markerless: when v2 ships), then calibrates. It recommends a stand facing
+the neck at about 30° but accepts any reasonable angle, for right- and left-handed players.
+
+**Why this priority**: Every user's room, camera and instrument differ; without a guided setup, the
+assistant fails silently.
+
+**Independent Test**: Replay fixture clips covering good and bad framing, angles, lighting and both
+handednesses through the wizard and verify each check's verdict and hint.
+
+**Acceptance Scenarios**:
+
+1. **Given** the neck is partly out of frame, **Then** the wizard says which end is cut off and
+   doesn't proceed to calibration until it is visible (or the user chooses "continue anyway").
+2. **Given** a ~45° side angle (inside the warn band, FR-022), **Then** the wizard accepts it, warns
+   that accuracy may be lower, and calibrates.
+3. **Given** a left-handed player (001 FR-017 handedness), **Then** every check and the calibration
+   work mirrored, with no extra steps.
+4. **Given** the user closes the wizard at any point, **Then** the camera stops, the indicator goes
+   off, and the app continues without vision.
+
+---
+
 ### User Story 1 - Marker-Based Neck Calibration, v1 (Priority: P1)
 
-The owner attaches fiducial marker stickers at defined points on the neck (e.g. near the nut and
+The user who chose marker mode attaches fiducial marker stickers at defined points on the neck (e.g. near the nut and
 the 12th fret, on the edge of the fingerboard or the headstock). The app detects the markers, fits
 the neck plane, and overlays a fret/string grid computed from the active InstrumentProfile's
 scale length and string count onto the camera image.
 
 **Why this priority**: You can't map anything without the geometry. Markers make v1 reliable
-enough to collect ground truth and to evaluate everything else.
+enough to collect ground truth and to evaluate everything else. Markers are optional for users:
+marker mode is the most accurate; markerless mode is the v2 goal (US6). Users choose.
 
 **Independent Test**: On recorded fixture clips with surveyed marker positions, verify that the
 projected fret and string lines fall within the pixel tolerance of the hand-labelled fret wires
@@ -82,7 +111,7 @@ finger) with the labels, per instrument and per condition.
 
 **Acceptance Scenarios**:
 
-1. **Given** the owner frets string 3 fret 5 with the ring finger, **Then** the app reports
+1. **Given** the user frets string 3 fret 5 with the ring finger, **Then** the app reports
    (3, 5, ring) with confidence ≥ the display threshold within the latency of SC-005.
 2. **Given** a finger hovering above the fingerboard without pressing, **Then** it is shown as
    "hovering", not reported as fretted.
@@ -106,7 +135,7 @@ engine, and verify correctness judgements and response times against labels.
 
 **Acceptance Scenarios**:
 
-1. **Given** the prompt "Find G on string 6", **When** the owner frets string 6 fret 3 and holds,
+1. **Given** the prompt "Find G on string 6", **When** the user frets string 6 fret 3 and holds,
    **Then** the answer is accepted and the response time is measured to hold onset.
 2. **Given** tracking is lost or confidence is low, **Then** the drill falls back to tap input with
    a notice. It never mis-scores silently.
@@ -137,7 +166,7 @@ every cell of the matrix is reported with sample counts and CIs.
 
 A keypoint model detects the neck outline, nut, fret wires and string ends with no markers.
 It is trained with 007, using v1 marker-based geometry as automatic ground truth plus owner
-corrections. It ships only if it beats a classical-vision baseline and stays within the stated
+corrections (the owner runs every training experiment, Constitution IV). It ships only if it beats a classical-vision baseline and stays within the stated
 margin of v1.
 
 **Why this priority**: Removes the stickers (convenience), and is a real trained-model showcase,
@@ -179,8 +208,10 @@ classical baseline and v1 on fret-line localisation error and downstream (string
 
 **Enablement, privacy, degradation**
 
-- **FR-001**: Vision MUST sit behind a feature flag, off by default. It is enabled per device by the
-  owner, and the camera permission is requested only when it is enabled and used.
+- **FR-001**: Vision MUST sit behind a feature flag, off by default. It is enabled per local profile
+  and device by the user (an opt-in assistant), and the camera permission is requested only when it
+  is enabled and used. A visible "camera on" indicator shows whenever the camera is live
+  (Constitution IX).
 - **FR-002**: Camera frames, landmarks and derived positions MUST be processed in memory on the
   device and never persisted or transmitted. The only exception is an explicit per-recording
   opt-in through 007 (Constitution IX). This is verified by `privacy-auditor`.
@@ -200,7 +231,7 @@ classical baseline and v1 on fret-line localisation error and downstream (string
   marker. Positions beyond that are reported low-confidence, never as confident extrapolations.
 - **FR-006**: Fret line positions MUST be computed from the InstrumentProfile's scale length
   (equal-tempered fret formula) and fret count. String lines MUST come from the string count and
-  the nut/bridge string spacing (per-family defaults, owner-adjustable).
+  the nut/bridge string spacing (per-family defaults, user-adjustable).
 - **FR-007**: The grid MUST hold its last good pose for at most 1 s of marker loss, then show
   "tracking lost".
 
@@ -219,9 +250,12 @@ classical baseline and v1 on fret-line localisation error and downstream (string
 **Position mapping**
 
 - **FR-011**: For each fretting fingertip, System MUST compute (string, fret, finger) via the
-  fingerboard mapping (human-owned math), with a confidence and a press/hover state. Confidence
-  thresholds are set on the validation split only. If press/hover F1 misses SC-002, press/hover
-  MUST be disabled, and drills use hold-to-answer (a stable position ≥ 500 ms) without a press model.
+  fingerboard mapping (human-owned math), with a confidence and a press/hover state. Default
+  confidence thresholds are set on the validation split only; users MAY adjust **sensitivity**
+  (FR-026). If press/hover F1 misses SC-002, press/hover
+  MUST be disabled, and drills use hold-to-answer (a stable position held for the FR-026 hold time)
+  without press/hover. Press/hover is a heuristic in v1; if a trained model ever replaces it, the
+  owner trains it (Constitution IV, X).
 - **FR-012**: Outputs MUST be temporally stabilised: a position is reported as stable after
   ≥ 100 ms of consistency (time-based, independent of fps). The system MUST also publish a
   low-latency "candidate" position before stabilisation. Both latencies are measured (SC-005).
@@ -233,7 +267,8 @@ classical baseline and v1 on fret-line localisation error and downstream (string
 **Drills**
 
 - **FR-015**: When vision is enabled, the note-finding and interval drills (001) MUST accept a
-  fretted position held ≥ 500 ms at confidence ≥ the threshold as an answer.
+  fretted position held for the FR-026 hold time (default 500 ms) at confidence ≥ the drill
+  threshold (FR-026) as an answer.
   - With several fingers on one string, the highest fret is the answer.
   - The answer is judged by the pitch the position sounds under the active profile (001 FR-008,
     FR-035).
@@ -287,9 +322,17 @@ classical baseline and v1 on fret-line localisation error and downstream (string
 
 **Setup and feedback**
 
-- **FR-022**: A camera setup guide MUST show the recommended placement (Clarifications), live
-  framing hints (neck fully in frame, fretting hand visible), and condition warnings learned from
-  US5.
+- **FR-022**: A guided camera setup wizard (US0) MUST show a live preview, check camera angle,
+  lighting, neck visibility and fretting-hand visibility with a verdict and fix hint for each, show
+  the recommended placement (a stand facing the neck at about 30°) without requiring it, support
+  right- and left-handed players, let the user choose marker or markerless mode (markerless only
+  once v2 passes FR-020/SC-008 for that instrument; **until then, vision needs markers**), and then
+  calibrate. Check bands (owner to confirm): angle from frontal accept ≤ 35°, warn 35–50°, above 50°
+  "continue anyway"; lighting accept when mean frame luminance is in the middle 70% of the range and
+  hand-landmark confidence ≥ the validation default; neck visibility accept when all markers (or
+  neck keypoints in v2) are detected for ≥ 1 s. Before US5 results exist, warnings are generic.
+  Placement notes are saved to the user's My Gear camera entry (016 FR-008); handedness comes from
+  001's profile settings (001 FR-067).
 - **FR-023**: An in-app performance overlay MUST show camera fps, tracker time per frame, mapping
   time, and end-to-end latency (p50/p95 over the last 10 s).
 - **FR-024**: Users MUST be able to choose the camera. "Camera in use by another app" and
@@ -298,6 +341,30 @@ classical baseline and v1 on fret-line localisation error and downstream (string
   before enabling.
 - **FR-025**: At 390 px portrait, the camera view MUST show a compact overlay and the on-screen
   fretboard mirror, with no page-level horizontal scroll.
+- **FR-026**: Users MUST be able to adjust sensitivity per local profile (Constitution XIII), with
+  "reset to default": the answer hold time (300–1,500 ms, default 500 ms), and the press/hover,
+  drill-answer and live-highlighting confidence thresholds, each within ±0.15 of its validation
+  default. The drill-answer threshold can't go below the value where validation precision is ≥ 95%,
+  so drills never mis-score silently. Changing sensitivity never changes the evaluation thresholds
+  used for SCs (which use the defaults).
+- **FR-027**: Live fretboard highlighting: with vision on, the on-screen fretboard MUST highlight
+  each stable fretted position (FR-012) in real time, in the explorer and in lessons' See stage,
+  only while the user has switched "live highlighting" on for that screen (off each time the app
+  starts).
+- **FR-027a**: The camera MUST be live only in: the setup wizard and calibration, drills answering
+  by fretting, live highlighting (FR-027), and 010/011 coaching stages. It MUST stop (all tracks
+  ended) within 1 s of leaving those contexts, with the "camera on" indicator shown whenever it is
+  live (Constitution IX; privacy-auditor gate).
+- **FR-028**: Vision MUST read the quality tier (016 FR-017) and adapt camera resolution, tracker
+  variant and frame rate to it, with per-tier targets in SC-004/SC-005. This feature also owns the
+  **tier benchmark**: ≤ 10 s, progress shown, cancellable, running the vision workloads (tracker +
+  mapping on a fixture clip) and mapping results to a tier by thresholds derived from SC-004; the
+  same machine must get the same tier in ≥ 9 of 10 runs. Each tier's tracker variant is a separate
+  model under FR-009 and MUST pass SC-001 and SC-002 on its own.
+- **FR-029**: **Ownership** (owner decision, 2026-11-21): the homography and pixel → (string, fret)
+  mapping are human-owned (Constitution IV). Agents MAY build the press/hover, finger-id, barre and
+  stabilisation heuristics, but each one needs tests first, a written explanation of how it works
+  that the owner approves before implementation, and a passing code-reviewer gate.
 
 ### Key Entities
 
@@ -326,14 +393,18 @@ bass) where data exists.
   Each point estimate MUST meet its target, with a lower 95% session-bootstrap bound ≥ target − 3 pp.
 - **SC-002**: Finger-id accuracy for pressed fingers is ≥ 90%. Press/hover F1 is ≥ 0.85.
 - **SC-003**: Calibration locks within 10 s in ≥ 95% of ≥ 40 setup trials across the angle cells.
-- **SC-004**: Tracking + mapping sustains ≥ 24 fps (GPU path) and ≥ 15 fps (CPU fallback) as the 5th
-  percentile over 5-minute sessions at the reference resolution, for every instrument profile.
-- **SC-005**: Camera frame → candidate event ≤ 120 ms p95 (GPU) and ≤ 180 ms p95 (CPU). Frame → stable
-  event ≤ 250 ms p95 (GPU) and ≤ 330 ms p95 (CPU).
+- **SC-004**: Tracking + mapping sustains, as the 5th percentile over 5-minute sessions, for every
+  instrument family (owner to confirm the numbers): **high** tier ≥ 24 fps on the reference laptop
+  (GPU path); **medium** ≥ 20 fps; **low** ≥ 15 fps on the minimum target (a laptop with integrated
+  graphics, named in 001 Clarifications alongside the reference laptop).
+- **SC-005**: Camera frame → candidate event ≤ 120 ms p95 (high), ≤ 150 ms (medium), ≤ 180 ms (low).
+  Frame → stable event ≤ 250 ms p95 (high), ≤ 290 ms (medium), ≤ 330 ms (low). Measured on the same
+  devices as SC-004.
 - **SC-006**: Over ≥ 300 replayed silent-fretting drill answers (US4), judgements match the labels in
   ≥ 95%, and the fallback-to-tap rate in the gating cell is ≤ 10%.
-- **SC-007**: Every robustness cell is reported (or marked insufficient data). Gate for switching
-  vision on by default (Constitution XI): SC-001, SC-002, SC-004 and SC-005 pass in the gating cell
+- **SC-007**: Every robustness cell is reported (or marked insufficient data). Gate for **offering**
+  the vision assistant for an instrument (the feature flag on; the camera still starts only when the
+  user turns the assistant on, Constitution XI): SC-001, SC-002, SC-004 and SC-005 pass in the gating cell
   for the instrument, no covered cell is below 70% stabilised accuracy, and ≥ 12 of the 18 cells for
   that instrument (lighting 3 × angle 3 × handedness 2) are covered. Cells below 85% show a setup
   warning.
@@ -343,10 +414,34 @@ bass) where data exists.
 
 ## Assumptions
 
-- The owner is right-handed (left-handed support is evaluated with mirrored clips and any
-  left-handed volunteer clips obtained with consent).
+- Users may be right- or left-handed. The owner is right-handed, so left-handed support is
+  evaluated with mirrored clips and any left-handed volunteer clips obtained with consent.
 - One player in frame. Multi-player is out of scope.
-- Camera on a stand (placement per Clarifications). Handheld cameras are out of scope.
+- Camera on a stand or fixed surface at any reasonable angle (US0). Handheld cameras are out of
+  scope.
 - Bass evaluation data depends on the bass data strategy in 007's Clarifications. Until real bass
   clips exist, bass cells are reported as "insufficient data".
 - Picking-hand, posture and technique events are feature 011.
+
+## Clarifications
+
+### Session 2026-11-21 (owner answers, constitution v2.2.0)
+
+- Q: Camera placement? → A: No fixed placement. A guided setup wizard (preview; angle, lighting and
+  neck checks; calibration). Recommend a stand facing the neck at about 30°, but support any
+  reasonable angle and left-handed players (US0, FR-022).
+- Q: Marker stickers for v1? → A: Optional. Marker mode is the most accurate; markerless is the v2
+  goal; users choose (US1, US6, FR-021, FR-022).
+- Q: Ownership of press/hover, finger-id, barre and stabilisation? → A: The owner owns the geometry
+  (homography, fret mapping). Agents may build the heuristics with tests, an owner-approved
+  explanation and code-reviewer; sensitivity is user-adjustable (FR-026, FR-029).
+- Q: Hardware? → A: Adaptive quality tiers from a device benchmark (016 FR-017), user-overridable;
+  minimum target is a laptop with integrated graphics; the owner's laptop is the development
+  benchmark machine (FR-028).
+- Spec re-review 2026-11-21 (BLOCK: 1 blocker + 10 others) folded in: per-tier fps and latency
+  targets with the minimum target in SC-004/005 (Constitution V), the tier benchmark moved here
+  from 016 (FR-028), per-variant evaluation, camera-live contexts (FR-027a), handedness from 001,
+  wizard check bands (FR-022), "markers until v2", sensitivity bounds with a precision floor
+  (FR-026), the SC-007 gate meaning "offered, not auto-on", the FR-026 hold time in FR-015, and
+  press/hover ownership (FR-011). **OPEN (owner):** confirm the tier numbers and wizard bands; add a
+  wizard SC once fixture clips exist.

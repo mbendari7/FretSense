@@ -9,7 +9,7 @@
 **Input**: User description: "Audio-visual fusion: audio says WHICH notes are sounding, vision says WHERE on the neck. Fuse them into the exact (string, fret). Compare a rules-based fusion against a probabilistic one (HMM or Bayesian combination of likelihoods). Lessons follow Read → See → Drill → Play → Camera-coach; the coach overlays target finger positions and flags wrong frets or fingers, muted strings and timing drift."
 
 **Practice-session value**: the same pitch can be played in up to five places on the neck. Only
-fusion can tell the owner "right note, wrong position" or "string 4 is muted". That is the feedback
+fusion can tell the user "right note, wrong position" or "string 4 is muted". That is the feedback
 a teacher gives while watching you play.
 
 **Depends on**: 015 (audio devices, A/V offset calibration), 002/003 (pitch, onsets, timing), 008 (positions), 009 (polyphonic notes, optional),
@@ -58,7 +58,7 @@ unless the probabilistic model is measurably better.
 ### User Story 3 - Camera-Coach Lesson Stage (Priority: P2)
 
 In a lesson's Camera-coach stage, target finger positions are overlaid on the camera view. As the
-owner plays, the coach flags wrong fret, wrong string, wrong finger, muted or dead strings, and
+user plays, the coach flags wrong fret, wrong string, wrong finger, muted or dead strings, and
 timing drift against the target rhythm.
 
 **Why this priority**: This is the lesson stage the whole vision and ML stack exists for.
@@ -70,7 +70,7 @@ is flagged with the stated precision and recall.
 
 1. **Given** a target C major chord shape, **When** string 2 is muted by a finger, **Then** the coach
    flags "string 2 muted" within 300 ms of the strum.
-2. **Given** a target sequence at 80 BPM, **When** the owner drifts by more than 40 ms on average over
+2. **Given** a target sequence at 80 BPM, **When** the user drifts by more than 40 ms on average over
    4 beats, **Then** "timing drift: late/early" is shown.
 3. **Given** the camera is off, **Then** the stage offers audio-only coaching (pitch and timing only).
 
@@ -79,7 +79,7 @@ is flagged with the stated precision and recall.
 ### Edge Cases
 
 - Audio and video clocks out of sync: 015's calibration measures the offset (clap/pluck test). If
-  the drift exceeds the tolerance, fusion is disabled and the owner is told.
+  the drift exceeds the tolerance, fusion is disabled and the user is told.
 - Open strings (no fretting finger): vision evidence is "no finger on string". Fusion uses audio plus
   the open-string prior.
 - Harmonics, bends and slides: flagged as unsupported by fusion until 011. Not mis-scored.

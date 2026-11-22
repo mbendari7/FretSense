@@ -1,18 +1,20 @@
 # FretSense: Rules for Claude
 
 FretSense is a guitar **and bass** theory handbook, real-time practice companion, and on-device
-machine-vision and ML system. It follows the book *Guitar Theory for Dummies*: **each book part
-is one lesson track, and each chapter is one lesson** (Read → See → Drill → Play → Camera-coach).
-Features are capability-oriented (see the roadmap in `README.md`). A track's lessons ship once
-the features they need exist.
+machine-vision and ML system, **personalised for every user**: their own gear (My Gear), goals,
+learning paths, lesson stages and curriculum packs. The built-in curriculum is general theory,
+delivered as a curriculum pack; users create packs mapping lessons to any book or course (the
+owner's *Guitar Theory for Dummies* pack is one example, not a dependency). **Nothing is locked**:
+the curriculum recommends, never forces. Lessons have stages Read → See → Drill → Play →
+Camera-coach. Features are capability-oriented (see the roadmap in `README.md`).
 
 The three goals matter equally:
-1. **A teaching tool the owner uses every session**, on guitar and bass, that adapts to them.
-   If a feature wouldn't help a real practice session, it doesn't ship.
+1. **A teaching tool any guitarist or bassist (the owner included) uses every session**, that adapts
+   to them. If a feature wouldn't help a real practice session, it doesn't ship.
 2. **A deep ML and vision system**: real models, datasets, evaluation and MLOps.
 3. **Fundamental engineering skills**, each used where it's genuinely needed (`docs/SKILLS-MATRIX.md`).
 
-**This is not vibe coding.** The constitution (`.specify/memory/constitution.md`, v2.1.0) is the
+**This is not vibe coding.** The constitution (`.specify/memory/constitution.md`, v2.2.0) is the
 highest authority. If this file disagrees with it, the constitution wins and this file gets fixed.
 
 ---
@@ -42,8 +44,9 @@ highest authority. If this file disagrees with it, the constitution wins and thi
    Claude may test, benchmark, explain and review these, and build tooling around them.
 7. **The owner writes all lesson prose** in `content/lessons/`. Claude may propose schemas and
    check the theory, but never writes the prose or copies book text.
-8. **Instrument-agnostic.** No hardcoded 6 strings, tuning or fret count outside the
-   `InstrumentProfile` definitions (ADR-0003).
+8. **Instrument-agnostic, any gear.** No hardcoded 6 strings, tuning or fret count outside the
+   `InstrumentProfile` definitions (ADR-0003). No hardcoded device model outside shipped preset
+   data; the owner's Scarlett, Katana:GO and guitars are a test rig, never defaults (ADR-0006).
 9. **On-device privacy.** Camera and mic data never leave the device, and are never persisted,
    without explicit opt-in.
 10. **Graceful degradation.** Every feature works audio-only. Camera and ML sit behind feature
@@ -51,6 +54,9 @@ highest authority. If this file disagrees with it, the constitution wins and thi
 11. **ADRs** for every non-trivial decision, with the alternatives that were rejected.
 12. **Skills where needed.** Never add a technique just to show it off. Every one traces to an FR.
 13. **Record AI mistakes** in "Where the AI got it wrong" in `docs/AI-WORKFLOW.md`.
+14. **Never locked, always adjustable** (Constitution XIII). No content gated by progress; every
+    adaptive behaviour has a user setting; all user data is profile-scoped and sync-ready.
+15. **ADRs stay Proposed until the owner approves them.** Never mark an ADR Accepted yourself.
 
 ## Workflow: which subagent gates which Spec Kit step
 
@@ -132,6 +138,7 @@ FretSense/
 ├── .specify/                         # constitution, templates, scripts
 ├── specs/NNN-<feature>/              # spec, plan, research, data-model, contracts, quickstart, tasks, checklists
 ├── content/lessons/                  # owner-written lessons (_template.md is the only AI-made file)
+├── content/packs/                    # curriculum packs (built-in General Theory; _template.yaml)
 ├── packages/
 │   ├── theory/                       # pure TS domain: notes, intervals, InstrumentProfile, fretboard graph
 │   ├── dsp/                          # Rust → wasm: YIN, chromagram, onset (owner-written cores) [002+]

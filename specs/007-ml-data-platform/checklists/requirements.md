@@ -38,3 +38,4 @@
   (FR-003, FR-004/004a, FR-006, FR-011, FR-018/018a, FR-019, FR-022, FR-023, FR-025–FR-027,
   SC-001, SC-003, SC-005, SC-009–SC-011). Leakage-unit wording also needs constitution X
   clarification (v2.1.0).
+- 2026-11-21: amended for constitution v2.2.0 (personalisation, no locks) and the owner's clarify answers; re-review pending.

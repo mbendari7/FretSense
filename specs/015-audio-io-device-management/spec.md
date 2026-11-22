@@ -4,16 +4,18 @@
 
 **Created**: 2026-11-21
 
-**Status**: Draft
+**Status**: Draft (amended 2026-11-21 for constitution v2.2.0: any gear, user-editable device profiles;
+clarify answers recorded)
 
 **Input**: User description: "Plug my instrument into the computer through an audio interface or a USB amp, have FretSense detect it, let me pick input and output devices, and use that signal across lessons, drills, pitch detection, ML and vision fusion. Gear: Focusrite Scarlett (4th Gen, Studio bundle) and Boss Katana:GO; must work with any class-compliant USB interface. Device detection and selection (names, channel counts, hot-plug, separate input/output and input-channel selection, per-profile memory, known-device profiles, raw audio with browser processing off). Signal check and calibration wizard (level meter, clipping, gain-staging guidance, noise floor, hum, clean vs effected detection, instrument auto-detection, built-in tuner, round-trip latency calibration via cross-correlation, A/V sync calibration). Output routing (setSinkId with fallback, direct-monitoring hint). Lesson integration (frontmatter needs, device checklist, audio-only/camera-only/fused modes, laptop-mic fallback). AudioBackend strategy with WebAudio and native Tauri + Rust/cpal backends; device state machine; sample-rate handling; mock devices, hot-plug simulation, golden recordings, latency benchmarks."
 
-**Practice-session value**: the owner plugs in the Scarlett or the Katana:GO and, on a returning
-session, is ready to practise in under 30 seconds (first-time setup under 90 s): right device, right channel, clean signal, correct gain, known latency,
+**Practice-session value**: a user plugs in *their* interface or USB amp (whatever it is) and, on a
+returning session, is ready to practise in under 30 seconds (first-time setup under 90 s): right device, right channel, clean signal, correct gain, known latency,
 tuned instrument. That is what makes every later audio feature (pitch, play-along, chords,
 fusion) accurate.
 
-**Depends on**: 001 (InstrumentProfile, lessons). **Enables**: 002, 003, 009 and 010 now depend on
+**Depends on**: 001 (InstrumentProfile, lessons), 016 (My Gear interface/amp and output entries,
+local profiles). **Enables**: 002, 003, 009 and 010 now depend on
 015. The tuner and instrument auto-detection steps use 002's pitch detector and are enabled when 002
 lands (US3 scenarios 4 and 5). A/V calibration (US5) needs only the camera and a frame-difference
 motion-onset detector built here. It doesn't depend on 008; 008 and 010 consume its result. **Human-owned** (Constitution IV): the cross-correlation estimator for
@@ -24,9 +26,10 @@ and Camera-coach stages.
 
 ### User Story 1 - Detect and Select Devices and Channels (Priority: P1)
 
-The owner sees every input and output device, with clear names and channel counts. They pick an
-input device and channel (e.g. Scarlett input 1 = instrument) and an output device separately. The
-app remembers the choice per InstrumentProfile and recognises known hardware with tailored tips.
+The user sees every input and output device, with clear names and channel counts. They pick an
+input device and channel (e.g. input 1 = instrument) and an output device separately, and link them
+to entries in their My Gear (016). The app remembers the choice per instrument and offers tailored
+tips when a device matches one of the user's gear entries or a shipped preset.
 
 **Why this priority**: Without the right device and channel, nothing downstream works.
 
@@ -38,13 +41,18 @@ restore after a reload.
 
 1. **Given** the mic permission is granted, **When** the device list opens, **Then** every input
    and output is listed with its name and channel count, and the active ones are marked.
-2. **Given** the Scarlett is selected, **When** the owner chooses input channel 1, **Then** only that
+2. **Given** a 2-input interface (e.g. a Scarlett 2i2 4th Gen) is selected, **When** the user chooses
+   input channel 1, **Then** only that
    channel's signal is captured (SC-004).
-3. **Given** the owner selects devices for the 5-string bass profile, **When** they later switch to
-   that profile, **Then** those devices and that channel are restored if present.
-4. **Given** a device whose name matches a known profile (Scarlett, Katana:GO), **Then** suggested
-   settings and setup tips are shown. **Given** an unknown class-compliant interface, **Then** generic
-   tips are shown and everything still works.
+3. **Given** the user selects devices for their 5-string bass, **When** they later switch to
+   that instrument, **Then** those devices and that channel are restored if present.
+4. **Given** a device whose name matches a My Gear entry or a shipped preset (e.g. Scarlett Solo or
+   2i2 4th Gen, Katana:GO), **Then** that entry's settings and tips are shown. **Given** an unknown
+   class-compliant interface, **Then** the user is offered "create a device profile" (016 FR-006),
+   generic tips are shown, and everything still works.
+6. **Given** a USB amp whose My Gear entry says it sends a **processed** signal, **Then** the signal
+   check (US3 scenario 3) explains that detection works best with a dry signal and shows how to
+   switch, if the entry or preset knows how.
 5. **Given** capture starts, **Then** the browser's echo cancellation, noise suppression and auto gain
    are requested off, and the applied settings are verified. If the platform ignores the request, a
    warning explains the accuracy impact.
@@ -70,7 +78,7 @@ running drill, and verifies the state-machine transitions, user prompts and the 
    pauses, a message explains what happened, and the app offers the next available input (e.g. the
    laptop mic, with the accuracy warning) or waiting for reconnection.
 3. **Given** the device is reconnected, **Then** the previous device, channel and calibration are
-   restored, and the owner can resume.
+   restored, and the user can resume.
 4. **Given** any (state, event) pair of the device lifecycle, **Then** the behaviour is defined and
    tested (FR-009).
 
@@ -100,7 +108,7 @@ clean/crunch/high-gain/reverb) through the wizard and verify each verdict.
    clean or dry setting, with device-specific instructions where known.
 4. **Given** 002 is available, **Then** a tuner is the first screen after connecting, using the
    active InstrumentProfile's strings.
-5. **Given** 002 is available, **When** the owner plays open strings, **Then** the app suggests guitar
+5. **Given** 002 is available, **When** the user plays open strings, **Then** the app suggests guitar
    or bass from the detected pitch range, and asks to confirm the InstrumentProfile.
 
 ---
@@ -128,7 +136,7 @@ hardware, verify repeatability across 10 runs.
 
 ### User Story 5 - Audio–Video Sync Calibration (Priority: P2)
 
-The owner performs a calibration gesture that is both visible and audible (a pluck or a clap)
+The user performs a calibration gesture that is both visible and audible (a pluck or a clap)
 several times. The app estimates the camera-to-audio clock offset by cross-correlating onset times
 (human-owned estimator), stores it, and 010's fusion step applies it.
 
@@ -140,7 +148,7 @@ then verify repeatability on hardware.
 
 **Acceptance Scenarios**:
 
-1. **Given** ≥ 5 claps visible and audible, **Then** an offset (ms) with a confidence is estimated and
+1. **Given** ≥ 10 claps or plucks visible and audible, **Then** an offset (ms) with a confidence is estimated and
    stored per (camera, audio device, backend).
 2. **Given** an inconsistent result (the spread exceeds the tolerance), **Then** the calibration is
    rejected with a retry prompt.
@@ -152,7 +160,7 @@ then verify repeatability on hardware.
 The metronome, backing tracks, reference tones and lesson audio play on the chosen output device.
 When the interface monitors the instrument in hardware, the app doesn't double it in software.
 
-**Why this priority**: The owner hears everything in their headphones on the interface, with no
+**Why this priority**: The user hears everything in their headphones on the interface, with no
 doubled or delayed signal.
 
 **Independent Test**: With mock outputs, verify routing for each sound category, the fallback when
@@ -160,11 +168,12 @@ output selection isn't supported, and the monitoring mode.
 
 **Acceptance Scenarios**:
 
-1. **Given** the Scarlett is selected as output, **Then** all app sounds play through it (where the
+1. **Given** the user's interface is selected as output, **Then** all app sounds play through it (where the
    platform supports output selection). Otherwise the app explains that the system default output is
    used.
-2. **Given** hardware direct monitoring is in use, **Then** software monitoring is off by default, and
-   the app shows a hint explaining why.
+2. **Given** the user's gear entry says hardware direct monitoring is available, **Then** the
+   monitoring setting recommends hardware direct, software monitoring is off by default, and a hint
+   explains why. The user can choose hardware direct, software or off at any time.
 
 ---
 
@@ -190,14 +199,16 @@ verify the checklist and the chosen mode.
 
 ---
 
-### User Story 8 - Native Desktop Backend (Priority: P3)
+### User Story 8 - Native Desktop Backend (Priority: P3, stretch goal, out of scope this term)
 
 An optional desktop app provides a native audio backend with control over the host API, buffer size
-and sample rate. Its latency is compared with the browser backend on the owner's Scarlett (ADR-0005).
+and sample rate. Its latency is compared with the browser backend on the development rig
+(ADR-0005).
 
-**Why this priority**: Kept only if measurements show a material latency gain on the owner's
-Scarlett (ADR-0005 rule: p95 round trip ≥ 10 ms lower, or meets an ADR-0002 budget that the browser
-misses). The browser stays the default. Scope this term is in Clarifications.
+**Why this priority**: A stretch goal (owner, 2026-11-21). Kept only if measurements show a material
+latency gain (ADR-0005 rule: p95 round trip ≥ 10 ms lower, or meets an ADR-0002 budget that the
+browser misses). The browser is the only backend this term; FR-020 keeps the interface so native
+can be added later without changing consumers.
 
 **Independent Test**: Run the same golden recordings and latency benchmark through both backends and
 compare.
@@ -212,7 +223,7 @@ compare.
 ### Edge Cases
 
 - **Labels before permission**: device names are hidden until mic permission is granted. The app asks
-  for permission only when the owner opens audio setup or starts an audio feature (Constitution IX),
+  for permission only when the user opens audio setup or starts an audio feature (Constitution IX),
   never at startup. The permission probe used to unlock labels MUST stop all tracks immediately after
   enumeration.
 - **Built-in mic with built-in speakers**: with echo cancellation off, metronome and backing audio
@@ -226,8 +237,7 @@ compare.
 - **Permission denied**: audio features are unavailable, with a clear "how to enable" message.
   Tap-based features keep working (Constitution XI).
 - **Multi-channel limits**: if the platform delivers only a mono or stereo downmix and the chosen
-  channel can't be isolated, the app warns and suggests the native backend (if available) or the
-  interface's routing.
+  channel can't be isolated, the app warns and suggests the interface's own routing.
 - **Sample-rate mismatch**: the device runs at 44.1 kHz and models expect a different rate. The input
   is resampled (FR-019). A sample-rate change mid-session triggers recalibration.
 - **Exclusive mode / device busy** (a DAW holds the device): a clear message; no crash.
@@ -235,8 +245,8 @@ compare.
   id first, then by name.
 - **Bluetooth output selected**: a warning about its high latency (usually ≥ 150 ms), recommending a
   wired output for play-along.
-- **Katana:GO as both input and output**: supported. Hardware monitoring through its headphone out is
-  the default.
+- **USB amp as both input and output** (e.g. Katana:GO): supported. Where its gear entry declares
+  hardware monitoring, that is the recommended monitoring mode.
 - **Low-latency transport unavailable on the platform**: fall back to a higher-latency transport,
   and report it in the performance overlay (transport design in plan.md).
 
@@ -250,14 +260,19 @@ compare.
   platform exposes them) and active state, and refresh the list on device changes.
 - **FR-002**: Users MUST be able to select an input device, an input channel, and an output device
   independently.
-- **FR-003**: System MUST remember the preferred input device, channel and output device per
-  InstrumentProfile, and restore them by stable id, then by name, when present.
-- **FR-004**: System MUST ship device profiles (Focusrite Scarlett 4th Gen family, Boss Katana:GO,
-  generic class-compliant) with suggested settings, defaults and setup tips, available offline.
-  Profiles are matched by device-name heuristics. A match MAY change **defaults and tips** but never
-  **availability**: every capability works identically for an unmatched interface. Unmatched
-  interfaces default to software monitoring off, with the hint "use your interface's direct-monitor
-  control if it has one".
+- **FR-003**: System MUST remember the preferred input device, channel and output device per My Gear
+  instrument (per local profile), and restore them by stable id, then by name, when present.
+- **FR-004**: Device profiles are **user data**: My Gear interface/amp and output entries (016 FR-006,
+  FR-008), created from shipped, editable presets (Focusrite Scarlett Solo 4th Gen, Focusrite
+  Scarlett 2i2 4th Gen, Boss Katana:GO, generic class-compliant; 016 FR-007) or from scratch.
+  Physical devices are matched to entries by the entry's name pattern, then to presets. A match MAY
+  change **defaults and tips** (channel labels, signal type, monitoring recommendation) but never
+  **availability**: every capability works identically for an unmatched interface. No model is
+  hardcoded outside the preset data. Unmatched interfaces default to software monitoring off, with
+  the hint "use your interface's direct-monitor control if it has one".
+- **FR-004a**: Each interface/amp entry's **signal type** (dry or processed, set by the user, 016
+  FR-006) MUST be shown in the signal check. When the entry says processed, or FR-012 detects heavy
+  processing, the app MUST recommend the dry signal for detection, without blocking.
 - **FR-005**: Capture MUST request echo cancellation, noise suppression and automatic gain control
   off, verify the applied settings, and warn when any remains on.
 
@@ -300,8 +315,11 @@ compare.
   with device-specific steps where known (e.g. Katana:GO).
 - **FR-013**: When 002 is available, the wizard MUST start with a tuner for the active profile's
   strings, and offer instrument auto-detection (guitar vs bass from the detected open-string range)
-  with confirmation of the InstrumentProfile. The owner plays the **lowest open string**. Below 60 Hz
-  suggests bass, above 70 Hz suggests guitar, and 60–70 Hz (or any custom tuning) asks the owner.
+  with confirmation of the instrument. It runs only when the user is creating an instrument or has
+  none selected; otherwise the selected My Gear instrument is trusted and the tuner just checks its
+  tuning. The user plays the **lowest open string**, and the app suggests the presets (001 FR-009,
+  any string count) whose lowest string is within 1 semitone; between 41 Hz and 75 Hz (where
+  extended-range guitars and basses overlap) it always asks the user.
   Tuner accuracy inherits 002's criteria. Until 002 lands, these steps are omitted, not shown
   disabled.
 
@@ -335,8 +353,13 @@ compare.
 - **FR-017**: All app sounds (metronome, backing tracks, reference tones, lesson audio) MUST route to
   the selected output where the platform supports output selection. Otherwise they fall back to the
   system default, with a notice.
-- **FR-018**: A monitoring setting (hardware direct / software / off) MUST exist. The default comes
-  from the device profile (FR-004; hardware direct where the profile declares it). Software
+- **FR-018**: A monitoring setting (hardware direct / software / off) MUST exist per interface entry
+  (for a device with no My Gear entry, per device stable id in the profile settings record) and be
+  user-changeable at any time. The recommendation comes from the gear entry (FR-004): hardware
+  direct where the entry declares it available. Where the entry declares **no** direct monitoring,
+  the first audio feature asks "You may not hear your instrument. Turn on software monitoring?"
+  and shows its latency. Software monitoring shows "uncalibrated" while no valid calibration exists.
+  Software monitoring is a mic-active context (FR-022). Software
   monitoring, when chosen, shows its added latency, taken from the current round-trip calibration.
 
 **Signal path**
@@ -345,7 +368,7 @@ compare.
   anti-aliasing, to each consumer's expected rate (DSP: native rate; ML: the rate in the model's
   registry manifest, 007 FR-023).
 - **FR-020**: Audio capture MUST sit behind an AudioBackend interface with interchangeable
-  implementations: (a) browser (default); (b) native desktop (US8, scope per Clarifications). Both
+  implementations: (a) browser (the only backend this term); (b) native desktop (US8, stretch). Both
   MUST deliver identical sample streams to consumers through the same real-time transport contract
   (lock-free, no allocation or locking in the audio callback; Constitution V).
 - **FR-021**: A mock device layer MUST simulate devices (names, channels, sample rates, injected
@@ -356,12 +379,14 @@ compare.
 
 - **FR-022**: The microphone MUST be active only while a feature that needs it is in use: setup
   wizard, tuner, calibrations, audio drills, a lesson's Drill and Play stages in audio mode (not Read
-  or See), and recording. A visible "listening" indicator MUST
+  or See), recording, and software monitoring while one of these is active (monitoring alone never
+  keeps the mic on). A visible "listening" indicator MUST
   show whenever capture is live, and all tracks MUST stop when no feature needs them (Constitution
   IX; `privacy-auditor` gate).
 - **FR-023**: Lesson frontmatter MUST support an optional `needs` list (`audio-input`, `camera`;
-  default empty) by amending 001 FR-022 and FR-023. `camera` is never allowed alone. Lesson start
-  MUST show a device checklist and select audio-only or fused mode by availability and feature flags.
+  default empty; defined in 001 FR-022). `camera` is never allowed alone. Lesson start MUST show a
+  device checklist and select audio-only or fused mode by device availability, feature flags and
+  whether the user has turned the vision assistant on (008 FR-001).
   Unmet needs show as unavailable, never broken.
 - **FR-024**: With no external interface, System MUST offer the built-in mic with a warning that
   accuracy will be lower.
@@ -370,6 +395,17 @@ compare.
 
 - **FR-025**: The performance overlay MUST show the active backend, transport, sample rate, buffer
   configuration, calibrated round-trip latency, buffer fill and dropout count.
+- **FR-027**: Development test tooling (not shipped to users): (a) the hardware latency reference is a
+  loopback cable measured with a dedicated round-trip latency utility (SC-002); (b) the A/V sync
+  reference is an ESP32 device that fires an LED flash and a piezo click with LED-to-click skew
+  ≤ 1 ms, verified by capturing a photodiode and the piezo on two inputs of one interface at 48 kHz
+  (SC-008). The latency utility and its stated accuracy (≤ 0.5 ms) are named in plan.md (owner). Its firmware, wiring and its own timing verification live under `bench/` (plan.md). In
+  the app, users calibrate with a guided pluck or clap (FR-015).
+- **FR-028**: Phones and tablets get a **limited mode**, triggered by capability detection (no output
+  selection, or no multi-channel input) or by user choice: built-in microphone input (or a USB-C
+  class-compliant interface where the OS allows), system output when output selection is
+  unsupported, no A/V calibration below 30 fps, and a notice listing what is limited. Laptops are
+  the primary target.
 - **FR-026**: The level meter and clipping state MUST have a screen-reader readout (e.g. "Level −12 dB,
   OK") and a cue that doesn't rely on colour. The wizard MUST work at 390 px and be readable from a
   music stand (Constitution VI).
@@ -378,7 +414,8 @@ compare.
 
 - **AudioDevice**: stable id, name, kind (input/output), channel count, sample rates, matched device
   profile.
-- **DeviceProfile**: hardware family, name patterns, suggested settings, tips, monitoring capability.
+- **DeviceProfile**: a My Gear interface/amp or output entry (016), or a shipped preset: name
+  pattern, channels and labels, signal type, monitoring capability, tips.
 - **DevicePreference**: InstrumentProfile id → input device id, channel, output device id.
 - **DeviceLifecycle**: current state, last event, error detail.
 - **SignalReport**: peak, RMS, clipping count, noise floor, hum frequency, clean/effected class.
@@ -390,8 +427,10 @@ compare.
 
 ### Measurable Outcomes
 
-Reference setup: the owner's laptop (Clarifications), the Scarlett 4th Gen (exact model in
-Clarifications) and the Katana:GO, in Chrome (latest stable) on Windows.
+Development test rig (not a product default, Constitution XIII): the owner's laptop (the
+development benchmark machine, recorded in plan.md), the owner's Scarlett 4th Gen and Katana:GO, in
+Chrome (latest stable) on Windows. Every SC that names a device MUST also pass with a gear entry
+created from scratch for that device (no preset).
 
 - **SC-001**: A newly plugged device appears in the list within 2 s of the physical plug-in
   (stopwatch or video timestamp; the first-ever plug with driver installation is excluded) in ≥ 95%
@@ -430,8 +469,8 @@ Clarifications) and the Katana:GO, in Chrome (latest stable) on Windows.
 - **SC-011**: Over 10 runs each: first-time setup (connect → level → noise/hum → latency) takes
   ≤ 90 s, and ≤ 120 s once the 002 tuner step exists. A returning session (device auto-restored,
   level check) is ready in ≤ 30 s.
-- **SC-012**: If the native backend is in scope, both backends are measured on the reference setup
-  and recorded in ADR-0005, and the ADR-0005 keep/drop rule is applied.
+- **SC-012**: (Stretch, only if the native backend is taken up.) Both backends are measured on the
+  test rig and recorded in ADR-0005, and the ADR-0005 keep/drop rule is applied.
 - **SC-013**: privacy-auditor stream-lifetime tests show the mic live only in the FR-022 contexts,
   with the indicator visible 100% of the time it is live, and 0 captured calibration media retained.
 
@@ -439,10 +478,38 @@ Clarifications) and the Katana:GO, in Chrome (latest stable) on Windows.
 
 - Interfaces are USB class-compliant. Vendor control panels (e.g. Focusrite Control) aren't needed for
   basic use.
-- Latency benchmarks run on the owner's hardware, are owned by `perf-auditor`, and are committed.
-  CI runs the mock-device latency tests (no audio hardware in CI).
+- Latency benchmarks run on the owner's test rig, are owned by `perf-auditor`, and are committed.
+  CI runs the mock-device latency tests (no audio hardware in CI). Every user runs their own
+  calibration in the app; results are saved per device (FR-014).
 - Fixture recordings for SC-006 and SC-007 made by the owner use the per-recording opt-in
   (Constitution IX) and live under `fixtures/golden/` with consent records.
 - Shared-memory transport requires cross-origin isolation headers on the deploy target. The threat
   model is updated accordingly.
 - Feature 002 provides the pitch detector for the tuner and auto-detection steps.
+
+## Clarifications
+
+### Session 2026-11-21 (owner answers, constitution v2.2.0)
+
+- Q: Exact Scarlett model? → A: Don't hardcode any model. Device profiles are user-editable My Gear
+  entries, with shipped presets for Scarlett Solo 4th Gen, Scarlett 2i2 4th Gen, Katana:GO and a
+  generic interface. The owner tests on their own Scarlett (FR-004).
+- Q: Katana:GO over USB: dry or processed? → A: The user sets it per device. Signal check detects
+  heavy processing and recommends the dry signal for detection (FR-004a, FR-012).
+- Q: Tauri desktop this term? → A: No. Browser only; ADR-0005 stays open as a stretch goal (US8,
+  FR-020).
+- Q: Monitoring? → A: A user setting (hardware direct, software or off); hardware direct is
+  recommended when the device supports it (FR-018).
+- Q: Hardware latency reference? → A: For development testing, a loopback cable measured with a
+  dedicated round-trip latency utility. In the app, every user calibrates their own device, saved
+  per device (FR-014, FR-027, SC-002).
+- Q: A/V sync reference? → A: An ESP32 LED-flash + piezo-click device for development testing; users
+  calibrate with a guided pluck or clap (FR-015, FR-027, SC-008).
+- Q: Phones? → A: Laptop first; phones get the built-in mic and a limited mode (FR-028).
+- Q: Reference hardware? → A: The owner's laptop is the development benchmark machine (details to be
+  recorded in plan.md); the minimum target is a laptop with integrated graphics.
+- Spec re-review 2026-11-21 (BLOCK: 1 blocker + 8 others) folded in: software monitoring as a
+  mic-active context (FR-018, FR-022), default for no direct monitoring, ESP32 skew ≤ 1 ms and its
+  verification (FR-027), ≥ 10 gestures (US5), auto-detect only when there is no instrument and
+  extended-range-safe (FR-013), limited-mode trigger (FR-028), lesson-mode rule (FR-023). **OPEN
+  (owner):** name the round-trip latency utility.

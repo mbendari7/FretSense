@@ -1,7 +1,7 @@
 # 0005. AudioBackend: WebAudio (Browser, Default) vs Native Tauri + Rust/cpal
 
-- Status: Proposed. The latency numbers must be measured on the owner's Scarlett during 015
-  implementation, before this ADR can be Accepted.
+- Status: Proposed. **Native backend is a stretch goal, out of scope this term** (owner, 2026-11-21).
+  The browser backend ships first; the native numbers are measured only if the stretch goal is taken up.
 - Date: 2026-11-21
 - Deciders: owner
 - Related: spec 015 (FR-001–FR-004, SC-002, SC-008), ADR-0002, Constitution V, XI, XII

@@ -44,3 +44,15 @@
   FR-056–FR-060, new FR-062). Open for the owner: 7-string custom profiles, bass track mapping.
 - "Markdown files with structured metadata" (FR-022) is an owner-authoring constraint, not an
   implementation choice.
+- 2026-11-21: amended for constitution v2.2.0 (personalisation, no locks) and the owner's clarify answers; re-review pending.
+- 2026-11-21 re-review after v2.2.0: BLOCK; all findings folded in (see the spec's Clarifications). Items marked OPEN need the owner.
+
+## Amendment after plan gates and analyze (2026-11-21)
+
+- FR-043 (export disclosure, copy re-stamping, natural-key copy merge), FR-044 (reset wording),
+  FR-047/FR-049 (scroll axis, keyboard model, announcements, reduce motion, screen-reader pass),
+  FR-026 (preset replaces the whole geometry), FR-051 (enharmonic ids), FR-066 (natural keys),
+  FR-066a (per-field settings, tombstones, preview, 24 h clock bound, writer id), FR-041 reference.
+- 013 US2-2 and FR-004 now use per-field HLC LWW instead of server receive time.
+- These came from the architecture, security and privacy gates and the 001 checklists. They need
+  **owner approval** of the amended spec before implementation starts.

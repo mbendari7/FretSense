@@ -81,27 +81,34 @@ flowchart LR
 
 | # | Feature | Instruments | Status |
 |---|---------|-------------|--------|
-| 001 | Theory engine, fretboard and lessons | guitar + bass | Specified (amended, reviewed twice); waiting on clarify answers |
-| 015 | Audio I/O and device management (built right after 001) | guitar + bass | Specified; under review; waiting on clarify answers |
+| 001 | Theory engine, fretboard and lessons; profile-scoped sync-ready data, My Gear instruments, packs format, stage choice | guitar + bass | Clarified; amended for v2.2.0; plan in progress |
+| 016 | Personalisation: local profiles, My Gear, onboarding, learning paths, curriculum packs, quality tiers (built right after 001) | guitar + bass | Specified; under review |
+| 015 | Audio I/O and device management (built after 016) | guitar + bass | Clarified; amended for v2.2.0 |
 | 002 | DSP pitch detection (YIN) | guitar + bass | Planned |
 | 003 | Play-along drills + timing/onset detection | guitar + bass | Planned |
 | 004 | Chord recognition baseline (chromagram templates) | guitar | Planned |
 | 005 | Chord sheet analyzer + Viterbi fingering optimizer | guitar + bass | Planned |
-| 006 | Adaptive curriculum: concept DAG, knowledge tracing, spaced repetition, practice planner | both | Specified (reviewed); waiting on clarify answers |
-| 007 | ML data platform: labelling tool, dataset versioning, training pipeline, tracking, registry | both | Specified (reviewed); waiting on clarify answers |
-| 008 | Vision I: hand + neck tracking → (string, fret) | both | Specified (reviewed); waiting on clarify answers |
+| 006 | Adaptive curriculum: concept DAG, knowledge tracing, spaced repetition, planner (recommends, never locks) | both | Clarified; amended for v2.2.0 |
+| 007 | ML data platform: labelling tool, dataset versioning, training pipeline, tracking, registry | both | Clarified |
+| 008 | Vision I: guided camera setup, hand + neck tracking → (string, fret), live highlighting | both | Clarified; amended for v2.2.0 |
 | 009 | ML audio models: chord CNN + polyphonic transcription (ONNX, int8, browser) | both | Specified (draft) |
 | 010 | Audio-visual fusion + camera coaching | both | Specified (draft) |
 | 011 | Vision II: picking hand, posture, technique events | both | Specified (draft) |
 | 012 | Transcription to tab and notation | both | Specified (draft) |
-| 013 | Optional sync backend: FastAPI, PostgreSQL, auth | — | Specified (draft) |
+| 013 | Optional sync backend: FastAPI, PostgreSQL, auth | — | Specified (draft); out of scope this term |
 | 014 | ESP32 LED fretboard (stretch goal) | guitar | Planned |
+
+Development test tooling (not a feature): an ESP32 LED-flash + piezo-click A/V sync reference (015 FR-027), under `bench/`.
 
 ### Dependency graph
 
 ```mermaid
 flowchart TD
-    F001[001 Theory + fretboard + lessons] --> F015[015 Audio I/O + devices]
+    F001[001 Theory + fretboard + lessons] --> F016[016 Personalisation]
+    F016 --> F015[015 Audio I/O + devices]
+    F016 --> F006
+    F016 --> F008
+    F016 -.sync-ready records.-> F013
     F015 --> F002[002 YIN pitch]
     F015 --> F003
     F015 --> F009
@@ -130,27 +137,27 @@ flowchart TD
     F015 -.A/V offset.-> F008
 ```
 
-Build order: 001 → 015 → 002 → 003 → 004 → 005 → 006 → 007 → 008 → 009 → 010 → 011 → 012 → 013 → 014.
+Build order: 001 → 016 → 015 → 002 → 003 → 004 → 005 → 006 → 007 → 008 → 009 → 010 → 011 → 012 → 013 → 014.
 
 ### Where each employer skill shows up
 
 ✔ = a primary demonstration, · = also used. Details and tests are in [SKILLS-MATRIX.md](SKILLS-MATRIX.md).
 
-| Skill | 001 | 015 | 002 | 003 | 004 | 005 | 006 | 007 | 008 | 009 | 010 | 011 | 012 | 013 | 014 |
-|-------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
-| Data structures & algorithms | ✔ graph | · ring buffer | · | · ring buf | · | ✔ DP/Viterbi, trie | ✔ DAG, heap | | · | | ✔ HMM | · | ✔ | · | |
-| Systems & concurrency | | ✔ Rust/WASM, worklet, SAB ring | ✔ | · | | | | ✔ workers | ✔ WebGPU | ✔ | · | · | | ✔ |
-| OOP & design patterns | ✔ clean arch, DI | ✔ strategy, state machine | ✔ strategy | ✔ event bus | ✔ strategy | · | · | · | ✔ strategy | ✔ strategy | ✔ observer | · | · | · | |
-| Backend & databases | · IndexedDB | · IndexedDB prefs | | | | | · IndexedDB | · | | | | | | ✔ | |
-| Testing | ✔ unit, property, E2E, visual | ✔ mock devices, hot-plug sim, golden audio | ✔ golden audio | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ golden video | ✔ ML eval | ✔ | ✔ | ✔ | ✔ contract | · |
-| DevOps / CI/CD | ✔ CI, preview deploys | · bench CI | · bench CI | | | | | ✔ Docker, ML pipeline | | ✔ ML eval CI | | | | ✔ docker-compose | |
-| Performance & observability | · | ✔ latency bench, overlay | ✔ benchmarks | ✔ | · | | | | ✔ perf overlay | ✔ | ✔ | · | | · | |
-| ML / MLOps | | | | · baseline | | ✔ KT | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | | |
-| Machine vision | | | | | | | · labelling | ✔ | | ✔ | ✔ | | | |
-| Security & privacy | · CSP, input validation | ✔ mic indicator, COOP/COEP | | | | · parser fuzzing | | ✔ consent | ✔ on-device | | ✔ | · | | ✔ auth, rate limits | |
-| Accessibility | ✔ | · | | · | | · | · | · | · | | · | | · | | |
-| Documentation | ✔ C4, ADRs | · ADR-0005 | · | · | · | · | · | ✔ cards | · | ✔ model cards | · | · | · | ✔ OpenAPI | · |
-| Signal processing & hardware | | ✔ hum, level, clean/effected, resampler | ✔ | ✔ onsets | ✔ chroma | | | | | ✔ | | | | | ✔ ESP32 |
+| Skill | 001 | 016 | 015 | 002 | 003 | 004 | 005 | 006 | 007 | 008 | 009 | 010 | 011 | 012 | 013 | 014 |
+|-------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+| Data structures & algorithms | ✔ graph | · order keys | · ring buffer | · | · ring buf | · | ✔ DP/Viterbi, trie | ✔ DAG, heap | | · | | ✔ HMM | · | ✔ | · | |
+| Systems & concurrency |  |  | ✔ worklet, SAB ring | ✔ Rust/WASM | · |  |  |  | ✔ workers | ✔ WebGPU | ✔ | · | · |  |  | ✔ embedded |
+| OOP & design patterns | ✔ clean arch, DI | ✔ configurable architecture | ✔ strategy, state machine | ✔ strategy | ✔ event bus | ✔ strategy | · | · | · | ✔ strategy | ✔ strategy | ✔ observer | · | · | · | |
+| Backend & databases | · IndexedDB | ✔ schema design, sync-ready records | · IndexedDB prefs | | | | | · IndexedDB | · | | | | | | ✔ | |
+| Testing | ✔ unit, property, E2E, visual | ✔ property, isolation | ✔ mock devices, hot-plug sim, golden audio | ✔ golden audio | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ golden video | ✔ ML eval | ✔ | ✔ | ✔ | ✔ contract | · |
+| DevOps / CI/CD | ✔ CI, preview deploys |  | · bench CI | · bench CI | | | | | ✔ Docker, ML pipeline | | ✔ ML eval CI | | | | ✔ docker-compose | |
+| Performance & observability | · | · tier benchmark | ✔ latency bench, overlay | ✔ benchmarks | ✔ | · | | | | ✔ perf overlay | ✔ | ✔ | · | | · | |
+| ML / MLOps |  |  | · resampling to model rate |  | · baseline |  |  | ✔ KT | ✔ | ✔ | ✔ | ✔ | ✔ | · |  |  |
+| Machine vision |  |  | · A/V sync |  |  |  |  |  | · labelling | ✔ |  | ✔ | ✔ |  |  |  |
+| Security & privacy | · CSP, input validation | ✔ import validation | ✔ mic indicator, COOP/COEP | | | | · parser fuzzing | | ✔ consent | ✔ on-device | | ✔ | · | | ✔ auth, rate limits | |
+| Accessibility | ✔ | ✔ keyboard reorder | · | | · | | · | · | · | · | | · | | · | | |
+| Documentation | ✔ C4, ADRs | · | · ADR-0005 | · | · | · | · | · | ✔ cards | · | ✔ model cards | · | · | · | ✔ OpenAPI | · |
+| Signal processing & hardware |  |  | ✔ hum, level, clean/effected, resampler | ✔ | ✔ onsets | ✔ chroma |  |  |  |  | ✔ |  |  |  |  | ✔ ESP32 |
 
 ## 4. Metrics
 
@@ -184,7 +191,11 @@ these mistakes is the point of the process.
 | 2026-11-21 | 001 specify | AI agent (main session) | First draft of spec 001 | Didn't name a book part (it conflicted with constitution v1). FR-032 said "within 100 ms" on every tap but SC-002 said p95. No octave rule for Cb/B#. No canonical chord-symbol format. Drill questions could be unanswerable. 23 findings in total | **spec-reviewer** returned BLOCK | Findings folded into the amended spec; the book-mapping conflict was resolved in constitution v2.0.0 (ADR-0001) |
 | 2026-11-21 | constitution v1 | AI agent (main session) | Wrote "< 30 ms note → screen" as a single budget, from the owner's brief | Never checked it against physics: two periods of a 5-string bass's low B ≈ 69 ms before any processing | Caught while writing the bass amendment | ADR-0002 splits the budget (onset ≤ 30 ms; per-instrument pitch budget); waiting on owner confirmation |
 | 2026-11-21 | 006 / 007 / 008 specify | AI agent (main session) | First drafts of the curriculum, data-platform and vision specs | 006: BKT fit could see held-out data, and the split cut sessions in two. 007: no leakage unit for a single performer, owner media could reach CI, the baseline needed the human-owned chromagram. 008: stabilisation alone exceeded the latency budget, v2 was scored against v1's own labels, and press/hover had no ground truth | **spec-reviewer** returned BLOCK on all three (12 blockers) | All findings folded in; the single-performer rule went into constitution v2.1.0 (ADR-0004) |
-| 2026-11-21 | repo setup | AI agent (main session) | Made 9 local git commits carrying an AI co-author trailer | The owner commits everything and doesn't want AI credited as a contributor | Owner review | Commits undone with the content kept as uncommitted changes (nothing was pushed); "Git rules" added to CLAUDE.md and the constitution (VII) |
+| 2026-11-21 | repo setup | AI agent (main session) | Made 10 local git commits carrying an AI co-author trailer | The owner commits everything and doesn't want AI credited as a contributor | Owner review | Commits undone with the content kept as uncommitted changes (nothing was pushed); "Git rules" added to CLAUDE.md and the constitution (VII) |
+| 2026-11-21 | summary to owner | AI agent (main session) | Reported "9 commits" while listing 10 hashes | Miscounted (two 006 commits) | Owner review | Corrected to 10 |
+| 2026-11-21 | all specs | AI agent (main session) | Specs built around the owner's gear and book (Scarlett/Katana defaults, book-part tracks, mastery locks) | Didn't question whether a single-owner design was what the product needed | Owner direction change | Constitution v2.2.0 (ADR-0006), new feature 016, and every spec amended |
+| 2026-11-21 | 001 plan | AI agent (main session) | Plan, data model and contracts for 001 | Claimed "the device id is never exported" while every HLC embedded it. Settings were one LWW record although 013 merges per field. Natural-key records (settings, completion) could be duplicated by copy-import or sync. No HLC receive rule. Payload hash and itemKey encodings weren't frozen. "Raw HTML is a build error" had no mechanism. CSP was incomplete, and there was no framing defence | **privacy-auditor**, **architecture-reviewer** and **security-reviewer** all returned CHANGES REQUESTED | All fixed (per-profile writer id, per-field HLC, natural keys, frozen encodings, explicit sanitiser, full CSP, T14–T17); 013 amended to match |
+| 2026-11-21 | 001 tasks | AI agent (main session) | tasks.md | A test-writer task edited CI config (outside test-writer scope); several data-model fields lacked explicit citations; FR-043 copy rule contradicted the new natural-key rule | `/speckit-analyze` | Fixed in tasks.md and spec FR-043/FR-066a |
 
 ## 6. AI involvement per PR
 

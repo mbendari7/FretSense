@@ -36,3 +36,5 @@
 - 2026-11-21 spec-reviewer: BLOCK (5 blockers: hardware latency truth, A/V sub-frame precision, open
   state set, profile-dependent defaults, camera-only lessons) plus 18 MAJOR/MINOR findings, all folded in. Open for the owner:
   the latency reference tool, an LED+click sync device, phone scope.
+- 2026-11-21: amended for constitution v2.2.0 (personalisation, no locks) and the owner's clarify answers; re-review pending.
+- 2026-11-21 re-review after v2.2.0: BLOCK; all findings folded in (see the spec's Clarifications). Items marked OPEN need the owner.

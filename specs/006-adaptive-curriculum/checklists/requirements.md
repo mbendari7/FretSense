@@ -39,3 +39,5 @@
   (FR-007, FR-010), session-aligned frozen snapshot, single-learner fitter check (SC-002), shrinkage
   regime (FR-008), per-profile fretboard concepts (FR-006), scale-justified FR-014 (no forced
   data structure), determinism scope (FR-020a), completeness edge cases. Open for the owner: ownership of the fitter and synthetic generator.
+- 2026-11-21: amended for constitution v2.2.0 (personalisation, no locks) and the owner's clarify answers; re-review pending.
+- 2026-11-21 re-review after v2.2.0: BLOCK; all findings folded in (see the spec's Clarifications). Items marked OPEN need the owner.

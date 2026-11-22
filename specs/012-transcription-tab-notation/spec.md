@@ -8,7 +8,7 @@
 
 **Input**: User description: "Automatic transcription: record yourself playing → tab and notation output, with rhythm and onset detection."
 
-**Practice-session value**: the owner records a riff, line or improvisation and gets readable tab
+**Practice-session value**: the user records a riff, line or improvisation and gets readable tab
 and notation for their instrument. They can review what they actually played, save ideas, and
 compare against a target.
 
@@ -20,10 +20,10 @@ markings, optional), 007 (consented recording).
 
 ### User Story 1 - Record → Tab (Priority: P1)
 
-The owner records (with opt-in) up to 2 minutes, and gets tab for the active InstrumentProfile.
+The user records (with opt-in) up to 2 minutes, and gets tab for the active InstrumentProfile.
 Positions come from fusion when the camera is on, otherwise from the fingering optimizer.
 
-**Why this priority**: Tab is the format the owner reads most.
+**Why this priority**: Tab is the format the user reads most.
 
 **Independent Test**: Transcribe held-out labelled clips, and compare notes, positions and onsets
 against the labels.
@@ -54,7 +54,7 @@ renders standard notation alongside tab (bass clef for bass, treble 8vb for guit
 
 ### User Story 3 - Edit and Export (Priority: P2)
 
-The owner corrects notes, positions and rhythms in the editor (corrections may feed 007 active
+The user corrects notes, positions and rhythms in the editor (corrections may feed 007 active
 learning with opt-in) and exports to a standard interchange format and PDF.
 
 **Why this priority**: Automatic output is never perfect. Corrections make it useful and improve

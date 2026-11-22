@@ -1,8 +1,10 @@
 # FretSense
 
 An interactive **guitar and bass** theory handbook that teaches on the fretboard, listens to your
-real instrument through an audio interface, and (later) watches your hands on camera to coach
-technique. Everything runs on your own device.
+real instrument through whatever audio interface or USB amp you own, and (optionally) watches your
+hands on camera to coach technique. It's **personalised for every player**: your gear, goals,
+learning paths, lesson structure and curriculum. Nothing is locked. Everything runs on your own
+device, with no account.
 
 > **Status (2026-11-21): specification phase, no application code yet.** This repo is built
 > strictly spec-first: constitution → spec → clarify → plan → tasks → analyze → implement. See
@@ -11,8 +13,9 @@ technique. Everything runs on your own device.
 
 ## Why I'm building it
 
-1. **To practise better.** I open it before every session, on guitar (Squier Strat → Focusrite
-   Scarlett) and bass. It tells me what to practise and checks what I actually play.
+1. **To practise better, and to help any player practise better.** I open it before every session.
+   My rig (a Squier Strat into a Focusrite Scarlett, plus a Katana:GO) is just one example setup.
+   It suggests what to practise, never forces it, and checks what I actually play.
 2. **To build a serious ML and vision system**, with real datasets, held-out evaluation, model cards,
    on-device inference, and models that ship only if they beat their DSP baselines.
 3. **To show disciplined, spec-driven engineering with AI agents.** Subagents review and gate the
@@ -21,29 +24,43 @@ technique. Everything runs on your own device.
    latency/A-V cross-correlation estimator. I also run every training experiment and write every
    lesson.
 
-## Book → lesson tracks → features
+## How it's personalised
 
-The curriculum follows *Guitar Theory for Dummies*. Each book part is a **lesson track** and each
-chapter a lesson (Read → See → Drill → Play → Camera-coach). Features are capabilities, and a
-stage becomes available when its enabling feature ships. *Part titles below are to be filled in by
-the owner from the book.*
+- **My Gear**: your instruments (type, strings, tuning, fret count, name), interface or amp, camera
+  and output. Shipped presets (e.g. Scarlett Solo/2i2 4th Gen, Katana:GO, generic interface) are
+  editable starting points, never assumptions.
+- **Learning paths**: a short onboarding (goals, instrument, level, genres, practice time) suggests a
+  path you can edit, reorder, extend or trim. Keep several and switch between them.
+- **Lessons your way**: pick which stages you want (Read, See, Drill, Play, Camera-coach) and their
+  order. Jump to any lesson, track or drill at any time; nothing is locked.
+- **Curriculum packs**: the built-in pack is general theory. Make your own pack that maps lessons to
+  the book or course you follow. Mine follows *Guitar Theory for Dummies*.
+- **Local profiles**: several players can share one device, each with their own gear, settings,
+  paths and progress. Offline-first, no account.
+- **Camera assistant**: optional. A guided setup, live fretboard highlighting and technique coaching.
+  Everything works without it.
 
-| Lesson track | Topics (examples) | Read / See / Drill | Play | Camera-coach |
-|--------------|-------------------|--------------------|------|--------------|
-| Book part 1 | Notes on the neck, intervals | 001 | 015 + 002 + 003 | 008 + 010 |
-| Book part 2 | Scales and modes | 001 | 015 + 002 + 003 | 010 |
-| Book part 3 | Chords and arpeggios | 001 | 015 + 004 / 009 | 010 |
-| Book part 4 | Keys, progressions, harmony | 001 + 005 | 015 + 004 / 009 | 010 |
-| Remaining parts | (owner to map) | 001 | — | — |
-| `bass` (owner-defined) | Root–fifth–octave, arpeggios, walking lines, chord-tone lock | 001 | 015 + 002 + 003 | 010 |
-| All tracks | Adaptive ordering, spaced review, practice plans | 006 | | |
+## Topics → features
+
+Lesson stages become available when their enabling feature ships.
+
+| Topic (General Theory pack) | Read / See / Drill | Play | Camera-coach |
+|-----------------------------|--------------------|------|--------------|
+| Notes on the neck, intervals | 001 | 015 + 002 + 003 | 008 + 010 |
+| Scales and modes | 001 | 015 + 002 + 003 | 010 |
+| Chords and arpeggios | 001 | 015 + 004 / 009 | 010 |
+| Keys, progressions, harmony | 001 + 005 | 015 + 004 / 009 | 010 |
+| Bass: root–fifth–octave, arpeggios, walking lines, chord-tone lock | 001 | 015 + 002 + 003 | 010 |
+| Paths, packs, profiles, My Gear | 001 + 016 | | |
+| Adaptive suggestions, spaced review, practice plans | 006 | | |
 
 ## Roadmap
 
 | # | Feature | Spec |
 |---|---------|------|
 | 001 | Theory engine, fretboard and lessons (guitar + bass) | [spec](specs/001-theory-fretboard-lessons/spec.md) |
-| 015 | Audio I/O and device management (built right after 001) | [spec](specs/015-audio-io-device-management/spec.md) |
+| 016 | Personalisation: profiles, My Gear, onboarding, paths, packs (right after 001) | [spec](specs/016-personalization/spec.md) |
+| 015 | Audio I/O and device management (after 016) | [spec](specs/015-audio-io-device-management/spec.md) |
 | 002 | DSP pitch detection (YIN), guitar + bass | planned |
 | 003 | Play-along drills + timing/onset detection | planned |
 | 004 | Chord recognition baseline (chromagram templates) | planned |
@@ -55,7 +72,7 @@ the owner from the book.*
 | 010 | Audio-visual fusion + camera coaching | [draft](specs/010-av-fusion-coaching/spec.md) |
 | 011 | Vision II: picking hand, posture, technique events | [draft](specs/011-vision-picking-posture-technique/spec.md) |
 | 012 | Transcription to tab and notation | [draft](specs/012-transcription-tab-notation/spec.md) |
-| 013 | Optional sync backend (FastAPI, PostgreSQL, auth) | [draft](specs/013-sync-backend/spec.md) |
+| 013 | Optional sync backend (FastAPI, PostgreSQL, auth); not this term | [draft](specs/013-sync-backend/spec.md) |
 | 014 | ESP32 LED fretboard (stretch goal) | planned |
 
 The dependency graph and the per-feature skill map are in [docs/AI-WORKFLOW.md](docs/AI-WORKFLOW.md#3-roadmap-one-spec-per-feature).
@@ -64,8 +81,8 @@ The dependency graph and the per-feature skill map are in [docs/AI-WORKFLOW.md](
 
 - **App:** pnpm monorepo, TypeScript strict, React + Vite installable PWA, SVG fretboard, IndexedDB
 - **Theory engine:** pure TypeScript, zero runtime dependencies, Vitest + fast-check
-- **Audio:** WebAudio AudioWorklet + SharedArrayBuffer ring buffer; Rust → WebAssembly DSP; optional
-  Tauri desktop backend with Rust/cpal (WASAPI/ASIO) ([ADR-0005](docs/adr/0005-audio-backend-webaudio-vs-native.md))
+- **Audio:** WebAudio AudioWorklet + SharedArrayBuffer ring buffer; Rust → WebAssembly DSP; a native
+  Tauri/Rust/cpal backend is a stretch goal ([ADR-0005](docs/adr/0005-audio-backend-webaudio-vs-native.md))
 - **ML/vision:** Python training in `ml/`, versioned datasets with cards, experiment tracking and a
   model registry, ONNX + int8, onnxruntime-web (WebGPU with WASM fallback)
 - **Optional backend:** FastAPI + PostgreSQL, OAuth/OIDC, OpenAPI
@@ -84,6 +101,6 @@ pnpm --filter web dev   # local PWA
 
 ## Project rules
 
-- [Constitution v2.1.0](.specify/memory/constitution.md): the highest authority
+- [Constitution v2.2.0](.specify/memory/constitution.md): the highest authority
 - [CLAUDE.md](CLAUDE.md): agent rules, gates, git rules
 - [ADRs](docs/adr/README.md), [Threat model](docs/THREAT-MODEL.md)

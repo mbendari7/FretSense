@@ -13,8 +13,10 @@ window sizing (ADR-0002) and vision geometry (fret spacing comes from scale leng
 ## Decision
 A pure, immutable `InstrumentProfile` value in the theory domain:
 `{ id, family: guitar|bass, stringCount, tuning: SpelledNote[] (low→high), fretCount,
-scaleLengthMm, pitchRange (derived) }`. Built-in profiles are data. Custom profiles are validated
-(string counts of the built-in families, 4–6; strictly ascending open strings; ≤ 24 frets; 7-string guitar is pending the owner's decision). **Every** fretboard, drill, DSP and vision
+scaleLengthMm, pitchRange (derived) }`, plus a user-given `name` when it lives in a profile's My Gear
+(ADR-0006). Built-in profiles are presets. User instruments are validated: guitar 6–8 strings, bass
+4–6 strings; strictly ascending open strings within the family range; 12–24 frets (defaults: guitar
+22, bass 20). **Every** fretboard, drill, DSP and vision
 function takes a profile argument. No module may reference a string count or tuning literal
 outside the profile definitions, and a lint rule plus property tests (run across all profiles)
 enforce this.
@@ -30,7 +32,8 @@ enforce this.
 - 001's engine API changes from `(tuning, string, fret)` to `(profile, string, fret)`.
 - Every fixture table gains a profile column; property tests are parameterised over all profiles.
 - Fret positions for vision come from `scaleLengthMm` (equal-tempered fret formula); 001 also uses it for optional proportional fret spacing (FR-062).
-- Open: whether custom 7-string guitar profiles are allowed (clarify batch).
+- User instruments are profile-scoped, sync-ready records (ADR-0006, Constitution XIII). The engine
+  sees only the immutable geometry value.
 
 ## AI involvement
 _To be written by the owner._

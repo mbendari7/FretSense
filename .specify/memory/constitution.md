@@ -1,14 +1,16 @@
 # FretSense Constitution
 
 FretSense is an interactive guitar and bass theory handbook, real-time practice companion, and
-on-device machine-vision / machine-learning system. It follows *Guitar Theory for Dummies*: each
-book part becomes one **lesson track**, and each chapter one lesson
-(Read → See → Drill → Play → Camera-coach). Features are capability-oriented (see the roadmap);
-a track's lessons ship once the features they need exist. FretSense has three goals of equal
-weight: (a) a teaching tool the owner uses every practice session, on guitar and bass, that adapts
-to them; (b) a deep, rigorously evaluated ML and machine-vision system; (c) a showcase of
-fundamental engineering skills, each used where it is genuinely needed. A feature that would not
-help a real practice session does not ship.
+on-device machine-vision / machine-learning system, **personalised to each user**: their own gear,
+goals, learning paths, lesson structure and curriculum. Its built-in curriculum is general music
+theory, organised as a **curriculum pack** of lessons (stages Read → See → Drill → Play →
+Camera-coach). Users can create packs that map lessons to any book or course they follow; the
+owner's *Guitar Theory for Dummies* pack is one example, not a dependency. Features are
+capability-oriented (see the roadmap); a lesson stage appears once the feature it needs exists.
+FretSense has three goals of equal weight: (a) a teaching tool that any guitarist or bassist, the
+owner included, uses every practice session and that adapts to them; (b) a deep, rigorously
+evaluated ML and machine-vision system; (c) a showcase of fundamental engineering skills, each used
+where it is genuinely needed. A feature that would not help a real practice session does not ship.
 
 ## Core Principles
 
@@ -86,10 +88,12 @@ Rationale: feedback that lags the hand is useless; unbacked numbers are not cred
 - All core features (theory, lessons, drills, audio, local progress) MUST work offline as an
   installable PWA, with progress stored on the device.
 - No account is required for any feature. Optional cloud sync MAY exist only as an explicit opt-in.
+- Several local profiles MAY share one device; each profile owns its gear, settings, paths and
+  progress, and no profile can see another's data.
 - Every screen MUST be usable at a 390 px phone viewport and readable from a music stand.
 - Each feature spec MUST state how it helps a real practice session.
 
-Rationale: the owner practises with an instrument in hand, often away from a desk or network.
+Rationale: users practise with an instrument in hand, often away from a desk or network.
 
 ### VII. Transparent AI Use
 
@@ -109,17 +113,20 @@ Rationale: the workflow itself is a deliverable and must be auditable.
 - Every instrument-dependent behaviour MUST be driven by an `InstrumentProfile` (string count,
   tuning, fret count, pitch range, scale length). Hardcoding six strings, a tuning, or a fret count
   outside a profile definition is a violation.
-- Supported profiles: 6-string guitar (Standard, Drop D, Eb, DADGAD), 4-string bass (EADG, Drop
-  D), 5-string bass (BEADG), and owner-defined custom tunings.
+- Instruments are user-defined in each profile's **My Gear** (type, string count, tuning, fret
+  count, name). Built-in instrument presets (6-string guitar: Standard, Drop D, Eb, DADGAD; 4-string
+  bass: EADG, Drop D; 5-string bass: BEADG) are starting points, not assumptions.
 - Lessons, drills, models and metrics MUST declare the instruments they apply to; accuracy and
   latency MUST be reported per instrument.
 
-Rationale: the owner plays guitar and bass; bass is not a special case of guitar.
+Rationale: users play guitars and basses of many kinds; bass is not a special case of guitar.
 
 ### IX. On-Device Privacy
 
 - Camera and microphone data MUST be processed on the device. Raw audio/video MUST NOT leave the
-  device, and MUST NOT be stored, unless the owner explicitly opts in per recording.
+  device, and MUST NOT be stored, unless the user explicitly opts in per recording. Corrections a
+  user makes for active learning stay on the device unless that user explicitly chooses to share
+  them.
 - The microphone and camera MUST be active only while a feature that needs them is in use, with a
   clear on-screen "listening" / "camera on" indicator whenever they are active.
 - Recordings contributed to datasets require explicit, revocable consent and are stripped of
@@ -127,7 +134,7 @@ Rationale: the owner plays guitar and bass; bass is not a special case of guitar
 - A threat model (`docs/THREAT-MODEL.md`) MUST be kept current; any feature adding a network call,
   storage of media, or new permission MUST update it and pass `privacy-auditor`.
 
-Rationale: a practice tool watching and listening to the owner must be trustworthy by design.
+Rationale: a practice tool watching and listening to its users must be trustworthy by design.
 
 ### X. ML Rigor (NON-NEGOTIABLE)
 
@@ -150,8 +157,12 @@ Rationale: a model without honest evaluation is a demo, not engineering.
 
 ### XI. Graceful Degradation
 
-- Every feature MUST work audio-only. Camera and ML are enhancements behind feature flags, off by
+- Every feature MUST work audio-only, and every lesson MUST have a path that needs no camera.
+  Machine vision is an assistant the user turns on; camera and ML are behind feature flags, off by
   default until they pass their gates.
+- Compute-heavy features MUST offer quality tiers (at least low / medium / high), chosen
+  automatically from an on-device benchmark and changeable by the user. The minimum target is a
+  laptop with integrated graphics.
 - DSP baselines (e.g. YIN, chromagram templates) MUST remain available and selectable whenever an
   ML model exists for the same task.
 - Missing permissions, unsupported hardware (no WebGPU, no camera), or failed model loads MUST
@@ -168,6 +179,26 @@ Rationale: practice must never be blocked by the fanciest component failing.
 
 Rationale: employers value judgement about when to use a tool, not a checklist of tools.
 
+### XIII. Personalised, Never Locked
+
+- **Any user, any gear.** No feature may assume a specific instrument, interface, amp, camera or
+  output. Shipped device and instrument profiles are editable presets; the owner's own setup is an
+  example and a test rig, never a default.
+- **No locked content.** Every lesson, track, drill and tool MUST be reachable at any time.
+  Mastery and recommendations MAY suggest a next step and drive progress display; they MUST NOT
+  hide, disable or gate anything.
+- **User-shaped learning.** Learning paths (generated from the user's goals, then editable,
+  reorderable, multiple and switchable), lesson-stage selection and order, and curriculum packs
+  MUST be user-editable data, not code.
+- **Adjustable adaptation.** Every adaptive behaviour (question weighting, thresholds, sensitivity)
+  MUST have a user-visible setting, including off where meaningful.
+- **Sync-ready local data.** All user data MUST be scoped to a local profile and carry stable
+  globally unique ids, timestamps, schema versions and deletion tombstones, so optional sync
+  (feature 013) needs no migration of existing records.
+
+Rationale: a practice companion is only useful if it fits the learner's instrument, goals and
+pace; forced sequencing and hardcoded setups exclude most players.
+
 ## Technology & Quality Constraints
 
 - pnpm monorepo; TypeScript `strict`; `any`, non-null assertions, `@ts-ignore` need inline
@@ -180,7 +211,9 @@ Rationale: employers value judgement about when to use a tool, not a checklist o
   limiting, and an OpenAPI contract; never required by the client.
 - GitHub Actions on every PR: lint, typecheck, tests, coverage gate, small fixed-set ML eval,
   benchmarks for DSP/vision/ML-touching changes, dependency scanning.
-- Reference setups (named in each spec): Squier Stratocaster → Focusrite Scarlett; bass setup TBD.
+- Development benchmark setups are named in each spec (the owner's laptop as the benchmark
+  machine; the owner's guitars, Scarlett and Katana:GO as a test rig). They are test references,
+  never product defaults (Principle XIII).
 
 ## Machine Learning & Data Constraints
 
@@ -189,8 +222,9 @@ Rationale: employers value judgement about when to use a tool, not a checklist o
   in git.
 - Experiments are tracked and models registered with model cards; browser inference uses exported,
   evaluated artefacts only.
-- Active learning MAY feed owner-corrected low-confidence predictions into a *new* dataset version;
-  it MUST NOT alter an existing version or a test split.
+- Active learning MAY feed user-corrected low-confidence predictions into a *new* dataset version
+  (only data the user has explicitly chosen to share, or the owner's own); it MUST NOT alter an
+  existing version or a test split.
 
 ## Development Workflow & Quality Gates
 
@@ -212,4 +246,4 @@ Rationale: employers value judgement about when to use a tool, not a checklist o
 - `/speckit-analyze` and every reviewing subagent MUST treat any constitution violation as
   CRITICAL. CRITICAL findings block implementation and merge.
 
-**Version**: 2.1.0 | **Ratified**: 2026-11-21 | **Last Amended**: 2026-11-21
+**Version**: 2.2.0 | **Ratified**: 2026-11-21 | **Last Amended**: 2026-11-21

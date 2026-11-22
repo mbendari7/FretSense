@@ -1,0 +1,11 @@
+# Curriculum pack template (schema: specs/001-theory-fretboard-lessons FR-063).
+# A pack groups and orders existing lessons. It may name the book or course it follows, but it
+# MUST NOT copy text from it. Users create their own packs in the app (feature 016).
+id: ""                    # unique, kebab-case, e.g. "general-theory"
+title: ""
+source: ""                # optional: the book or course this pack follows, e.g. "My course, 2nd ed."
+schema_version: 1
+sections:                 # ordered
+  - title: ""             # e.g. "Notes on the neck"
+    label: ""             # optional: the chapter or module label in the source, e.g. "Ch. 3"
+    lessons: []           # ordered lesson ids

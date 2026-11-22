@@ -38,3 +38,5 @@
   marker leakage) plus 18 MAJOR/MINOR findings, folded in (FR-005, FR-008, FR-009, FR-011–FR-013, FR-015–FR-020,
   FR-024, FR-025, SC-001, SC-003–SC-007). Open for the owner: the human-owned boundary for press/hover,
   finger-id, barre and stabilisation.
+- 2026-11-21: amended for constitution v2.2.0 (personalisation, no locks) and the owner's clarify answers; re-review pending.
+- 2026-11-21 re-review after v2.2.0: BLOCK; all findings folded in (see the spec's Clarifications). Items marked OPEN need the owner.
