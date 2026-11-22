@@ -1,0 +1,17 @@
+{
+  "name": "fretsense",
+  "private": true,
+  "packageManager": "pnpm@10.34.9",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "pnpm -r --if-present test",
+    "test:coverage": "pnpm -r --if-present test:coverage",
+    "depcruise": "depcruise packages apps/web/src --config .dependency-cruiser.cjs",
+    "lessons:validate": "pnpm --filter web lessons:validate",
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm -r --if-present build"
+  }
+}

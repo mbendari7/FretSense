@@ -33,7 +33,7 @@ For each question give:
 - **Why:** one or two sentences tied to the vision or the constitution.
 - **Confidence:** High, Medium, or **NEEDS MAHMOUD**.
 
-Use **NEEDS MAHMOUD** for anything involving: the human-owned code list, hardware he must buy or build, his time budget, naming and branding, privacy trade-offs, removing a feature, or anything that changes the constitution. Never invent facts about his gear, laptop or schedule. Ask instead.
+Use **NEEDS MAHMOUD** for anything involving: approving lessons, handbook content or a model for release, hardware he must buy or build, his time budget, naming and branding, privacy trade-offs, removing a feature, or anything that changes the constitution. Never invent facts about his gear, laptop or schedule. Ask instead.
 
 ## When reviewing a spec
 Return:

@@ -47,6 +47,34 @@ Signatures are the contract. Bodies are implementation (tests first, per task). 
 | `positionsOf(profile, target: { pitchClass: 0..11 } \| { midi: number }, range: { fromFret; toFret; strings? })` | `FretPosition[]` |
 | `fretX(profile, fret, mode: 'uniform' \| 'proportional')` | `number` in [0, 1] (FR-062; xₙ = 1 − 2^(−n/12), normalised to the last fret) |
 
+## Instrument data exports (v1.2, 2026-11-22, provisional; code-reviewer r2 M2)
+
+- `SUGGESTED_TUNINGS: Record<InstrumentFamily, Record<number, readonly string[]>>`: starting tunings for the custom-instrument form, low to high, for every string count `FAMILY_RULES` allows (guitar 6, 7, 8; bass 4, 5, 6). Standard tunings: guitar 6 E2 A2 D3 G3 B3 E4, 7 adds B1, 8 adds F♯1 below that; bass 4 E1 A1 D2 G2, 5 adds B0, 6 adds C3 on top.
+- `suggestedTuning(family, strings): readonly string[] | undefined`: the entry above, or `undefined` for a count the family doesn't allow.
+- Every suggested tuning MUST pass `validateProfile` for its family. Tuning data lives here, never in the UI (ADR-0003).
+
+## Helper exports (v1.1, added 2026-11-22 during T017 implementation; provisional under the standing approval)
+
+The app needs these small helpers. They are part of the public API, so the contract test covers them too.
+
+| Export | Returns / purpose |
+|--------|-------------------|
+| `parsePitchClassNote(text)` | `Result<PitchClassNote>` (no octave), e.g. `"F#"` |
+| `formatPitchClass(note, style?)` | `string` |
+| `mod(n, m)` | non-negative remainder (pitch-class arithmetic) |
+| `formatInterval(interval)` | `string`, e.g. `"-P5"` |
+| `semitones(interval)` | signed semitone size |
+| `scaleType(typeId)` / `chordQuality(qualityId)` | `Result<ScaleType>` / `Result<ChordQuality>` (alias-aware lookup) |
+| `keySignature(key)` | sharps (+) or flats (−), −7..7 |
+| `spellInContext(root, ctx, pitchClass)` | `{ spelled, label, inContext, isRoot }` (context tones keep the context spelling; others follow FR-060) |
+| `presetById(id)` | `Preset \| undefined` |
+| `openString(profile, string)` | `Note \| undefined` (string 1 = highest) |
+| `midiAt(profile, pos)` | `Result<number>` |
+| `FAMILY_RULES` | per-family string counts, pitch range (provisional, O3), default fret count and scale length |
+
+`diatonicChords(key, { harmonicMinor: true })` on a minor key returns the 7 natural-minor chords
+followed by the harmonic-minor alternatives (V/V7 and vii°/vii°7), per US5-2 ("also shown").
+
 ## Stability and versioning
 
 - The package is versioned with the app (workspace). A change to any signature in this file is a

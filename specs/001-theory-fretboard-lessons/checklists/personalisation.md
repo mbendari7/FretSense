@@ -44,7 +44,7 @@
 
 ## Dependencies & Assumptions
 
-- [x] CHK020 Is the assumption that the owner writes the built-in General Theory pack's lessons recorded, with fixtures as placeholders? [Assumption, Spec §Assumptions, Constitution IV]
+- [x] CHK020 Is the assumption that the owner writes the built-in General Theory pack's lessons recorded, with fixtures as placeholders? [Assumption, Spec §Assumptions, Constitution IV] — superseded by constitution v3.0.0: agents write the lessons; the spec's Assumptions now say so
 
 ## Notes
 

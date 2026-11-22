@@ -1,0 +1,77 @@
+{
+  "$schema": "fretsense/fixtures/theory/notes v1",
+  "status": "PLACEHOLDER: awaiting owner + theory-checker sign-off (SC-001, task T009)",
+  "roots": {
+    "why": "SC-001: 21 spelled roots = 7 naturals, 7 single sharps, 7 single flats. Pitch class = natural pitch class of the letter (C0 D2 E4 F5 G7 A9 B11) + accidental, mod 12.",
+    "values": [
+      { "text": "C", "letter": "C", "accidental": 0, "pitchClass": 0 },
+      { "text": "D", "letter": "D", "accidental": 0, "pitchClass": 2 },
+      { "text": "E", "letter": "E", "accidental": 0, "pitchClass": 4 },
+      { "text": "F", "letter": "F", "accidental": 0, "pitchClass": 5 },
+      { "text": "G", "letter": "G", "accidental": 0, "pitchClass": 7 },
+      { "text": "A", "letter": "A", "accidental": 0, "pitchClass": 9 },
+      { "text": "B", "letter": "B", "accidental": 0, "pitchClass": 11 },
+      { "text": "C#", "letter": "C", "accidental": 1, "pitchClass": 1 },
+      { "text": "D#", "letter": "D", "accidental": 1, "pitchClass": 3 },
+      { "text": "E#", "letter": "E", "accidental": 1, "pitchClass": 5 },
+      { "text": "F#", "letter": "F", "accidental": 1, "pitchClass": 6 },
+      { "text": "G#", "letter": "G", "accidental": 1, "pitchClass": 8 },
+      { "text": "A#", "letter": "A", "accidental": 1, "pitchClass": 10 },
+      { "text": "B#", "letter": "B", "accidental": 1, "pitchClass": 0 },
+      { "text": "Cb", "letter": "C", "accidental": -1, "pitchClass": 11 },
+      { "text": "Db", "letter": "D", "accidental": -1, "pitchClass": 1 },
+      { "text": "Eb", "letter": "E", "accidental": -1, "pitchClass": 3 },
+      { "text": "Fb", "letter": "F", "accidental": -1, "pitchClass": 4 },
+      { "text": "Gb", "letter": "G", "accidental": -1, "pitchClass": 6 },
+      { "text": "Ab", "letter": "A", "accidental": -1, "pitchClass": 8 },
+      { "text": "Bb", "letter": "B", "accidental": -1, "pitchClass": 10 }
+    ]
+  },
+  "spelled": {
+    "why": "FR-001 scientific pitch notation, C4 = middle C = MIDI 60 (MIDI 1.0 / ASA convention), so MIDI = 12 * (octave + 1) + natural pitch class of the letter + accidental. The octave number belongs to the LETTER and wraps at C, so Cb4 = 12*5 + 0 - 1 = 59 (the pitch of B3) and B#3 = 12*4 + 11 + 1 = 60 (the pitch of C4) (spec Edge Cases). A0 = 21 and C8 = 108 are the piano's published end points.",
+    "values": [
+      { "text": "C4", "letter": "C", "accidental": 0, "octave": 4, "midi": 60, "pitchClass": 0 },
+      { "text": "Cb4", "letter": "C", "accidental": -1, "octave": 4, "midi": 59, "pitchClass": 11 },
+      { "text": "B#3", "letter": "B", "accidental": 1, "octave": 3, "midi": 60, "pitchClass": 0 },
+      { "text": "E#4", "letter": "E", "accidental": 1, "octave": 4, "midi": 65, "pitchClass": 5 },
+      { "text": "Fb4", "letter": "F", "accidental": -1, "octave": 4, "midi": 64, "pitchClass": 4 },
+      { "text": "F#3", "letter": "F", "accidental": 1, "octave": 3, "midi": 54, "pitchClass": 6 },
+      { "text": "Bbb2", "letter": "B", "accidental": -2, "octave": 2, "midi": 45, "pitchClass": 9 },
+      { "text": "G##3", "letter": "G", "accidental": 2, "octave": 3, "midi": 57, "pitchClass": 9 },
+      { "text": "Dbb4", "letter": "D", "accidental": -2, "octave": 4, "midi": 60, "pitchClass": 0 },
+      { "text": "A4", "letter": "A", "accidental": 0, "octave": 4, "midi": 69, "pitchClass": 9 },
+      { "text": "A0", "letter": "A", "accidental": 0, "octave": 0, "midi": 21, "pitchClass": 9 },
+      { "text": "B0", "letter": "B", "accidental": 0, "octave": 0, "midi": 23, "pitchClass": 11 },
+      { "text": "E1", "letter": "E", "accidental": 0, "octave": 1, "midi": 28, "pitchClass": 4 },
+      { "text": "E2", "letter": "E", "accidental": 0, "octave": 2, "midi": 40, "pitchClass": 4 },
+      { "text": "Eb2", "letter": "E", "accidental": -1, "octave": 2, "midi": 39, "pitchClass": 3 },
+      { "text": "D#2", "letter": "D", "accidental": 1, "octave": 2, "midi": 39, "pitchClass": 3 },
+      { "text": "C3", "letter": "C", "accidental": 0, "octave": 3, "midi": 48, "pitchClass": 0 },
+      { "text": "E4", "letter": "E", "accidental": 0, "octave": 4, "midi": 64, "pitchClass": 4 },
+      { "text": "C8", "letter": "C", "accidental": 0, "octave": 8, "midi": 108, "pitchClass": 0 }
+    ]
+  },
+  "unicode": {
+    "why": "formatNote(note, 'unicode') renders b/# as the Unicode flat U+266D and sharp U+266F (FR-005 'The UI MAY render b/# as flat/sharp signs'). Double accidentals are deliberately not listed: the spec does not say whether bb renders as U+1D12B or two U+266D (flagged).",
+    "values": [
+      { "text": "F#3", "unicode": "F♯3" },
+      { "text": "Bb2", "unicode": "B♭2" },
+      { "text": "C4", "unicode": "C4" }
+    ]
+  },
+  "invalid": {
+    "why": "FR-010: malformed note text is a typed error. Missing octave is invalid because parseNote returns a Note (octave required). Mixed or misplaced accidentals and unknown letters are InvalidNote; three or more of the same accidental is TripleAccidental (FR-010, Edge Cases).",
+    "values": [
+      { "text": "", "kind": "InvalidNote" },
+      { "text": "H3", "kind": "InvalidNote" },
+      { "text": "C", "kind": "InvalidNote" },
+      { "text": "#4", "kind": "InvalidNote" },
+      { "text": "C#b4", "kind": "InvalidNote" },
+      { "text": "Cb#4", "kind": "InvalidNote" },
+      { "text": "4C", "kind": "InvalidNote" },
+      { "text": "C4.5", "kind": "InvalidNote" },
+      { "text": "C###4", "kind": "TripleAccidental" },
+      { "text": "Dbbb3", "kind": "TripleAccidental" }
+    ]
+  }
+}

@@ -19,7 +19,7 @@ Record shapes, including the common fields, are in [../data-model.md](../data-mo
 
 ## Limits (enforced before and during parsing)
 
-- File size ≤ 20 MB, checked before reading; JSON nesting depth ≤ 16, checked by a pre-scan
+- File size ≤ 50 MB, checked before reading; JSON nesting depth ≤ 16, checked by a pre-scan
   before `JSON.parse` (data-model.md §4 step 1).
 - Array caps: instruments ≤ 50, attempts ≤ 200,000, lessonCompletion ≤ 1,000,
   `answer` ≤ stringCount × (fretCount + 1).

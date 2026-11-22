@@ -1,5 +1,6 @@
 ---
-# Lesson template: copy this file to <slug>.md and fill it in yourself.
+# Lesson template: copy this file to <slug>.md and fill it in. Original wording only; never copy or
+# closely paraphrase a book or website (CLAUDE.md rule 7). theory-checker checks every claim.
 # Lessons are not tied to any book. Curriculum packs (content/packs/) group and order them.
 # The schema is defined in specs/001-theory-fretboard-lessons (FR-022, FR-023, FR-063). Validation runs at build time.
 id: ""                    # unique, kebab-case, e.g. "notes-on-the-neck"
@@ -24,7 +25,7 @@ camera_coach: {}          # reserved for feature 010; ignored in 001
 
 ## Read
 
-<!-- Your own words. -->
+<!-- Original wording only. -->
 
 ## Notes for See
 

@@ -1,16 +1,17 @@
 # How FretSense Is Built: Spec-Driven Development With AI Agents
 
 > **For reviewers and recruiters.** FretSense is built with AI agents, but not by "vibe coding".
-> Every line of code traces back to an approved requirement. AI subagents act as **reviewers and
-> gatekeepers** with narrow permissions, not as free code generators. I hand-write the core
-> algorithms (YIN, chromagram, camera homography, Viterbi fingering, knowledge-tracing updates),
-> run every ML training experiment, and write every lesson myself. This page explains the
+> Every line of code traces back to an approved requirement. AI agents write the code and the
+> lesson content, including the core algorithms (YIN, chromagram, camera homography, Viterbi
+> fingering, knowledge tracing), from specs, plans and task groups I approve. Separate reviewer
+> agents with narrow permissions gate every step, every algorithm is verified against independent
+> references, and I make every product decision and every commit. This page explains the
 > process, shows the measured results, and keeps an honest log of where the AI got things wrong.
 > The skills these features demonstrate are listed in [SKILLS-MATRIX.md](SKILLS-MATRIX.md).
 
 ## 1. Principles
 
-These are summarised from [the constitution](../.specify/memory/constitution.md), v2.3.0. The product vision and release plan are in [PRODUCT.md](PRODUCT.md).
+These are summarised from [the constitution](../.specify/memory/constitution.md), v3.0.0. The product vision and release plan are in [PRODUCT.md](PRODUCT.md).
 
 - **Specs are the source of truth.** Code that disagrees with the spec is a bug, or a spec change
   that must be approved *first*.
@@ -20,7 +21,9 @@ These are summarised from [the constitution](../.specify/memory/constitution.md)
   reproducible runs. A model ships only if it beats its baseline.
 - **Instrument-agnostic, private, degradable.** Guitar and bass are equal citizens. Camera and mic
   data stay on the device. Everything works audio-only, and the DSP baselines remain available.
-- **One task at a time,** each approved by me, with every decision recorded as an [ADR](adr/).
+- **One task group at a time,** each approved by me, with every decision recorded as an [ADR](adr/).
+- **Honest authorship.** Agents write the code and content; this page records what they generated
+  and what I changed or rejected (constitution v3.0.0, [ADR-0012](adr/0012-constitution-v3-ai-authored.md)).
 
 ## 2. Subagent gate diagram
 
@@ -46,7 +49,7 @@ flowchart LR
     AR --> CK[checklist] --> T[tasks] --> AN[analyze<br/>no CRITICAL/HIGH]
     AN --> IMPL
 
-    subgraph IMPL [implement: one task at a time]
+    subgraph IMPL [implement: one approved task group at a time]
       direction LR
       TW{{test-writer<br/>red}} --> OK[owner OK] --> I[implement] --> G[green] --> CR{{code-reviewer}}
       CR -.theory/fingering.-> TC{{theory-checker}}
@@ -290,6 +293,9 @@ these mistakes is the point of the process.
 | 2026-11-22 | 017 / 018 / 012 specify | AI agent (main session) | First drafts of the handbook and product-shell specs, and the Studio amendment of 012 | 017: new scales and chords listed by name with no formulas; a wrong edge case (G♯ major does *not* need a triple accidental); "30 keys in the mode it is written for" is self-contradictory; "Practice this" relied on drill sets 001 doesn't have. 018: opt-in telemetry contradicted 001 FR-050 unamended; a "≤ 4 taps" onboarding target that the required steps can't meet; instrument asked twice (016 FR-010 already asks it). 012: the octave convention for notation contradicted itself; "exact" MusicXML round trip included fields MusicXML can't carry | **spec-reviewer** returned BLOCK on all three (9 blockers) | Folded into the specs where the fix is unambiguous; owner decisions batched into the clarify message |
 | 2026-11-22 | 017 / 018 clarify | AI agent (main session) | Clarify answers and their fold-in | Left "all 30 keys" in 017 US7's Independent Test after fixing the FRs; the Key row of "Practice this" still had no drill 001 can express; recommended per-device telemetry consent, which sits outside Constitution XIII's "all user data is profile-scoped" | **spec-reviewer** re-review BLOCK (017); **product-owner** flagged the consent scope | 017 fixed; consent scope sent back to the owner |
 | 2026-11-22 | 001 checklist → tasks | AI agent (main session, earlier) | `tasks.md` for 001 | Generated while 58 items in 001's accessibility, data and personalisation checklists were still open (workflow step 4 requires them resolved or deferred first); the spec also lacked the release line constitution v2.3.0 requires | Setup audit, then **spec-reviewer** re-review (BLOCK) | Checklists verified (33 satisfied, 2 deferred, 19 gaps, 4 owner items); gaps answered by **product-owner** and folded into the spec; tasks re-sync pending owner decisions |
+| 2026-11-22 | 001 implement (v0.1 build) | AI agent (main session) | `packages/theory` engine and the whole `apps/web` app | Theory engine was written in parallel with **test-writer**'s tests instead of after them; it replaced the natural-minor v/VII with the harmonic-minor V/vii° instead of showing them as well (US5-2 says "also shown"), exported undocumented helpers, and accepted malformed tuning notes. The web app was written before its tests (test-after, not tests-first) | **test-writer**'s independent fixtures (18 failures) | Engine fixed (all 1200 theory tests pass); helper exports added to the contract as v1.1; web tests commissioned from **test-writer** after the fact and recorded as a process deviation |
+| 2026-11-22 | 001 implement (v0.1 build) | AI agent (main session) | A first lesson draft for the walking-bass lesson | Contained a self-contradicting example sentence ("C♯ leads into D? no, into G") | Main-agent self-review before saving | Not saved; lessons are blocked by the project's permission deny rule until the owner changes it |
+| 2026-11-22 | 001 implement (v0.1 fixes) | AI agent (main session) | `apps/web` domain and UI | Put lesson-completion tombstone rules into `merge.ts` before the spec recorded them (spec-first rule); hardcoded 7/8-string guitar and 6-string bass starting tunings in the UI (ADR-0003); also mis-built FR-030 qualifiers, FR-035/036 defaults, FR-056 span and walking-bass R2/R3 | **code-reviewer** r1/r2, **test-writer**'s spec-derived suites (39 failures at first run) | Tombstone rule recorded as a provisional Clarification; tunings moved to `packages/theory` (`SUGGESTED_TUNINGS`); all other failures fixed (320/320 web tests pass) |
 
 ## 6. AI involvement per PR
 

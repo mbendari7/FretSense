@@ -7,18 +7,20 @@ description: "Task list for 001: theory engine, interactive fretboard and lesson
 **Input**: [spec.md](spec.md), [plan.md](plan.md), [research.md](research.md),
 [data-model.md](data-model.md), [contracts/](contracts/), [quickstart.md](quickstart.md)
 
-**Process (CLAUDE.md rule 4)**: one task at a time. For every implementation task, the paired
-**test-writer** task (red) runs first, then the owner says OK, then the implementation turns the
-tests green, then the listed gates run. Commits reference `[Txxx][FR-xxx]` and are made by the owner.
+**Process (CLAUDE.md rule 4)**: one owner-approved task group at a time (a phase or checkpoint
+below, or a smaller set the owner names). After the owner OKs the group's approach, each task runs
+in order: the paired **test-writer** task (red) first, then the implementation turns the tests
+green, then the listed gates run. Commits reference `[Txxx][FR-xxx]` and are made by the owner.
 
 **Notation**
 - `[P]`: can run in parallel with other `[P]` tasks in the same phase (different files, no pending
-  dependency). This parallelism applies to planning only; execution stays one task at a time.
+  dependency). This parallelism applies to planning only; execution is sequential within a group.
 - `[USn]`: user story from spec.md.
 - `→ gates:` the agents that must pass before the task is done. `code-reviewer` applies to every
   implementation task, even where it isn't repeated.
 - **blocked-on-owner (Ox)**: can't finish until the owner resolves the open item in research.md.
-- **owner**: human-owned work (CLAUDE.md rules 6 and 7). Claude doesn't do these.
+- **owner**: an owner decision or manual action (approvals, open items, the manual screen-reader
+  pass). Claude doesn't do these.
 - Data constraints are cited as `data-model.md Entity.field` and are not repeated here.
 
 ---
@@ -102,7 +104,7 @@ tests green, then the listed gates run. Commits reference `[Txxx][FR-xxx]` and a
 
 ## Phase 4: User Story 2: Lessons: Any Lesson, Stages of Your Choice (P1)
 
-**Goal**: owner-written lessons, grouped by packs, with user-chosen stages and nothing locked.
+**Goal**: original lessons, grouped by packs, with user-chosen stages and nothing locked.
 **Independent test**: quickstart V5, V6, V13, V15 with fixture lessons.
 
 - [ ] T040 [P] [US2] test-writer: fixtures `fixtures/content/valid/*.md`, `fixtures/content/invalid/*.md`, `fixtures/content/packs/*.yaml`, `fixtures/content/hostile/*.md` (placeholder prose only) and red tests `apps/web/src/domain/content/schemas.test.ts` (lesson, pack, tag vocabulary schemas; tag namespaces; unique drill ids; `needs` rules; progression keys; pack lesson references) per contracts/content-formats.md [FR-022, FR-023, FR-054, FR-063, FR-068, SC-008] → gates: security-reviewer
@@ -111,7 +113,7 @@ tests green, then the listed gates run. Commits reference `[Txxx][FR-xxx]` and a
 - [ ] T043 [US2] Implement `apps/web/content-plugin/compile.ts`, `apps/web/content-plugin/index.ts` (Vite plugin emitting precached JSON) and `apps/web/scripts/lessons-validate.ts` to pass T042 [FR-023, FR-025, SC-008] → gates: security-reviewer, architecture-reviewer, code-reviewer
 - [ ] T044 [P] [US2] Create `content/tags.yaml` with placeholder values and the structural `content/packs/general-theory.yaml` (sections with empty lesson lists) that pass validation [FR-063, FR-068] → gates: code-reviewer
 - [ ] T045 [US2] **owner** (blocked-on-owner O4): curate the real tag vocabulary in `content/tags.yaml` [FR-068]
-- [ ] T046 [US2] **owner**: write lesson prose in `content/lessons/*.md` from `_template.md` and list them in `content/packs/general-theory.yaml` (Claude may only run `pnpm lessons:validate` and theory-checker on the claims) [FR-022, FR-063; CLAUDE.md rule 7] → gates: theory-checker
+- [ ] T046 [US2] Write the General Theory lessons in `content/lessons/*.md` from `_template.md` (original wording, CLAUDE.md rule 7) and list them in `content/packs/general-theory.yaml`; run `pnpm lessons:validate`; owner approves the lessons before release [FR-022, FR-063; Constitution IV] → gates: theory-checker, code-reviewer
 - [ ] T047 [US2] test-writer: red tests `apps/web/src/application/LessonService.test.ts` (library grouped by the active pack with "all lessons"; family filter; stage preference and order with missing-stage and empty-set fallback; "show all stages"; preset applies the whole geometry temporarily and restores on leaving; "Reset to lesson"; completion is informational and never gates; drill list and launch) [FR-024, FR-026, FR-027, FR-028, FR-054, FR-063, FR-064, FR-065] → gates: code-reviewer
 - [ ] T048 [US2] Implement `apps/web/src/application/LessonService.ts` for data-model.md `LessonCompletion.stages`, `ProfileSettings.stagePreference`, `ProfileSettings.activePackId` to pass T047 [FR-024, FR-026–FR-028, FR-054, FR-063–FR-065] → gates: code-reviewer
 - [ ] T049 [US2] test-writer: red tests `apps/web/src/ui/lessons/*.test.tsx` and `apps/web/e2e/lessons.spec.ts` (US2 scenarios 1–10; Play/Camera-coach controls absent; preset banner text; direct links to every stage and drill) [FR-024–FR-029, FR-064, FR-065, SC-012] → gates: code-reviewer
@@ -219,7 +221,7 @@ All stories ─► Phase 10 Polish
 - US4 and US6 reuse `session.ts`, `summary.ts` and `DrillService` from US3.
 - US7's weighting (T072) edits the generators from US3, US4 and US6, so it runs after them.
 
-## Parallel opportunities (for planning; execution is one task at a time)
+## Parallel opportunities (for planning; execution is sequential within a task group)
 
 - Setup: T002–T006 and T008.
 - Foundational: T009/T012 fixtures; T019, T021, T023 domain test suites.
@@ -229,7 +231,7 @@ All stories ─► Phase 10 Polish
 ## Implementation strategy
 
 1. **MVP**: Phases 1–3 (setup, foundations, explorer). Stop and validate with quickstart V1–V4.
-2. Add US2 (lessons) with fixture content, while the owner writes real lessons (T046).
+2. Add US2 (lessons) with fixture content, then the real lessons (T046).
 3. Add US3 (note-finding), then US4 and US6 (more drills), US5 (key helper).
 4. Add US7 (weighting, progress, export/import).
 5. Polish: offline, CSP, no-lock crawl, 390 px, a11y, docs, full gate run.

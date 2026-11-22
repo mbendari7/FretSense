@@ -1,0 +1,126 @@
+{
+  "$schema": "fretsense/fixtures/theory/intervals v1",
+  "status": "PLACEHOLDER: awaiting owner + theory-checker sign-off (SC-001, task T009)",
+  "method": "Interval number = letter steps counted inclusively from the lower to the upper note on the staff (C up to E = 3, plus 7 per octave). Quality compares the semitone size with the major/perfect size of that number (1:0 2:2 3:4 4:5 5:7 6:9 7:11 8:12 9:14 10:16 11:17 12:19 13:21 14:23 15:24): perfect numbers (1 4 5 8 11 12 15) take P, A (+1), d (-1); the others take M, m (-1), A (+1), d (-2). Direction is up when the second note is higher on the staff. Every row below was worked by hand.",
+  "between": {
+    "why": "FR-002 direction-aware intervals, simple and compound, both directions. Rows with direction null are unisons, whose direction the spec does not define (not asserted).",
+    "values": [
+      { "from": "C4", "to": "C4", "quality": "P", "number": 1, "direction": null, "why": "same note" },
+      { "from": "C4", "to": "C#4", "quality": "A", "number": 1, "direction": "up", "why": "same letter, +1 semitone" },
+      { "from": "C#4", "to": "C4", "quality": "A", "number": 1, "direction": "down", "why": "same letter, -1 semitone" },
+      { "from": "C4", "to": "Db4", "quality": "m", "number": 2, "direction": "up", "why": "C-D, 1 semitone (M2 = 2)" },
+      { "from": "C4", "to": "D4", "quality": "M", "number": 2, "direction": "up", "why": "C-D, 2 semitones" },
+      { "from": "C4", "to": "Eb4", "quality": "m", "number": 3, "direction": "up", "why": "C-E, 3 semitones" },
+      { "from": "C4", "to": "E4", "quality": "M", "number": 3, "direction": "up", "why": "C-E, 4 semitones" },
+      { "from": "C4", "to": "F4", "quality": "P", "number": 4, "direction": "up", "why": "C-F, 5 semitones" },
+      { "from": "C4", "to": "F#4", "quality": "A", "number": 4, "direction": "up", "why": "C-F, 6 semitones" },
+      { "from": "C4", "to": "Gb4", "quality": "d", "number": 5, "direction": "up", "why": "C-G, 6 semitones" },
+      { "from": "C4", "to": "G4", "quality": "P", "number": 5, "direction": "up", "why": "C-G, 7 semitones" },
+      { "from": "C4", "to": "G#4", "quality": "A", "number": 5, "direction": "up", "why": "C-G, 8 semitones" },
+      { "from": "C4", "to": "Ab4", "quality": "m", "number": 6, "direction": "up", "why": "C-A, 8 semitones" },
+      { "from": "C4", "to": "A4", "quality": "M", "number": 6, "direction": "up", "why": "C-A, 9 semitones" },
+      { "from": "C4", "to": "Bbb4", "quality": "d", "number": 7, "direction": "up", "why": "C-B, 9 semitones (M7 = 11, d = -2)" },
+      { "from": "C4", "to": "Bb4", "quality": "m", "number": 7, "direction": "up", "why": "C-B, 10 semitones" },
+      { "from": "C4", "to": "B4", "quality": "M", "number": 7, "direction": "up", "why": "C-B, 11 semitones" },
+      { "from": "C4", "to": "C5", "quality": "P", "number": 8, "direction": "up", "why": "octave, 12 semitones" },
+      { "from": "B3", "to": "F4", "quality": "d", "number": 5, "direction": "up", "why": "B-F, 59 to 65 = 6 semitones" },
+      { "from": "F4", "to": "B4", "quality": "A", "number": 4, "direction": "up", "why": "F-B, 65 to 71 = 6 semitones" },
+      { "from": "Cb4", "to": "Bb4", "quality": "M", "number": 7, "direction": "up", "why": "C-B, 59 to 70 = 11 semitones" },
+      { "from": "Bb3", "to": "D4", "quality": "M", "number": 3, "direction": "up", "why": "B-D, 58 to 62 = 4 semitones" },
+      { "from": "F#4", "to": "A#4", "quality": "M", "number": 3, "direction": "up", "why": "F-A, 66 to 70 = 4 semitones" },
+      { "from": "B#3", "to": "C4", "quality": "d", "number": 2, "direction": "up", "why": "B-C one staff step up, 60 to 60 = 0 semitones (m2 = 1, d = -1)" },
+      { "from": "E4", "to": "C4", "quality": "M", "number": 3, "direction": "down", "why": "E down to C, 4 semitones" },
+      { "from": "G4", "to": "C4", "quality": "P", "number": 5, "direction": "down", "why": "G down to C, 7 semitones" },
+      { "from": "C5", "to": "E4", "quality": "m", "number": 6, "direction": "down", "why": "C down to E (C B A G F E = 6), 72 to 64 = 8 semitones" },
+      { "from": "C4", "to": "D5", "quality": "M", "number": 9, "direction": "up", "why": "compound M2, 14 semitones" },
+      { "from": "C4", "to": "Eb5", "quality": "m", "number": 10, "direction": "up", "why": "compound m3, 15 semitones" },
+      { "from": "C4", "to": "E5", "quality": "M", "number": 10, "direction": "up", "why": "compound M3, 16 semitones" },
+      { "from": "C4", "to": "F5", "quality": "P", "number": 11, "direction": "up", "why": "compound P4, 17 semitones" },
+      { "from": "C4", "to": "F#5", "quality": "A", "number": 11, "direction": "up", "why": "compound A4, 18 semitones" },
+      { "from": "C4", "to": "G5", "quality": "P", "number": 12, "direction": "up", "why": "compound P5, 19 semitones" },
+      { "from": "C4", "to": "A5", "quality": "M", "number": 13, "direction": "up", "why": "compound M6, 21 semitones" },
+      { "from": "C4", "to": "Bb5", "quality": "m", "number": 14, "direction": "up", "why": "compound m7, 22 semitones" },
+      { "from": "C4", "to": "B5", "quality": "M", "number": 14, "direction": "up", "why": "compound M7, 23 semitones" },
+      { "from": "C4", "to": "C6", "quality": "P", "number": 15, "direction": "up", "why": "double octave, 24 semitones" },
+      { "from": "A3", "to": "C5", "quality": "m", "number": 10, "direction": "up", "why": "A-C over an octave, 57 to 72 = 15 semitones" },
+      { "from": "G5", "to": "C4", "quality": "P", "number": 12, "direction": "down", "why": "79 to 60 = 19 semitones" },
+      { "from": "E4", "to": "C3", "quality": "M", "number": 10, "direction": "down", "why": "64 to 48 = 16 semitones" }
+    ]
+  },
+  "betweenRejects": {
+    "why": "FR-002: doubly augmented or doubly diminished results are a typed InvalidInterval error.",
+    "values": [
+      { "from": "C4", "to": "F##4", "kind": "InvalidInterval", "why": "C-F (4th) with 7 semitones = P4 + 2, doubly augmented" },
+      { "from": "C4", "to": "Gbb4", "kind": "InvalidInterval", "why": "C-G (5th) with 5 semitones = P5 - 2, doubly diminished" },
+      { "from": "Cb4", "to": "G#4", "kind": "InvalidInterval", "why": "C-G (5th), 59 to 68 = 9 semitones = P5 + 2" },
+      { "from": "B#3", "to": "F4", "kind": "InvalidInterval", "why": "B-F (5th), 60 to 65 = 5 semitones = P5 - 2" },
+      { "from": "C#4", "to": "Cb4", "kind": "InvalidInterval", "why": "unison letters, 61 to 59 = 2 semitones apart, doubly augmented unison" }
+    ]
+  },
+  "beyondDoubleOctave": {
+    "why": "FR-002 covers unison to double octave (Interval.number 1..15, data-model). Wider spans cannot be represented; the error kind is not specified, so only ok=false is asserted (flagged).",
+    "values": [{ "from": "C4", "to": "D6" }]
+  },
+  "transpose": {
+    "why": "FR-002 transpose with correct spelling: new letter = letter + (number - 1) steps in the given direction, octave follows the letter (wraps at C), accidental chosen so the pitch moves by exactly the interval's semitones.",
+    "values": [
+      { "from": "C4", "interval": "M3", "to": "E4", "why": "C+2 letters = E, 60+4 = 64 = E4" },
+      { "from": "E4", "interval": "m3", "to": "G4", "why": "64+3 = 67 = G4" },
+      { "from": "G#4", "interval": "M3", "to": "B#4", "why": "G+2 letters = B, 68+4 = 72; B4 = 71 so B#4" },
+      { "from": "B3", "interval": "m2", "to": "C4", "why": "B to C crosses the octave boundary: 59+1 = 60 = C4" },
+      { "from": "C4", "interval": "-m2", "to": "B3", "why": "60-1 = 59 = B3" },
+      { "from": "C4", "interval": "P8", "to": "C5", "why": "+12" },
+      { "from": "C4", "interval": "M9", "to": "D5", "why": "+14, letter D one octave up" },
+      { "from": "D4", "interval": "-P15", "to": "D2", "why": "-24" },
+      { "from": "B#3", "interval": "m2", "to": "C#4", "why": "60+1 = 61, letter C in octave 4: C#4" },
+      { "from": "E#4", "interval": "M2", "to": "F##4", "why": "65+2 = 67, letter F (65) so F##" },
+      { "from": "Fb4", "interval": "m2", "to": "Gbb4", "why": "64+1 = 65, letter G (67) so Gbb" },
+      { "from": "Cb4", "interval": "M7", "to": "Bb4", "why": "59+11 = 70, letter B (71) so Bb4" },
+      { "from": "B3", "interval": "A1", "to": "B#3", "why": "59+1 = 60, same letter and octave: B#3 (MIDI 60)" },
+      { "from": "C4", "interval": "-d2", "to": "B#3", "why": "down one letter to B3 (59), pitch 60 - 0 = 60, so B#3" },
+      { "from": "Gb4", "interval": "-A4", "to": "Dbb4", "why": "G down 4 letters (G F E D) = D, 66-6 = 60, D4 = 62 so Dbb4" },
+      { "from": "A4", "interval": "-M6", "to": "C4", "why": "69-9 = 60" }
+    ]
+  },
+  "transposeRejects": {
+    "why": "FR-010: a result needing a triple accidental is a typed TripleAccidental error.",
+    "values": [
+      { "from": "F##4", "interval": "A1", "kind": "TripleAccidental", "why": "F## + 1 semitone on the same letter = F###" },
+      { "from": "Bbb3", "interval": "-A1", "kind": "TripleAccidental", "why": "Bbb - 1 semitone on the same letter = Bbbb" },
+      { "from": "B#3", "interval": "A2", "kind": "TripleAccidental", "why": "letter C, 60+3 = 63, C4 = 60 so C###4" },
+      { "from": "Cb4", "interval": "d3", "kind": "TripleAccidental", "why": "letter E, 59+2 = 61, E4 = 64 so Ebbb4" }
+    ]
+  },
+  "parse": {
+    "why": "parseInterval text grammar from contracts/theory-api.md: optional leading '-' for down, quality letter, number 1..15.",
+    "values": [
+      { "text": "M3", "quality": "M", "number": 3, "direction": "up" },
+      { "text": "-P5", "quality": "P", "number": 5, "direction": "down" },
+      { "text": "m10", "quality": "m", "number": 10, "direction": "up" },
+      { "text": "P15", "quality": "P", "number": 15, "direction": "up" },
+      { "text": "A4", "quality": "A", "number": 4, "direction": "up" },
+      { "text": "d5", "quality": "d", "number": 5, "direction": "up" },
+      { "text": "d7", "quality": "d", "number": 7, "direction": "up" },
+      { "text": "M9", "quality": "M", "number": 9, "direction": "up" },
+      { "text": "P1", "quality": "P", "number": 1, "direction": "up" }
+    ]
+  },
+  "parseRejects": {
+    "why": "InvalidInterval: perfect numbers (1 4 5 8 11 12 15) cannot be M/m and the others cannot be P; number outside 1..15; unknown quality; doubled quality letters (doubly augmented) are not representable.",
+    "values": ["P3", "M5", "m4", "M1", "m8", "P2", "X3", "P16", "P0", "", "3", "AA4", "dd5", "M 3", "+M3", "--M3"]
+  },
+  "invalidIntervalValues": {
+    "why": "transpose with a structurally impossible Interval value is InvalidInterval (contract: transpose errors include InvalidInterval).",
+    "values": [
+      { "quality": "P", "number": 3, "direction": "up" },
+      { "quality": "M", "number": 5, "direction": "up" },
+      { "quality": "M", "number": 16, "direction": "up" },
+      { "quality": "P", "number": 0, "direction": "up" }
+    ]
+  },
+  "semitones": {
+    "why": "Reference sizes used by the property tests (major/perfect size per number, from the 'method' above).",
+    "majorOrPerfect": { "1": 0, "2": 2, "3": 4, "4": 5, "5": 7, "6": 9, "7": 11, "8": 12, "9": 14, "10": 16, "11": 17, "12": 19, "13": 21, "14": 23, "15": 24 },
+    "perfectNumbers": [1, 4, 5, 8, 11, 12, 15]
+  }
+}

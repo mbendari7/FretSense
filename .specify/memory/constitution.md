@@ -49,28 +49,33 @@ Rationale: a correct, isolated engine makes every UI, drill, and model label tru
   before any model is trained or integrated.
 - CI MUST block merges on failing tests, lint, typecheck, or ML-eval regressions, and on line or
   branch coverage below **90%** in `packages/theory`, `packages/dsp`, and other packages that hold
-  the human-owned algorithms.
+  the core algorithms (Principle IV).
 
 Rationale: tests and evaluations written afterwards mirror the implementation, not the requirement.
 
-### IV. Human-Owned Core
+### IV. AI-Authored, Owner-Directed
 
-The owner hand-writes, and agents MUST NOT implement (including as "starter" code or
-implementation-equivalent pseudocode):
+Agents write the software and the content; the owner directs, reviews and decides.
 
-- YIN pitch detection; the chromagram;
-- the camera homography and pixel → (string, fret) mapping math;
-- the Viterbi / dynamic-programming fingering optimizer and its fingering cost model;
-- the knowledge-tracing update equations;
-- the cross-correlation estimator for round-trip audio latency and audio–video offset;
-- running ML training experiments (launching runs, choosing hyperparameters, accepting results).
+- Agents MAY implement all code, including the core algorithms: YIN pitch detection, the chromagram, the camera homography and pixel → (string, fret) mapping, the Viterbi fingering optimizer and its cost model, the knowledge-tracing update equations, and the cross-correlation estimator for round-trip latency and audio–video offset.
+- Every core algorithm MUST come with a written derivation or published reference in the feature's
+  `research.md` (method, complexity, numerical assumptions), and MUST be verified against
+  independent expectations: synthetic signals with known answers, brute-force reference
+  computations, or published values. Tests whose expected values are derived from the
+  implementation itself do not count.
+- Agents MAY write all lesson prose (`content/lessons/`), handbook explanation and glossary text
+  (`content/handbook/`) and the built-in curriculum packs. All text MUST be original: agents MUST
+  NOT copy or closely paraphrase books, courses or websites, and packs reference a source by name
+  and chapter only. `theory-checker` verifies every theory claim, and the owner approves content
+  before it ships.
+- Agents MAY launch ML training runs, but only from a committed config the owner has approved.
+  Promoting a model to production requires `ml-evaluator` APPROVE and owner approval.
+- The owner approves specs, plans, ADRs, task groups, content and model promotion, answers every
+  product decision, and makes every commit.
 
-Agents MAY write tests, fixtures, benchmarks, evaluation harnesses, data tooling and pipelines
-around these, explain them, and review them. The owner writes all lesson prose in
-`content/lessons/` and all handbook explanation and glossary text in `content/handbook/`; agents
-MUST NOT write that text or copy book or website text.
-
-Rationale: the portfolio must honestly demonstrate the owner's own algorithmic and ML skill.
+Rationale: an all-in-one product needs far more code and content than one person can hand-write;
+credibility comes from specs, independent verification, reviewer gates and honest attribution
+(Principle VII), not from who typed each line.
 
 ### V. Real-Time Budget
 
@@ -107,8 +112,11 @@ Rationale: users practise with an instrument in hand, often away from a desk or 
 - Commits MUST reference task and FR IDs; every PR MUST include an "AI involvement" section.
 - Rejected or corrected AI output MUST be logged in `docs/AI-WORKFLOW.md`.
 - AI agents MUST NOT write git history (commit, push, tag, rewrite) and MUST NOT be credited as an
-  author, co-author or contributor anywhere. The owner makes every commit and writes every PR's
+    author, co-author or contributor anywhere. The owner makes every commit and writes every PR's
   "AI involvement" section.
+- Authorship MUST be described honestly: the README, `docs/AI-WORKFLOW.md`, ADRs and PRs state
+  what agents generated and what the owner decided, reviewed or changed. Nothing may present
+  agent-written code or content as hand-written by the owner.
 
 Rationale: the workflow itself is a deliverable and must be auditable.
 
@@ -237,9 +245,16 @@ pace; forced sequencing and hardcoded setups exclude most players.
   `/speckit-converge`. No step may be skipped.
 - Gates are defined in `CLAUDE.md` (subagent → step). At minimum: `spec-reviewer` before planning;
   `architecture-reviewer` on plans; `/speckit-analyze` with no CRITICAL issues before
-  implementation; per task `test-writer` (red) → owner-approved implementation → green →
-  `code-reviewer` (+ specialised reviewers by area).
-- Implementation proceeds one task at a time: approach → owner OK → single task → gates → stop.
+    implementation; per task `test-writer` (red) → implementation → green → `code-reviewer`
+  (+ specialised reviewers by area).
+- Implementation proceeds in **owner-approved task groups** (a `tasks.md` phase or checkpoint, or a
+  smaller set the owner names): approach for the group → owner OK → each task in order, test-first
+  → the group's gates on the group's combined diff → report. An unresolved BLOCKER, or a task that
+  needs an owner decision, stops the group early. The next group needs a new OK, unless the owner
+  has given a **standing approval**: then work continues group after group, with a report after
+  each, until the owner withdraws it or a BLOCKER can't be resolved. Under a standing approval,
+  product decisions use the `product-owner` recommendation, are recorded as provisional in the
+  spec's Clarifications, and stay open for the owner to change.
 
 ## Governance
 
@@ -253,4 +268,4 @@ pace; forced sequencing and hardcoded setups exclude most players.
 - `/speckit-analyze` and every reviewing subagent MUST treat any constitution violation as
   CRITICAL. CRITICAL findings block implementation and merge.
 
-**Version**: 2.3.0 | **Ratified**: 2026-11-21 | **Last Amended**: 2026-11-21
+**Version**: 3.0.0 | **Ratified**: 2026-11-21 | **Last Amended**: 2026-11-22

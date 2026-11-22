@@ -382,7 +382,7 @@ the progress views.
 
 **Lessons**
 
-- **FR-022**: System MUST load owner-authored markdown lessons with structured metadata: id, title,
+- **FR-022**: System MUST load markdown lessons (original text, Constitution IV) with structured metadata: id, title,
   level (beginner | intermediate | advanced), tags (goal, genre and topic tags, used by 016 to
   suggest paths), instruments, concepts, optional fretboard preset, drills, optional songs, an
   optional `needs` list (`audio-input`, `camera`; default empty; used from 015 on; `camera` never
@@ -666,7 +666,7 @@ the progress views.
 - **FR-063**: System MUST support **curriculum packs**: id, title, optional source (the book or
   course it follows, by name only), schema version, and ordered sections (title, optional source
   label such as a chapter, ordered lesson ids). A lesson MAY appear in several packs. 001 ships one
-  built-in pack, **General Theory**, built from owner-written lessons. The active pack is a
+  built-in pack, **General Theory**, built from original lessons that theory-checker has verified and the owner has approved. The active pack is a
   per-profile setting. The pack format and validation are defined here; creating, editing,
   importing and exporting user packs is feature 016. Packs MUST NOT contain lesson prose or text
   copied from their source.
@@ -813,8 +813,9 @@ the progress views.
 - "Neck positions" means where the chord tones lie; voicings, CAGED shapes and fingerings are
   out of scope (005).
 - Bass drills in 001 are untimed and tap-based; timed play-along is feature 003.
-- Fixture lessons use placeholder text only (Constitution IV); the owner writes all real lessons,
-  including those in the built-in General Theory pack.
+- Fixture lessons use placeholder text only. Real lessons, including the built-in General Theory
+  pack, are written by agents in original wording, checked by theory-checker and approved by the
+  owner (Constitution IV, v3.0.0).
 - Progressions in lessons are given as structured root + quality data; chord-symbol parsing is
   feature 005.
 - Audio, camera, ML, sync and spaced repetition beyond FR-041 are out of scope (002–013).
@@ -877,3 +878,14 @@ the progress views.
   traceable to their source profile; affects frozen encodings); cross-spec changes to 016, 017 and
   018; a11y colour-difference threshold (proposal: CIEDE2000 ≥ 20, as 018 FR-015) and music-stand
   legibility distance (proposal: 1 m); O1–O4.
+
+### Session 2026-11-22 (v0.1 build, team loop D; provisional under the standing approval, owner review pending)
+
+- Export/import size limit: one 50 MB limit (spec wins); data-model.md and contracts/profile-export.md aligned. (product-owner FN-10)
+- The simplified walking-bass drill is hidden until full FR-058 ships in a later 001 task group; the other four bass drills ship. (FN-7, NEEDS MAHMOUD to confirm hide vs labelled preview)
+- Harmonic-minor alternatives are shown in addition to the natural-minor chords (US5-2 "also shown"); theory API v1.1 adds helper exports (contracts/theory-api.md).
+- 4-string EADG bass preset id: `bass4-standard`.
+- Lesson-completion tombstones (FN-10, provisional, applied): completion merges as a per-stage union (earliest time per stage kept); restore-import un-deletes a locally tombstoned completion when the file holds it live, keeping the union of both records' stages; an incoming tombstone applies only if its HLC is newer than the local record's last update. SC-009 covers completion as well as attempts.
+- Root–fifth–octave (FR-056, applied): a step counts only within 3 frets of the root, and the finished shape must span at most 4 frets (max − min ≤ 3).
+- Spec change requests FN-2, FN-3, FN-4, FN-5, FN-6, FN-10 (copy idempotence only) and FN-11 from the product-owner triage go through loop A before their code changes.
+

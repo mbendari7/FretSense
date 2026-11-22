@@ -21,11 +21,11 @@ structure and curriculum. Nothing is locked. Everything runs on your own device,
    It suggests what to practise, never forces it, and checks what I actually play.
 2. **To build a serious ML and vision system**, with real datasets, held-out evaluation, model cards,
    on-device inference, and models that ship only if they beat their DSP baselines.
-3. **To show disciplined, spec-driven engineering with AI agents.** Subagents review and gate the
-   work. They don't write it freely. I hand-write the core algorithms: YIN, the chromagram, the
-   camera homography, the Viterbi fingering optimizer, the knowledge-tracing updates, and the
-   latency/A-V cross-correlation estimator. I also run every training experiment and write every
-   lesson.
+3. **To show disciplined, spec-driven engineering with AI agents.** AI agents write the code and
+   the lessons, including the core algorithms (YIN pitch detection, the chromagram, the camera
+   homography, Viterbi fingering, knowledge tracing, latency estimation), from specs I approve.
+   Reviewer agents gate every step, each algorithm is checked against independent references, and
+   I decide what gets built, what ships and every commit.
 4. **To ship a real product**, not a demo: a landing page, onboarding, one design system,
    accessibility, a performance budget, a demo mode for people without a guitar, and versioned
    releases.

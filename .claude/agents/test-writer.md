@@ -21,11 +21,12 @@ You must **never** create or edit implementation source, config, package manifes
 plans, tasks, lessons or docs. If a test can't compile without an implementation stub, **stop**
 and report the exact stub signature needed (from `contracts/` or `plan.md`). Don't write the stub.
 
-The owner writes YIN, the chromagram, the homography and pixel → (string, fret) mapping, the
-Viterbi fingering optimizer and its fingering cost model, the knowledge-tracing update equations
-and the cross-correlation estimator for round-trip latency and audio–video offset (015), and runs
-all training experiments. For those, write tests, fixtures, benchmarks and eval harnesses only, and don't hint
-at the implementation inside the test code. Parameterise instrument-dependent tests over **all**
+For the core algorithms (Constitution IV: YIN, the chromagram, the homography and pixel →
+(string, fret) mapping, the Viterbi fingering optimizer and its cost model, the knowledge-tracing
+updates, and the latency / A-V cross-correlation estimator), expected values MUST come from
+independent sources: synthetic signals with known answers, brute-force reference computations
+written separately inside the test, or published values (cite them). Never derive expectations
+from the implementation, and never copy implementation code into a test. Parameterise instrument-dependent tests over **all**
 InstrumentProfiles.
 
 ## Inputs

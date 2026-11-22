@@ -132,7 +132,7 @@ truth (006 FR-025).
 
 ### Import algorithm (FR-043, FR-066a)
 
-1. Check `File.size` ≤ 20 MB **before** reading the file → read text → a linear pre-scan counts
+1. Check `File.size` ≤ 50 MB **before** reading the file → read text → a linear pre-scan counts
    bracket depth outside strings and rejects at > 16 → `JSON.parse` → reject prototype keys at any
    depth → Zod-validate the whole file with strict schemas (unknown fields rejected; caps:
    instruments ≤ 50, attempts ≤ 200,000, lessonCompletion ≤ 1,000; names ≤ 60 and other text ≤ 200,
@@ -150,7 +150,7 @@ truth (006 FR-025).
    - profile settings: matched by natural key; per-field LWW on `fieldUpdated`;
    - instruments: an incoming live record replaces a local tombstone (fresh `updated`); otherwise
      the newest `updated` wins (HLC order, ties by writer id);
-   - completion: matched by natural key `(localProfileId, lessonId)`; per-stage union (earliest
+   - completion (tombstones: see spec Clarifications 2026-11-22, FN-10 provisional; a live incoming record un-deletes, keeping the union; an incoming tombstone applies only if newer): matched by natural key `(localProfileId, lessonId)`; per-stage union (earliest
      Hlc kept per stage);
    - the local HLC receives the largest incoming `updated` (research R5 receive rule).
    Before writing, the user sees a preview (added, restored, updated, hidden by incoming tombstones,

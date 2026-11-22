@@ -11,7 +11,7 @@ constitution v2.2.0)
 001 delivers a pure TypeScript theory engine (notes, intervals, 12 scales, 12 chords, 30 keys,
 instrument geometry for any guitar of 6–8 strings and bass of 4–6), an SVG fretboard explorer, a key
 helper, seven tap-based drills (note-finding, interval, chord-tone and four bass drills) with
-miss-count weighting that the user can turn off, and an owner-written lesson system grouped by
+miss-count weighting that the user can turn off, and a lesson system (original, theory-checked lessons) grouped by
 curriculum packs (built-in **General Theory**) with user-chosen stages and nothing locked. All user
 data lives in one auto-created local profile in IndexedDB, with sync-ready records (UUIDs, HLC
 timestamps, schema versions, tombstones) and a profile export format with restore and copy import.
@@ -61,7 +61,7 @@ SC-002/SC-003 benchmark tasks run. No device is assumed here (Constitution V).
 | I Spec before code | Spec approved path: reviewed (BLOCK → fixed), clarified; tasks will trace every FR | ✅ (pending owner approval of the amended spec) |
 | II Pure theory engine | `packages/theory` has zero runtime deps, no DOM/I/O, formulas from intervals, `Result` errors; enforced by dependency-cruiser | ✅ |
 | III Test-first, 90% | Fixtures + property tests first; coverage gates on theory and domain; CI blocks | ✅ |
-| IV Human-owned core | None of the human-owned algorithms are in 001 (miss-count weighting isn't knowledge tracing). Lesson prose stays with the owner; fixtures are placeholders | ✅ |
+| IV AI-authored, owner-directed (v3.0.0) | No core algorithm is in 001 (miss-count weighting isn't knowledge tracing). Agents write the General Theory lessons (T046) in original wording; theory-checker and owner approval gate them | ✅ |
 | V Real-time budget | SC-002/SC-003 benchmarked by perf-auditor on named devices | ⚠️ **devices OPEN (O1, O2)**: benchmark tasks blocked until named |
 | VI Built for real practice | Offline PWA, no account, 390 px, music-stand text sizes; multiple local profiles supported by the model | ✅ |
 | VII Transparent AI use | ADRs 0007–0010 Proposed; no agent commits | ✅ |

@@ -16,7 +16,7 @@ The three goals matter equally:
 2. **A deep ML and vision system**: real models, datasets, evaluation and MLOps.
 3. **Fundamental engineering skills**, each used where it's genuinely needed (`docs/SKILLS-MATRIX.md`).
 
-**This is not vibe coding.** The constitution (`.specify/memory/constitution.md`, v2.3.0) is the
+**This is not vibe coding.** The constitution (`.specify/memory/constitution.md`, v3.0.0) is the
 highest authority. If this file disagrees with it, the constitution wins and this file gets fixed.
 
 ---
@@ -29,24 +29,27 @@ highest authority. If this file disagrees with it, the constitution wins and thi
    approved), then the code.
 3. **Traceability.** Every task traces to an `FR-xxx`, and every FR has a test (or an evaluation,
    for ML). Commits reference `[Txxx][FR-xxx]`.
-4. **One task at a time.** Explain the approach in a few bullets → **wait for the owner's OK** →
-   do that single task → run its gates → report → stop. **Never batch tasks.**
+4. **One owner-approved task group at a time.** A group is a `tasks.md` phase or checkpoint, or a
+   smaller set the owner names. Explain the approach for the group in a few bullets → **wait for
+   the owner's OK** → do the group's tasks in order, each test-first → run the group's gates on the
+   combined diff → report. Stop early on an unresolved BLOCKER. Start the next group only with a new
+   OK or under a **standing approval** (Constitution workflow): then keep going group after group,
+   reporting after each; product decisions take the product-owner recommendation, recorded as
+   provisional in the spec's Clarifications.
 5. **Tests first** for theory, DSP, vision geometry, fingering, learner modelling and backend code.
    For ML, the dataset, eval harness, metrics and baseline come before any model.
-6. **Human-owned code**, which Claude must not implement (not even as a "starter" or as
-   pseudocode that is really the implementation):
-   - YIN pitch detection
-   - the chromagram
-   - the camera homography and pixel → (string, fret) mapping math
-   - the Viterbi fingering optimizer and its fingering cost model (005; 017 ranks voicings with it)
-   - the knowledge-tracing update equations
-   - the cross-correlation estimator for round-trip latency and audio–video offset (015)
-   - **running** the ML training experiments
-
-   Claude may test, benchmark, explain and review these, and build tooling around them.
-7. **The owner writes all lesson prose** in `content/lessons/`, and all handbook explanation and
-   glossary text in `content/handbook/` (017). Claude may propose schemas and
-   check the theory, but never writes the prose or copies book text.
+6. **Core algorithms are AI-written and independently verified** (Constitution IV). Claude may
+   implement YIN, the chromagram, the camera homography and pixel → (string, fret) mapping, the
+   Viterbi fingering optimizer and its cost model, the knowledge-tracing updates and the
+   cross-correlation latency / A-V offset estimator. Each needs a derivation or published reference
+   in `research.md` and tests whose expected values come from independent sources (synthetic
+   signals, brute-force references, published values), never from the implementation. Claude may
+   launch ML training runs only from an owner-approved config; promoting a model needs
+   **ml-evaluator** APPROVE and owner approval.
+7. **Claude writes the lessons and handbook text** in `content/lessons/` and `content/handbook/`,
+   and the built-in packs. Original wording only: never copy or closely paraphrase books, courses
+   or websites (packs name a source and chapter, nothing more). **theory-checker** verifies every
+   theory claim, and the owner approves content before it ships.
 8. **Instrument-agnostic, any gear.** No hardcoded 6 strings, tuning or fret count outside the
    `InstrumentProfile` definitions (ADR-0003). No hardcoded device model outside shipped preset
    data; the owner's Scarlett, Katana:GO and guitars are a test rig, never defaults (ADR-0006).
@@ -72,7 +75,7 @@ highest authority. If this file disagrees with it, the constitution wins and thi
 | 4 | `/speckit-checklist` | `checklists/*.md` | Items resolved or explicitly deferred |
 | 5 | `/speckit-tasks` | `tasks.md` (test-first, `[P]`, FR tags, gate tags) | — |
 | 6 | `/speckit-analyze` | Consistency report | No CRITICAL or HIGH findings; owner approves |
-| 7 | `/speckit-implement` | One task at a time | Per task: **test-writer** (red) → owner OK → implement → green → **code-reviewer**, plus by area: **theory-checker** (theory/fingering), **perf-auditor** (DSP/vision/inference/hot paths), **ml-evaluator** (models/exports), **dataset-curator** (data/), **privacy-auditor** (media/network), **security-reviewer** (auth/input/deps/CI), **architecture-reviewer** (new modules or deps). After each user-facing task group: team loop B (**user-tester** Mode B → **product-owner** triage) |
+| 7 | `/speckit-implement` | One owner-approved task group at a time | Group approach → owner OK, then per task: **test-writer** (red) → implement → green → **code-reviewer**, plus by area: **theory-checker** (theory/fingering), **perf-auditor** (DSP/vision/inference/hot paths), **ml-evaluator** (models/exports), **dataset-curator** (data/), **privacy-auditor** (media/network), **security-reviewer** (auth/input/deps/CI), **architecture-reviewer** (new modules or deps). After each user-facing task group: team loop B (**user-tester** Mode B → **product-owner** triage) |
 | 8 | `/speckit-converge` | Remaining work added to `tasks.md` | **code-reviewer** on the full diff + the relevant area gates; **docs-keeper** syncs the docs; team loop B before a release |
 
 ### Subagents (`.claude/agents/`)
@@ -223,12 +226,12 @@ FretSense/
 ├── .claude/{agents,skills}/          # committed; settings.local.json is gitignored
 ├── .specify/                         # constitution, templates, scripts
 ├── specs/NNN-<feature>/              # spec, plan, research, data-model, contracts, quickstart, tasks, checklists
-├── content/lessons/                  # owner-written lessons (_template.md is the only AI-made file)
-├── content/handbook/                 # owner-written handbook explanations and glossary [017]
+├── content/lessons/                  # lessons (original text, theory-checked, owner-approved)
+├── content/handbook/                 # handbook explanations and glossary (same rules) [017]
 ├── content/packs/                    # curriculum packs (built-in General Theory; _template.yaml)
 ├── packages/
 │   ├── theory/                       # pure TS domain: notes, intervals, InstrumentProfile, fretboard graph
-│   ├── dsp/                          # Rust → wasm: YIN, chromagram, onset (owner-written cores) [002+]
+│   ├── dsp/                          # Rust → wasm: YIN, chromagram, onset [002+]
 │   ├── vision/                       # hand/neck tracking adapters, geometry [008+]
 │   ├── learner/                      # concept DAG, knowledge tracing, scheduler [006]
 │   ├── audio-io/                     # AudioBackend port, device state machine, calibration [015]
@@ -249,5 +252,7 @@ FretSense/
 - If a request would skip a workflow step, say so and point to the missing artefact.
 - If something is ambiguous, ask. Never invent requirements, numbers or dataset facts.
 - Never claim that tests passed, a benchmark ran or a metric improved unless it was actually run.
+- Describe authorship honestly (Constitution VII): docs and PR text say what agents generated and
+  what the owner decided. Never present AI-written code or lessons as hand-written by the owner.
 - Keep `docs/AI-WORKFLOW.md` and `docs/SKILLS-MATRIX.md` honest. Rows point to real paths, or are
   marked *planned* with a spec ID.

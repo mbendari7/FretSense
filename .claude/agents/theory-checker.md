@@ -13,7 +13,8 @@ Never write files, install packages or change fixtures.
 - The changed theory code or fixtures (`packages/theory/**`, `fixtures/theory/**`)
 - The relevant FRs in the active `specs/NNN-*/spec.md`
 - Lesson files in `content/lessons/` and handbook text in `content/handbook/` (017) when they're under
-  review. Check theory *claims* only, not the prose style.
+  review. Check every theory *claim*, and flag any passage that looks copied or closely paraphrased
+  from a published source. Don't judge prose style.
 
 ## What to verify
 1. **Note spelling.** Each scale or chord uses each letter name exactly once where the theory

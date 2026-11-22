@@ -17,13 +17,13 @@ every spec to a release in [PRODUCT.md](PRODUCT.md) (ADR-0011).
 |-------|-------------------------------|-----------------|-----------------|--------|
 | Interval arithmetic and enharmonic spelling | `packages/theory` → 001 FR-001–FR-007, FR-060 | Correct note names in every key | Fixture tables (21 roots × 12 scales/chords, 30 keys) + fast-check properties | Specified |
 | Fretboard as a position graph | `packages/theory` → 001 FR-008, FR-051; 005 | Position lookup now; fingering search later | Property tests over all profiles (001 SC-011) | Specified |
-| DP / Viterbi fingering optimizer (human-owned) | `packages/theory/fingering` → 005 | Most playable fingering for melodies and progressions | Golden fingerings, optimality checks vs brute force on small inputs | Planned (005) |
+| DP / Viterbi fingering optimizer | `packages/theory/fingering` → 005 | Most playable fingering for melodies and progressions | Golden fingerings, optimality checks vs brute force on small inputs | Planned (005) |
 | Concept DAG + topological sort, O(V+E) | `packages/learner` → 006 FR-001–FR-005 | Prerequisite-driven curriculum | Fixture graphs up to 500 nodes, cycle detection (006 SC-001) | Specified |
 | Review-queue structure (priority queue if justified) | `packages/learner` → 006 FR-014 | Due-item retrieval in < 5 ms at 5k items | Benchmarks at the FR-014 scale; the choice is justified in the plan | Specified (data structure open) |
 | Lock-free SPSC ring buffer | `packages/audio-io` → 015 FR-020 | Audio thread → analysis worker without locks or allocation | Concurrency stress tests, no-allocation checks | Specified |
 | Chord-symbol parsing (trie or hash map) | `packages/theory/parse` → 005 | Chord sheets and labels | Property/fuzz tests, round-trip with canonical symbols | Planned (005) |
 | Fuzzy search with typo tolerance and alias ranking | → 017 FR-020, FR-021 | "Am7", "dorian", "2 5 1" found mid-practice | Search fixture ≥ 200 queries; per-keystroke latency (017 SC-002) | Specified |
-| Constrained voicing enumeration ranked by a cost model | → 017 FR-022–FR-024 (cost model owner-written in 005) | Every playable chord shape on any instrument and tuning | Constraint checks on ≥ 50 cases; golden shapes in top 3 (017 SC-005) | Specified (v0.3) |
+| Constrained voicing enumeration ranked by a cost model | → 017 FR-022–FR-024 (cost model from 005) | Every playable chord shape on any instrument and tuning | Constraint checks on ≥ 50 cases; golden shapes in top 3 (017 SC-005) | Specified (v0.3) |
 | HMM / Bayesian likelihood fusion | `packages/fusion` → 010 FR-003 | Exact (string, fret) from audio + vision | Held-out accuracy vs rules baseline (010 SC-002) | Specified (draft) |
 
 ## Systems and concurrency
@@ -66,10 +66,10 @@ every spec to a release in [PRODUCT.md](PRODUCT.md) (ADR-0011).
 | Skill | Where | Why | How tested | Status |
 |-------|-------|-----|------------|--------|
 | Hand landmarks → (string, fret, finger) | `packages/vision` → 008 FR-008–FR-015 | Silent fretting answers; fusion | Session-bootstrap accuracy, coverage (008 SC-001/002) | Specified |
-| Fiducial-marker homography (human-owned) | → 008 FR-004–FR-007 | Neck geometry | Projection-error targets (008 FR-005) | Specified |
+| Fiducial-marker homography | → 008 FR-004–FR-007 | Neck geometry | Projection-error targets (008 FR-005) | Specified |
 | Markerless keypoint model | → 008 FR-019–FR-021 | No stickers | Markerless held-out set vs classical baseline and v1 (008 FR-020) | Specified |
 | Picking hand, posture, technique events | → 011 | Technique feedback | Event F1 vs rules baseline (011 SC-002) | Specified (draft) |
-| A/V clock-offset calibration (human-owned estimator) | `packages/audio-io` → 015 FR-015 | Align audio and video events for fusion | Synthetic ±5 ms, hardware ±10 ms (015 SC-008) | Specified |
+| A/V clock-offset calibration (cross-correlation estimator) | `packages/audio-io` → 015 FR-015 | Align audio and video events for fusion | Synthetic ±5 ms, hardware ±10 ms (015 SC-008) | Specified |
 
 ## User modelling, personalisation and configurable architecture
 

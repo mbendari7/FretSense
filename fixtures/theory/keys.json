@@ -1,0 +1,8767 @@
+{
+  "$schema": "fretsense/fixtures/theory/keys v1",
+  "status": "PLACEHOLDER: awaiting owner + theory-checker sign-off (SC-001, task T063)",
+  "why": "FR-007: the 15 major and 15 minor key signatures from 7 flats to 7 sharps. Majors: C G D A E B F# C# (0-7 sharps), F Bb Eb Ab Db Gb Cb (1-7 flats); relative minors a minor third below: A E B F# C# G# D# A#, D G C F Bb Eb Ab. Diatonic chords stack thirds on each degree of the major / natural-minor scale; numerals are exactly FR-007 (major: I ii iii IV V vi vii° / Imaj7 ii7 iii7 IVmaj7 V7 vi7 viiø7; natural minor: i ii° III iv v VI VII / i7 iiø7 IIImaj7 iv7 v7 VImaj7 VII7). Harmonic-minor alternatives build V, V7 on degree 5 and vii°, vii°7 on the raised 7th of the harmonic minor scale. The reference script cross-checked every chord two ways (formula from the root vs stacking scale degrees 1-3-5-7). US5 scenarios 1 and 2 (G major, A minor) are reproduced by hand in key.test.ts.",
+  "values": [
+    {
+      "tonic": "C",
+      "mode": "major",
+      "scale": [
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "A",
+        "B"
+      ],
+      "triads": [
+        {
+          "numeral": "I",
+          "root": "C",
+          "qualityId": "major",
+          "symbol": "C",
+          "tones": [
+            "C",
+            "E",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii",
+          "root": "D",
+          "qualityId": "minor",
+          "symbol": "Dm",
+          "tones": [
+            "D",
+            "F",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iii",
+          "root": "E",
+          "qualityId": "minor",
+          "symbol": "Em",
+          "tones": [
+            "E",
+            "G",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "IV",
+          "root": "F",
+          "qualityId": "major",
+          "symbol": "F",
+          "tones": [
+            "F",
+            "A",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "V",
+          "root": "G",
+          "qualityId": "major",
+          "symbol": "G",
+          "tones": [
+            "G",
+            "B",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vi",
+          "root": "A",
+          "qualityId": "minor",
+          "symbol": "Am",
+          "tones": [
+            "A",
+            "C",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vii°",
+          "root": "B",
+          "qualityId": "dim",
+          "symbol": "Bdim",
+          "tones": [
+            "B",
+            "D",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "Imaj7",
+          "root": "C",
+          "qualityId": "maj7",
+          "symbol": "Cmaj7",
+          "tones": [
+            "C",
+            "E",
+            "G",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "ii7",
+          "root": "D",
+          "qualityId": "min7",
+          "symbol": "Dm7",
+          "tones": [
+            "D",
+            "F",
+            "A",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iii7",
+          "root": "E",
+          "qualityId": "min7",
+          "symbol": "Em7",
+          "tones": [
+            "E",
+            "G",
+            "B",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IVmaj7",
+          "root": "F",
+          "qualityId": "maj7",
+          "symbol": "Fmaj7",
+          "tones": [
+            "F",
+            "A",
+            "C",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "V7",
+          "root": "G",
+          "qualityId": "dom7",
+          "symbol": "G7",
+          "tones": [
+            "G",
+            "B",
+            "D",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "vi7",
+          "root": "A",
+          "qualityId": "min7",
+          "symbol": "Am7",
+          "tones": [
+            "A",
+            "C",
+            "E",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "viiø7",
+          "root": "B",
+          "qualityId": "m7b5",
+          "symbol": "Bm7b5",
+          "tones": [
+            "B",
+            "D",
+            "F",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        }
+      ]
+    },
+    {
+      "tonic": "G",
+      "mode": "major",
+      "scale": [
+        "G",
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F#"
+      ],
+      "triads": [
+        {
+          "numeral": "I",
+          "root": "G",
+          "qualityId": "major",
+          "symbol": "G",
+          "tones": [
+            "G",
+            "B",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii",
+          "root": "A",
+          "qualityId": "minor",
+          "symbol": "Am",
+          "tones": [
+            "A",
+            "C",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iii",
+          "root": "B",
+          "qualityId": "minor",
+          "symbol": "Bm",
+          "tones": [
+            "B",
+            "D",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "IV",
+          "root": "C",
+          "qualityId": "major",
+          "symbol": "C",
+          "tones": [
+            "C",
+            "E",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "V",
+          "root": "D",
+          "qualityId": "major",
+          "symbol": "D",
+          "tones": [
+            "D",
+            "F#",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vi",
+          "root": "E",
+          "qualityId": "minor",
+          "symbol": "Em",
+          "tones": [
+            "E",
+            "G",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vii°",
+          "root": "F#",
+          "qualityId": "dim",
+          "symbol": "F#dim",
+          "tones": [
+            "F#",
+            "A",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "Imaj7",
+          "root": "G",
+          "qualityId": "maj7",
+          "symbol": "Gmaj7",
+          "tones": [
+            "G",
+            "B",
+            "D",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "ii7",
+          "root": "A",
+          "qualityId": "min7",
+          "symbol": "Am7",
+          "tones": [
+            "A",
+            "C",
+            "E",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iii7",
+          "root": "B",
+          "qualityId": "min7",
+          "symbol": "Bm7",
+          "tones": [
+            "B",
+            "D",
+            "F#",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IVmaj7",
+          "root": "C",
+          "qualityId": "maj7",
+          "symbol": "Cmaj7",
+          "tones": [
+            "C",
+            "E",
+            "G",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "V7",
+          "root": "D",
+          "qualityId": "dom7",
+          "symbol": "D7",
+          "tones": [
+            "D",
+            "F#",
+            "A",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "vi7",
+          "root": "E",
+          "qualityId": "min7",
+          "symbol": "Em7",
+          "tones": [
+            "E",
+            "G",
+            "B",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "viiø7",
+          "root": "F#",
+          "qualityId": "m7b5",
+          "symbol": "F#m7b5",
+          "tones": [
+            "F#",
+            "A",
+            "C",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        }
+      ]
+    },
+    {
+      "tonic": "D",
+      "mode": "major",
+      "scale": [
+        "D",
+        "E",
+        "F#",
+        "G",
+        "A",
+        "B",
+        "C#"
+      ],
+      "triads": [
+        {
+          "numeral": "I",
+          "root": "D",
+          "qualityId": "major",
+          "symbol": "D",
+          "tones": [
+            "D",
+            "F#",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii",
+          "root": "E",
+          "qualityId": "minor",
+          "symbol": "Em",
+          "tones": [
+            "E",
+            "G",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iii",
+          "root": "F#",
+          "qualityId": "minor",
+          "symbol": "F#m",
+          "tones": [
+            "F#",
+            "A",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "IV",
+          "root": "G",
+          "qualityId": "major",
+          "symbol": "G",
+          "tones": [
+            "G",
+            "B",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "V",
+          "root": "A",
+          "qualityId": "major",
+          "symbol": "A",
+          "tones": [
+            "A",
+            "C#",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vi",
+          "root": "B",
+          "qualityId": "minor",
+          "symbol": "Bm",
+          "tones": [
+            "B",
+            "D",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vii°",
+          "root": "C#",
+          "qualityId": "dim",
+          "symbol": "C#dim",
+          "tones": [
+            "C#",
+            "E",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "Imaj7",
+          "root": "D",
+          "qualityId": "maj7",
+          "symbol": "Dmaj7",
+          "tones": [
+            "D",
+            "F#",
+            "A",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "ii7",
+          "root": "E",
+          "qualityId": "min7",
+          "symbol": "Em7",
+          "tones": [
+            "E",
+            "G",
+            "B",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iii7",
+          "root": "F#",
+          "qualityId": "min7",
+          "symbol": "F#m7",
+          "tones": [
+            "F#",
+            "A",
+            "C#",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IVmaj7",
+          "root": "G",
+          "qualityId": "maj7",
+          "symbol": "Gmaj7",
+          "tones": [
+            "G",
+            "B",
+            "D",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "V7",
+          "root": "A",
+          "qualityId": "dom7",
+          "symbol": "A7",
+          "tones": [
+            "A",
+            "C#",
+            "E",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "vi7",
+          "root": "B",
+          "qualityId": "min7",
+          "symbol": "Bm7",
+          "tones": [
+            "B",
+            "D",
+            "F#",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "viiø7",
+          "root": "C#",
+          "qualityId": "m7b5",
+          "symbol": "C#m7b5",
+          "tones": [
+            "C#",
+            "E",
+            "G",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        }
+      ]
+    },
+    {
+      "tonic": "A",
+      "mode": "major",
+      "scale": [
+        "A",
+        "B",
+        "C#",
+        "D",
+        "E",
+        "F#",
+        "G#"
+      ],
+      "triads": [
+        {
+          "numeral": "I",
+          "root": "A",
+          "qualityId": "major",
+          "symbol": "A",
+          "tones": [
+            "A",
+            "C#",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii",
+          "root": "B",
+          "qualityId": "minor",
+          "symbol": "Bm",
+          "tones": [
+            "B",
+            "D",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iii",
+          "root": "C#",
+          "qualityId": "minor",
+          "symbol": "C#m",
+          "tones": [
+            "C#",
+            "E",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "IV",
+          "root": "D",
+          "qualityId": "major",
+          "symbol": "D",
+          "tones": [
+            "D",
+            "F#",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "V",
+          "root": "E",
+          "qualityId": "major",
+          "symbol": "E",
+          "tones": [
+            "E",
+            "G#",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vi",
+          "root": "F#",
+          "qualityId": "minor",
+          "symbol": "F#m",
+          "tones": [
+            "F#",
+            "A",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vii°",
+          "root": "G#",
+          "qualityId": "dim",
+          "symbol": "G#dim",
+          "tones": [
+            "G#",
+            "B",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "Imaj7",
+          "root": "A",
+          "qualityId": "maj7",
+          "symbol": "Amaj7",
+          "tones": [
+            "A",
+            "C#",
+            "E",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "ii7",
+          "root": "B",
+          "qualityId": "min7",
+          "symbol": "Bm7",
+          "tones": [
+            "B",
+            "D",
+            "F#",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iii7",
+          "root": "C#",
+          "qualityId": "min7",
+          "symbol": "C#m7",
+          "tones": [
+            "C#",
+            "E",
+            "G#",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IVmaj7",
+          "root": "D",
+          "qualityId": "maj7",
+          "symbol": "Dmaj7",
+          "tones": [
+            "D",
+            "F#",
+            "A",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "V7",
+          "root": "E",
+          "qualityId": "dom7",
+          "symbol": "E7",
+          "tones": [
+            "E",
+            "G#",
+            "B",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "vi7",
+          "root": "F#",
+          "qualityId": "min7",
+          "symbol": "F#m7",
+          "tones": [
+            "F#",
+            "A",
+            "C#",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "viiø7",
+          "root": "G#",
+          "qualityId": "m7b5",
+          "symbol": "G#m7b5",
+          "tones": [
+            "G#",
+            "B",
+            "D",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        }
+      ]
+    },
+    {
+      "tonic": "E",
+      "mode": "major",
+      "scale": [
+        "E",
+        "F#",
+        "G#",
+        "A",
+        "B",
+        "C#",
+        "D#"
+      ],
+      "triads": [
+        {
+          "numeral": "I",
+          "root": "E",
+          "qualityId": "major",
+          "symbol": "E",
+          "tones": [
+            "E",
+            "G#",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii",
+          "root": "F#",
+          "qualityId": "minor",
+          "symbol": "F#m",
+          "tones": [
+            "F#",
+            "A",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iii",
+          "root": "G#",
+          "qualityId": "minor",
+          "symbol": "G#m",
+          "tones": [
+            "G#",
+            "B",
+            "D#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "IV",
+          "root": "A",
+          "qualityId": "major",
+          "symbol": "A",
+          "tones": [
+            "A",
+            "C#",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "V",
+          "root": "B",
+          "qualityId": "major",
+          "symbol": "B",
+          "tones": [
+            "B",
+            "D#",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vi",
+          "root": "C#",
+          "qualityId": "minor",
+          "symbol": "C#m",
+          "tones": [
+            "C#",
+            "E",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vii°",
+          "root": "D#",
+          "qualityId": "dim",
+          "symbol": "D#dim",
+          "tones": [
+            "D#",
+            "F#",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "Imaj7",
+          "root": "E",
+          "qualityId": "maj7",
+          "symbol": "Emaj7",
+          "tones": [
+            "E",
+            "G#",
+            "B",
+            "D#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "ii7",
+          "root": "F#",
+          "qualityId": "min7",
+          "symbol": "F#m7",
+          "tones": [
+            "F#",
+            "A",
+            "C#",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iii7",
+          "root": "G#",
+          "qualityId": "min7",
+          "symbol": "G#m7",
+          "tones": [
+            "G#",
+            "B",
+            "D#",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IVmaj7",
+          "root": "A",
+          "qualityId": "maj7",
+          "symbol": "Amaj7",
+          "tones": [
+            "A",
+            "C#",
+            "E",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "V7",
+          "root": "B",
+          "qualityId": "dom7",
+          "symbol": "B7",
+          "tones": [
+            "B",
+            "D#",
+            "F#",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "vi7",
+          "root": "C#",
+          "qualityId": "min7",
+          "symbol": "C#m7",
+          "tones": [
+            "C#",
+            "E",
+            "G#",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "viiø7",
+          "root": "D#",
+          "qualityId": "m7b5",
+          "symbol": "D#m7b5",
+          "tones": [
+            "D#",
+            "F#",
+            "A",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        }
+      ]
+    },
+    {
+      "tonic": "B",
+      "mode": "major",
+      "scale": [
+        "B",
+        "C#",
+        "D#",
+        "E",
+        "F#",
+        "G#",
+        "A#"
+      ],
+      "triads": [
+        {
+          "numeral": "I",
+          "root": "B",
+          "qualityId": "major",
+          "symbol": "B",
+          "tones": [
+            "B",
+            "D#",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii",
+          "root": "C#",
+          "qualityId": "minor",
+          "symbol": "C#m",
+          "tones": [
+            "C#",
+            "E",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iii",
+          "root": "D#",
+          "qualityId": "minor",
+          "symbol": "D#m",
+          "tones": [
+            "D#",
+            "F#",
+            "A#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "IV",
+          "root": "E",
+          "qualityId": "major",
+          "symbol": "E",
+          "tones": [
+            "E",
+            "G#",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "V",
+          "root": "F#",
+          "qualityId": "major",
+          "symbol": "F#",
+          "tones": [
+            "F#",
+            "A#",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vi",
+          "root": "G#",
+          "qualityId": "minor",
+          "symbol": "G#m",
+          "tones": [
+            "G#",
+            "B",
+            "D#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vii°",
+          "root": "A#",
+          "qualityId": "dim",
+          "symbol": "A#dim",
+          "tones": [
+            "A#",
+            "C#",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "Imaj7",
+          "root": "B",
+          "qualityId": "maj7",
+          "symbol": "Bmaj7",
+          "tones": [
+            "B",
+            "D#",
+            "F#",
+            "A#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "ii7",
+          "root": "C#",
+          "qualityId": "min7",
+          "symbol": "C#m7",
+          "tones": [
+            "C#",
+            "E",
+            "G#",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iii7",
+          "root": "D#",
+          "qualityId": "min7",
+          "symbol": "D#m7",
+          "tones": [
+            "D#",
+            "F#",
+            "A#",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IVmaj7",
+          "root": "E",
+          "qualityId": "maj7",
+          "symbol": "Emaj7",
+          "tones": [
+            "E",
+            "G#",
+            "B",
+            "D#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "V7",
+          "root": "F#",
+          "qualityId": "dom7",
+          "symbol": "F#7",
+          "tones": [
+            "F#",
+            "A#",
+            "C#",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "vi7",
+          "root": "G#",
+          "qualityId": "min7",
+          "symbol": "G#m7",
+          "tones": [
+            "G#",
+            "B",
+            "D#",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "viiø7",
+          "root": "A#",
+          "qualityId": "m7b5",
+          "symbol": "A#m7b5",
+          "tones": [
+            "A#",
+            "C#",
+            "E",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        }
+      ]
+    },
+    {
+      "tonic": "F#",
+      "mode": "major",
+      "scale": [
+        "F#",
+        "G#",
+        "A#",
+        "B",
+        "C#",
+        "D#",
+        "E#"
+      ],
+      "triads": [
+        {
+          "numeral": "I",
+          "root": "F#",
+          "qualityId": "major",
+          "symbol": "F#",
+          "tones": [
+            "F#",
+            "A#",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii",
+          "root": "G#",
+          "qualityId": "minor",
+          "symbol": "G#m",
+          "tones": [
+            "G#",
+            "B",
+            "D#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iii",
+          "root": "A#",
+          "qualityId": "minor",
+          "symbol": "A#m",
+          "tones": [
+            "A#",
+            "C#",
+            "E#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "IV",
+          "root": "B",
+          "qualityId": "major",
+          "symbol": "B",
+          "tones": [
+            "B",
+            "D#",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "V",
+          "root": "C#",
+          "qualityId": "major",
+          "symbol": "C#",
+          "tones": [
+            "C#",
+            "E#",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vi",
+          "root": "D#",
+          "qualityId": "minor",
+          "symbol": "D#m",
+          "tones": [
+            "D#",
+            "F#",
+            "A#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vii°",
+          "root": "E#",
+          "qualityId": "dim",
+          "symbol": "E#dim",
+          "tones": [
+            "E#",
+            "G#",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "Imaj7",
+          "root": "F#",
+          "qualityId": "maj7",
+          "symbol": "F#maj7",
+          "tones": [
+            "F#",
+            "A#",
+            "C#",
+            "E#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "ii7",
+          "root": "G#",
+          "qualityId": "min7",
+          "symbol": "G#m7",
+          "tones": [
+            "G#",
+            "B",
+            "D#",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iii7",
+          "root": "A#",
+          "qualityId": "min7",
+          "symbol": "A#m7",
+          "tones": [
+            "A#",
+            "C#",
+            "E#",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IVmaj7",
+          "root": "B",
+          "qualityId": "maj7",
+          "symbol": "Bmaj7",
+          "tones": [
+            "B",
+            "D#",
+            "F#",
+            "A#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "V7",
+          "root": "C#",
+          "qualityId": "dom7",
+          "symbol": "C#7",
+          "tones": [
+            "C#",
+            "E#",
+            "G#",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "vi7",
+          "root": "D#",
+          "qualityId": "min7",
+          "symbol": "D#m7",
+          "tones": [
+            "D#",
+            "F#",
+            "A#",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "viiø7",
+          "root": "E#",
+          "qualityId": "m7b5",
+          "symbol": "E#m7b5",
+          "tones": [
+            "E#",
+            "G#",
+            "B",
+            "D#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        }
+      ]
+    },
+    {
+      "tonic": "C#",
+      "mode": "major",
+      "scale": [
+        "C#",
+        "D#",
+        "E#",
+        "F#",
+        "G#",
+        "A#",
+        "B#"
+      ],
+      "triads": [
+        {
+          "numeral": "I",
+          "root": "C#",
+          "qualityId": "major",
+          "symbol": "C#",
+          "tones": [
+            "C#",
+            "E#",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii",
+          "root": "D#",
+          "qualityId": "minor",
+          "symbol": "D#m",
+          "tones": [
+            "D#",
+            "F#",
+            "A#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iii",
+          "root": "E#",
+          "qualityId": "minor",
+          "symbol": "E#m",
+          "tones": [
+            "E#",
+            "G#",
+            "B#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "IV",
+          "root": "F#",
+          "qualityId": "major",
+          "symbol": "F#",
+          "tones": [
+            "F#",
+            "A#",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "V",
+          "root": "G#",
+          "qualityId": "major",
+          "symbol": "G#",
+          "tones": [
+            "G#",
+            "B#",
+            "D#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vi",
+          "root": "A#",
+          "qualityId": "minor",
+          "symbol": "A#m",
+          "tones": [
+            "A#",
+            "C#",
+            "E#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vii°",
+          "root": "B#",
+          "qualityId": "dim",
+          "symbol": "B#dim",
+          "tones": [
+            "B#",
+            "D#",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "Imaj7",
+          "root": "C#",
+          "qualityId": "maj7",
+          "symbol": "C#maj7",
+          "tones": [
+            "C#",
+            "E#",
+            "G#",
+            "B#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "ii7",
+          "root": "D#",
+          "qualityId": "min7",
+          "symbol": "D#m7",
+          "tones": [
+            "D#",
+            "F#",
+            "A#",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iii7",
+          "root": "E#",
+          "qualityId": "min7",
+          "symbol": "E#m7",
+          "tones": [
+            "E#",
+            "G#",
+            "B#",
+            "D#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IVmaj7",
+          "root": "F#",
+          "qualityId": "maj7",
+          "symbol": "F#maj7",
+          "tones": [
+            "F#",
+            "A#",
+            "C#",
+            "E#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "V7",
+          "root": "G#",
+          "qualityId": "dom7",
+          "symbol": "G#7",
+          "tones": [
+            "G#",
+            "B#",
+            "D#",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "vi7",
+          "root": "A#",
+          "qualityId": "min7",
+          "symbol": "A#m7",
+          "tones": [
+            "A#",
+            "C#",
+            "E#",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "viiø7",
+          "root": "B#",
+          "qualityId": "m7b5",
+          "symbol": "B#m7b5",
+          "tones": [
+            "B#",
+            "D#",
+            "F#",
+            "A#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        }
+      ]
+    },
+    {
+      "tonic": "F",
+      "mode": "major",
+      "scale": [
+        "F",
+        "G",
+        "A",
+        "Bb",
+        "C",
+        "D",
+        "E"
+      ],
+      "triads": [
+        {
+          "numeral": "I",
+          "root": "F",
+          "qualityId": "major",
+          "symbol": "F",
+          "tones": [
+            "F",
+            "A",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii",
+          "root": "G",
+          "qualityId": "minor",
+          "symbol": "Gm",
+          "tones": [
+            "G",
+            "Bb",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iii",
+          "root": "A",
+          "qualityId": "minor",
+          "symbol": "Am",
+          "tones": [
+            "A",
+            "C",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "IV",
+          "root": "Bb",
+          "qualityId": "major",
+          "symbol": "Bb",
+          "tones": [
+            "Bb",
+            "D",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "V",
+          "root": "C",
+          "qualityId": "major",
+          "symbol": "C",
+          "tones": [
+            "C",
+            "E",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vi",
+          "root": "D",
+          "qualityId": "minor",
+          "symbol": "Dm",
+          "tones": [
+            "D",
+            "F",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vii°",
+          "root": "E",
+          "qualityId": "dim",
+          "symbol": "Edim",
+          "tones": [
+            "E",
+            "G",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "Imaj7",
+          "root": "F",
+          "qualityId": "maj7",
+          "symbol": "Fmaj7",
+          "tones": [
+            "F",
+            "A",
+            "C",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "ii7",
+          "root": "G",
+          "qualityId": "min7",
+          "symbol": "Gm7",
+          "tones": [
+            "G",
+            "Bb",
+            "D",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iii7",
+          "root": "A",
+          "qualityId": "min7",
+          "symbol": "Am7",
+          "tones": [
+            "A",
+            "C",
+            "E",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IVmaj7",
+          "root": "Bb",
+          "qualityId": "maj7",
+          "symbol": "Bbmaj7",
+          "tones": [
+            "Bb",
+            "D",
+            "F",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "V7",
+          "root": "C",
+          "qualityId": "dom7",
+          "symbol": "C7",
+          "tones": [
+            "C",
+            "E",
+            "G",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "vi7",
+          "root": "D",
+          "qualityId": "min7",
+          "symbol": "Dm7",
+          "tones": [
+            "D",
+            "F",
+            "A",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "viiø7",
+          "root": "E",
+          "qualityId": "m7b5",
+          "symbol": "Em7b5",
+          "tones": [
+            "E",
+            "G",
+            "Bb",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        }
+      ]
+    },
+    {
+      "tonic": "Bb",
+      "mode": "major",
+      "scale": [
+        "Bb",
+        "C",
+        "D",
+        "Eb",
+        "F",
+        "G",
+        "A"
+      ],
+      "triads": [
+        {
+          "numeral": "I",
+          "root": "Bb",
+          "qualityId": "major",
+          "symbol": "Bb",
+          "tones": [
+            "Bb",
+            "D",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii",
+          "root": "C",
+          "qualityId": "minor",
+          "symbol": "Cm",
+          "tones": [
+            "C",
+            "Eb",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iii",
+          "root": "D",
+          "qualityId": "minor",
+          "symbol": "Dm",
+          "tones": [
+            "D",
+            "F",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "IV",
+          "root": "Eb",
+          "qualityId": "major",
+          "symbol": "Eb",
+          "tones": [
+            "Eb",
+            "G",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "V",
+          "root": "F",
+          "qualityId": "major",
+          "symbol": "F",
+          "tones": [
+            "F",
+            "A",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vi",
+          "root": "G",
+          "qualityId": "minor",
+          "symbol": "Gm",
+          "tones": [
+            "G",
+            "Bb",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vii°",
+          "root": "A",
+          "qualityId": "dim",
+          "symbol": "Adim",
+          "tones": [
+            "A",
+            "C",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "Imaj7",
+          "root": "Bb",
+          "qualityId": "maj7",
+          "symbol": "Bbmaj7",
+          "tones": [
+            "Bb",
+            "D",
+            "F",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "ii7",
+          "root": "C",
+          "qualityId": "min7",
+          "symbol": "Cm7",
+          "tones": [
+            "C",
+            "Eb",
+            "G",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iii7",
+          "root": "D",
+          "qualityId": "min7",
+          "symbol": "Dm7",
+          "tones": [
+            "D",
+            "F",
+            "A",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IVmaj7",
+          "root": "Eb",
+          "qualityId": "maj7",
+          "symbol": "Ebmaj7",
+          "tones": [
+            "Eb",
+            "G",
+            "Bb",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "V7",
+          "root": "F",
+          "qualityId": "dom7",
+          "symbol": "F7",
+          "tones": [
+            "F",
+            "A",
+            "C",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "vi7",
+          "root": "G",
+          "qualityId": "min7",
+          "symbol": "Gm7",
+          "tones": [
+            "G",
+            "Bb",
+            "D",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "viiø7",
+          "root": "A",
+          "qualityId": "m7b5",
+          "symbol": "Am7b5",
+          "tones": [
+            "A",
+            "C",
+            "Eb",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        }
+      ]
+    },
+    {
+      "tonic": "Eb",
+      "mode": "major",
+      "scale": [
+        "Eb",
+        "F",
+        "G",
+        "Ab",
+        "Bb",
+        "C",
+        "D"
+      ],
+      "triads": [
+        {
+          "numeral": "I",
+          "root": "Eb",
+          "qualityId": "major",
+          "symbol": "Eb",
+          "tones": [
+            "Eb",
+            "G",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii",
+          "root": "F",
+          "qualityId": "minor",
+          "symbol": "Fm",
+          "tones": [
+            "F",
+            "Ab",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iii",
+          "root": "G",
+          "qualityId": "minor",
+          "symbol": "Gm",
+          "tones": [
+            "G",
+            "Bb",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "IV",
+          "root": "Ab",
+          "qualityId": "major",
+          "symbol": "Ab",
+          "tones": [
+            "Ab",
+            "C",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "V",
+          "root": "Bb",
+          "qualityId": "major",
+          "symbol": "Bb",
+          "tones": [
+            "Bb",
+            "D",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vi",
+          "root": "C",
+          "qualityId": "minor",
+          "symbol": "Cm",
+          "tones": [
+            "C",
+            "Eb",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vii°",
+          "root": "D",
+          "qualityId": "dim",
+          "symbol": "Ddim",
+          "tones": [
+            "D",
+            "F",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "Imaj7",
+          "root": "Eb",
+          "qualityId": "maj7",
+          "symbol": "Ebmaj7",
+          "tones": [
+            "Eb",
+            "G",
+            "Bb",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "ii7",
+          "root": "F",
+          "qualityId": "min7",
+          "symbol": "Fm7",
+          "tones": [
+            "F",
+            "Ab",
+            "C",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iii7",
+          "root": "G",
+          "qualityId": "min7",
+          "symbol": "Gm7",
+          "tones": [
+            "G",
+            "Bb",
+            "D",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IVmaj7",
+          "root": "Ab",
+          "qualityId": "maj7",
+          "symbol": "Abmaj7",
+          "tones": [
+            "Ab",
+            "C",
+            "Eb",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "V7",
+          "root": "Bb",
+          "qualityId": "dom7",
+          "symbol": "Bb7",
+          "tones": [
+            "Bb",
+            "D",
+            "F",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "vi7",
+          "root": "C",
+          "qualityId": "min7",
+          "symbol": "Cm7",
+          "tones": [
+            "C",
+            "Eb",
+            "G",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "viiø7",
+          "root": "D",
+          "qualityId": "m7b5",
+          "symbol": "Dm7b5",
+          "tones": [
+            "D",
+            "F",
+            "Ab",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        }
+      ]
+    },
+    {
+      "tonic": "Ab",
+      "mode": "major",
+      "scale": [
+        "Ab",
+        "Bb",
+        "C",
+        "Db",
+        "Eb",
+        "F",
+        "G"
+      ],
+      "triads": [
+        {
+          "numeral": "I",
+          "root": "Ab",
+          "qualityId": "major",
+          "symbol": "Ab",
+          "tones": [
+            "Ab",
+            "C",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii",
+          "root": "Bb",
+          "qualityId": "minor",
+          "symbol": "Bbm",
+          "tones": [
+            "Bb",
+            "Db",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iii",
+          "root": "C",
+          "qualityId": "minor",
+          "symbol": "Cm",
+          "tones": [
+            "C",
+            "Eb",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "IV",
+          "root": "Db",
+          "qualityId": "major",
+          "symbol": "Db",
+          "tones": [
+            "Db",
+            "F",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "V",
+          "root": "Eb",
+          "qualityId": "major",
+          "symbol": "Eb",
+          "tones": [
+            "Eb",
+            "G",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vi",
+          "root": "F",
+          "qualityId": "minor",
+          "symbol": "Fm",
+          "tones": [
+            "F",
+            "Ab",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vii°",
+          "root": "G",
+          "qualityId": "dim",
+          "symbol": "Gdim",
+          "tones": [
+            "G",
+            "Bb",
+            "Db"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "Imaj7",
+          "root": "Ab",
+          "qualityId": "maj7",
+          "symbol": "Abmaj7",
+          "tones": [
+            "Ab",
+            "C",
+            "Eb",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "ii7",
+          "root": "Bb",
+          "qualityId": "min7",
+          "symbol": "Bbm7",
+          "tones": [
+            "Bb",
+            "Db",
+            "F",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iii7",
+          "root": "C",
+          "qualityId": "min7",
+          "symbol": "Cm7",
+          "tones": [
+            "C",
+            "Eb",
+            "G",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IVmaj7",
+          "root": "Db",
+          "qualityId": "maj7",
+          "symbol": "Dbmaj7",
+          "tones": [
+            "Db",
+            "F",
+            "Ab",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "V7",
+          "root": "Eb",
+          "qualityId": "dom7",
+          "symbol": "Eb7",
+          "tones": [
+            "Eb",
+            "G",
+            "Bb",
+            "Db"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "vi7",
+          "root": "F",
+          "qualityId": "min7",
+          "symbol": "Fm7",
+          "tones": [
+            "F",
+            "Ab",
+            "C",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "viiø7",
+          "root": "G",
+          "qualityId": "m7b5",
+          "symbol": "Gm7b5",
+          "tones": [
+            "G",
+            "Bb",
+            "Db",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        }
+      ]
+    },
+    {
+      "tonic": "Db",
+      "mode": "major",
+      "scale": [
+        "Db",
+        "Eb",
+        "F",
+        "Gb",
+        "Ab",
+        "Bb",
+        "C"
+      ],
+      "triads": [
+        {
+          "numeral": "I",
+          "root": "Db",
+          "qualityId": "major",
+          "symbol": "Db",
+          "tones": [
+            "Db",
+            "F",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii",
+          "root": "Eb",
+          "qualityId": "minor",
+          "symbol": "Ebm",
+          "tones": [
+            "Eb",
+            "Gb",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iii",
+          "root": "F",
+          "qualityId": "minor",
+          "symbol": "Fm",
+          "tones": [
+            "F",
+            "Ab",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "IV",
+          "root": "Gb",
+          "qualityId": "major",
+          "symbol": "Gb",
+          "tones": [
+            "Gb",
+            "Bb",
+            "Db"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "V",
+          "root": "Ab",
+          "qualityId": "major",
+          "symbol": "Ab",
+          "tones": [
+            "Ab",
+            "C",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vi",
+          "root": "Bb",
+          "qualityId": "minor",
+          "symbol": "Bbm",
+          "tones": [
+            "Bb",
+            "Db",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vii°",
+          "root": "C",
+          "qualityId": "dim",
+          "symbol": "Cdim",
+          "tones": [
+            "C",
+            "Eb",
+            "Gb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "Imaj7",
+          "root": "Db",
+          "qualityId": "maj7",
+          "symbol": "Dbmaj7",
+          "tones": [
+            "Db",
+            "F",
+            "Ab",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "ii7",
+          "root": "Eb",
+          "qualityId": "min7",
+          "symbol": "Ebm7",
+          "tones": [
+            "Eb",
+            "Gb",
+            "Bb",
+            "Db"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iii7",
+          "root": "F",
+          "qualityId": "min7",
+          "symbol": "Fm7",
+          "tones": [
+            "F",
+            "Ab",
+            "C",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IVmaj7",
+          "root": "Gb",
+          "qualityId": "maj7",
+          "symbol": "Gbmaj7",
+          "tones": [
+            "Gb",
+            "Bb",
+            "Db",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "V7",
+          "root": "Ab",
+          "qualityId": "dom7",
+          "symbol": "Ab7",
+          "tones": [
+            "Ab",
+            "C",
+            "Eb",
+            "Gb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "vi7",
+          "root": "Bb",
+          "qualityId": "min7",
+          "symbol": "Bbm7",
+          "tones": [
+            "Bb",
+            "Db",
+            "F",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "viiø7",
+          "root": "C",
+          "qualityId": "m7b5",
+          "symbol": "Cm7b5",
+          "tones": [
+            "C",
+            "Eb",
+            "Gb",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        }
+      ]
+    },
+    {
+      "tonic": "Gb",
+      "mode": "major",
+      "scale": [
+        "Gb",
+        "Ab",
+        "Bb",
+        "Cb",
+        "Db",
+        "Eb",
+        "F"
+      ],
+      "triads": [
+        {
+          "numeral": "I",
+          "root": "Gb",
+          "qualityId": "major",
+          "symbol": "Gb",
+          "tones": [
+            "Gb",
+            "Bb",
+            "Db"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii",
+          "root": "Ab",
+          "qualityId": "minor",
+          "symbol": "Abm",
+          "tones": [
+            "Ab",
+            "Cb",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iii",
+          "root": "Bb",
+          "qualityId": "minor",
+          "symbol": "Bbm",
+          "tones": [
+            "Bb",
+            "Db",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "IV",
+          "root": "Cb",
+          "qualityId": "major",
+          "symbol": "Cb",
+          "tones": [
+            "Cb",
+            "Eb",
+            "Gb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "V",
+          "root": "Db",
+          "qualityId": "major",
+          "symbol": "Db",
+          "tones": [
+            "Db",
+            "F",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vi",
+          "root": "Eb",
+          "qualityId": "minor",
+          "symbol": "Ebm",
+          "tones": [
+            "Eb",
+            "Gb",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vii°",
+          "root": "F",
+          "qualityId": "dim",
+          "symbol": "Fdim",
+          "tones": [
+            "F",
+            "Ab",
+            "Cb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "Imaj7",
+          "root": "Gb",
+          "qualityId": "maj7",
+          "symbol": "Gbmaj7",
+          "tones": [
+            "Gb",
+            "Bb",
+            "Db",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "ii7",
+          "root": "Ab",
+          "qualityId": "min7",
+          "symbol": "Abm7",
+          "tones": [
+            "Ab",
+            "Cb",
+            "Eb",
+            "Gb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iii7",
+          "root": "Bb",
+          "qualityId": "min7",
+          "symbol": "Bbm7",
+          "tones": [
+            "Bb",
+            "Db",
+            "F",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IVmaj7",
+          "root": "Cb",
+          "qualityId": "maj7",
+          "symbol": "Cbmaj7",
+          "tones": [
+            "Cb",
+            "Eb",
+            "Gb",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "V7",
+          "root": "Db",
+          "qualityId": "dom7",
+          "symbol": "Db7",
+          "tones": [
+            "Db",
+            "F",
+            "Ab",
+            "Cb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "vi7",
+          "root": "Eb",
+          "qualityId": "min7",
+          "symbol": "Ebm7",
+          "tones": [
+            "Eb",
+            "Gb",
+            "Bb",
+            "Db"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "viiø7",
+          "root": "F",
+          "qualityId": "m7b5",
+          "symbol": "Fm7b5",
+          "tones": [
+            "F",
+            "Ab",
+            "Cb",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        }
+      ]
+    },
+    {
+      "tonic": "Cb",
+      "mode": "major",
+      "scale": [
+        "Cb",
+        "Db",
+        "Eb",
+        "Fb",
+        "Gb",
+        "Ab",
+        "Bb"
+      ],
+      "triads": [
+        {
+          "numeral": "I",
+          "root": "Cb",
+          "qualityId": "major",
+          "symbol": "Cb",
+          "tones": [
+            "Cb",
+            "Eb",
+            "Gb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii",
+          "root": "Db",
+          "qualityId": "minor",
+          "symbol": "Dbm",
+          "tones": [
+            "Db",
+            "Fb",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iii",
+          "root": "Eb",
+          "qualityId": "minor",
+          "symbol": "Ebm",
+          "tones": [
+            "Eb",
+            "Gb",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "IV",
+          "root": "Fb",
+          "qualityId": "major",
+          "symbol": "Fb",
+          "tones": [
+            "Fb",
+            "Ab",
+            "Cb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "V",
+          "root": "Gb",
+          "qualityId": "major",
+          "symbol": "Gb",
+          "tones": [
+            "Gb",
+            "Bb",
+            "Db"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vi",
+          "root": "Ab",
+          "qualityId": "minor",
+          "symbol": "Abm",
+          "tones": [
+            "Ab",
+            "Cb",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "vii°",
+          "root": "Bb",
+          "qualityId": "dim",
+          "symbol": "Bbdim",
+          "tones": [
+            "Bb",
+            "Db",
+            "Fb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "Imaj7",
+          "root": "Cb",
+          "qualityId": "maj7",
+          "symbol": "Cbmaj7",
+          "tones": [
+            "Cb",
+            "Eb",
+            "Gb",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "ii7",
+          "root": "Db",
+          "qualityId": "min7",
+          "symbol": "Dbm7",
+          "tones": [
+            "Db",
+            "Fb",
+            "Ab",
+            "Cb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iii7",
+          "root": "Eb",
+          "qualityId": "min7",
+          "symbol": "Ebm7",
+          "tones": [
+            "Eb",
+            "Gb",
+            "Bb",
+            "Db"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IVmaj7",
+          "root": "Fb",
+          "qualityId": "maj7",
+          "symbol": "Fbmaj7",
+          "tones": [
+            "Fb",
+            "Ab",
+            "Cb",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "V7",
+          "root": "Gb",
+          "qualityId": "dom7",
+          "symbol": "Gb7",
+          "tones": [
+            "Gb",
+            "Bb",
+            "Db",
+            "Fb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "vi7",
+          "root": "Ab",
+          "qualityId": "min7",
+          "symbol": "Abm7",
+          "tones": [
+            "Ab",
+            "Cb",
+            "Eb",
+            "Gb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "viiø7",
+          "root": "Bb",
+          "qualityId": "m7b5",
+          "symbol": "Bbm7b5",
+          "tones": [
+            "Bb",
+            "Db",
+            "Fb",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        }
+      ]
+    },
+    {
+      "tonic": "A",
+      "mode": "minor",
+      "scale": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G"
+      ],
+      "triads": [
+        {
+          "numeral": "i",
+          "root": "A",
+          "qualityId": "minor",
+          "symbol": "Am",
+          "tones": [
+            "A",
+            "C",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii°",
+          "root": "B",
+          "qualityId": "dim",
+          "symbol": "Bdim",
+          "tones": [
+            "B",
+            "D",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        },
+        {
+          "numeral": "III",
+          "root": "C",
+          "qualityId": "major",
+          "symbol": "C",
+          "tones": [
+            "C",
+            "E",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iv",
+          "root": "D",
+          "qualityId": "minor",
+          "symbol": "Dm",
+          "tones": [
+            "D",
+            "F",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "v",
+          "root": "E",
+          "qualityId": "minor",
+          "symbol": "Em",
+          "tones": [
+            "E",
+            "G",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VI",
+          "root": "F",
+          "qualityId": "major",
+          "symbol": "F",
+          "tones": [
+            "F",
+            "A",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VII",
+          "root": "G",
+          "qualityId": "major",
+          "symbol": "G",
+          "tones": [
+            "G",
+            "B",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "i7",
+          "root": "A",
+          "qualityId": "min7",
+          "symbol": "Am7",
+          "tones": [
+            "A",
+            "C",
+            "E",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iiø7",
+          "root": "B",
+          "qualityId": "m7b5",
+          "symbol": "Bm7b5",
+          "tones": [
+            "B",
+            "D",
+            "F",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IIImaj7",
+          "root": "C",
+          "qualityId": "maj7",
+          "symbol": "Cmaj7",
+          "tones": [
+            "C",
+            "E",
+            "G",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "iv7",
+          "root": "D",
+          "qualityId": "min7",
+          "symbol": "Dm7",
+          "tones": [
+            "D",
+            "F",
+            "A",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "v7",
+          "root": "E",
+          "qualityId": "min7",
+          "symbol": "Em7",
+          "tones": [
+            "E",
+            "G",
+            "B",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "VImaj7",
+          "root": "F",
+          "qualityId": "maj7",
+          "symbol": "Fmaj7",
+          "tones": [
+            "F",
+            "A",
+            "C",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "VII7",
+          "root": "G",
+          "qualityId": "dom7",
+          "symbol": "G7",
+          "tones": [
+            "G",
+            "B",
+            "D",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        }
+      ],
+      "harmonicMinor": {
+        "triads": [
+          {
+            "numeral": "V",
+            "root": "E",
+            "qualityId": "major",
+            "symbol": "E",
+            "tones": [
+              "E",
+              "G#",
+              "B"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5"
+            ]
+          },
+          {
+            "numeral": "vii°",
+            "root": "G#",
+            "qualityId": "dim",
+            "symbol": "G#dim",
+            "tones": [
+              "G#",
+              "B",
+              "D"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5"
+            ]
+          }
+        ],
+        "sevenths": [
+          {
+            "numeral": "V7",
+            "root": "E",
+            "qualityId": "dom7",
+            "symbol": "E7",
+            "tones": [
+              "E",
+              "G#",
+              "B",
+              "D"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5",
+              "b7"
+            ]
+          },
+          {
+            "numeral": "vii°7",
+            "root": "G#",
+            "qualityId": "dim7",
+            "symbol": "G#dim7",
+            "tones": [
+              "G#",
+              "B",
+              "D",
+              "F"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5",
+              "bb7"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tonic": "E",
+      "mode": "minor",
+      "scale": [
+        "E",
+        "F#",
+        "G",
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "triads": [
+        {
+          "numeral": "i",
+          "root": "E",
+          "qualityId": "minor",
+          "symbol": "Em",
+          "tones": [
+            "E",
+            "G",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii°",
+          "root": "F#",
+          "qualityId": "dim",
+          "symbol": "F#dim",
+          "tones": [
+            "F#",
+            "A",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        },
+        {
+          "numeral": "III",
+          "root": "G",
+          "qualityId": "major",
+          "symbol": "G",
+          "tones": [
+            "G",
+            "B",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iv",
+          "root": "A",
+          "qualityId": "minor",
+          "symbol": "Am",
+          "tones": [
+            "A",
+            "C",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "v",
+          "root": "B",
+          "qualityId": "minor",
+          "symbol": "Bm",
+          "tones": [
+            "B",
+            "D",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VI",
+          "root": "C",
+          "qualityId": "major",
+          "symbol": "C",
+          "tones": [
+            "C",
+            "E",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VII",
+          "root": "D",
+          "qualityId": "major",
+          "symbol": "D",
+          "tones": [
+            "D",
+            "F#",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "i7",
+          "root": "E",
+          "qualityId": "min7",
+          "symbol": "Em7",
+          "tones": [
+            "E",
+            "G",
+            "B",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iiø7",
+          "root": "F#",
+          "qualityId": "m7b5",
+          "symbol": "F#m7b5",
+          "tones": [
+            "F#",
+            "A",
+            "C",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IIImaj7",
+          "root": "G",
+          "qualityId": "maj7",
+          "symbol": "Gmaj7",
+          "tones": [
+            "G",
+            "B",
+            "D",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "iv7",
+          "root": "A",
+          "qualityId": "min7",
+          "symbol": "Am7",
+          "tones": [
+            "A",
+            "C",
+            "E",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "v7",
+          "root": "B",
+          "qualityId": "min7",
+          "symbol": "Bm7",
+          "tones": [
+            "B",
+            "D",
+            "F#",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "VImaj7",
+          "root": "C",
+          "qualityId": "maj7",
+          "symbol": "Cmaj7",
+          "tones": [
+            "C",
+            "E",
+            "G",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "VII7",
+          "root": "D",
+          "qualityId": "dom7",
+          "symbol": "D7",
+          "tones": [
+            "D",
+            "F#",
+            "A",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        }
+      ],
+      "harmonicMinor": {
+        "triads": [
+          {
+            "numeral": "V",
+            "root": "B",
+            "qualityId": "major",
+            "symbol": "B",
+            "tones": [
+              "B",
+              "D#",
+              "F#"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5"
+            ]
+          },
+          {
+            "numeral": "vii°",
+            "root": "D#",
+            "qualityId": "dim",
+            "symbol": "D#dim",
+            "tones": [
+              "D#",
+              "F#",
+              "A"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5"
+            ]
+          }
+        ],
+        "sevenths": [
+          {
+            "numeral": "V7",
+            "root": "B",
+            "qualityId": "dom7",
+            "symbol": "B7",
+            "tones": [
+              "B",
+              "D#",
+              "F#",
+              "A"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5",
+              "b7"
+            ]
+          },
+          {
+            "numeral": "vii°7",
+            "root": "D#",
+            "qualityId": "dim7",
+            "symbol": "D#dim7",
+            "tones": [
+              "D#",
+              "F#",
+              "A",
+              "C"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5",
+              "bb7"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tonic": "B",
+      "mode": "minor",
+      "scale": [
+        "B",
+        "C#",
+        "D",
+        "E",
+        "F#",
+        "G",
+        "A"
+      ],
+      "triads": [
+        {
+          "numeral": "i",
+          "root": "B",
+          "qualityId": "minor",
+          "symbol": "Bm",
+          "tones": [
+            "B",
+            "D",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii°",
+          "root": "C#",
+          "qualityId": "dim",
+          "symbol": "C#dim",
+          "tones": [
+            "C#",
+            "E",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        },
+        {
+          "numeral": "III",
+          "root": "D",
+          "qualityId": "major",
+          "symbol": "D",
+          "tones": [
+            "D",
+            "F#",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iv",
+          "root": "E",
+          "qualityId": "minor",
+          "symbol": "Em",
+          "tones": [
+            "E",
+            "G",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "v",
+          "root": "F#",
+          "qualityId": "minor",
+          "symbol": "F#m",
+          "tones": [
+            "F#",
+            "A",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VI",
+          "root": "G",
+          "qualityId": "major",
+          "symbol": "G",
+          "tones": [
+            "G",
+            "B",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VII",
+          "root": "A",
+          "qualityId": "major",
+          "symbol": "A",
+          "tones": [
+            "A",
+            "C#",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "i7",
+          "root": "B",
+          "qualityId": "min7",
+          "symbol": "Bm7",
+          "tones": [
+            "B",
+            "D",
+            "F#",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iiø7",
+          "root": "C#",
+          "qualityId": "m7b5",
+          "symbol": "C#m7b5",
+          "tones": [
+            "C#",
+            "E",
+            "G",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IIImaj7",
+          "root": "D",
+          "qualityId": "maj7",
+          "symbol": "Dmaj7",
+          "tones": [
+            "D",
+            "F#",
+            "A",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "iv7",
+          "root": "E",
+          "qualityId": "min7",
+          "symbol": "Em7",
+          "tones": [
+            "E",
+            "G",
+            "B",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "v7",
+          "root": "F#",
+          "qualityId": "min7",
+          "symbol": "F#m7",
+          "tones": [
+            "F#",
+            "A",
+            "C#",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "VImaj7",
+          "root": "G",
+          "qualityId": "maj7",
+          "symbol": "Gmaj7",
+          "tones": [
+            "G",
+            "B",
+            "D",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "VII7",
+          "root": "A",
+          "qualityId": "dom7",
+          "symbol": "A7",
+          "tones": [
+            "A",
+            "C#",
+            "E",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        }
+      ],
+      "harmonicMinor": {
+        "triads": [
+          {
+            "numeral": "V",
+            "root": "F#",
+            "qualityId": "major",
+            "symbol": "F#",
+            "tones": [
+              "F#",
+              "A#",
+              "C#"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5"
+            ]
+          },
+          {
+            "numeral": "vii°",
+            "root": "A#",
+            "qualityId": "dim",
+            "symbol": "A#dim",
+            "tones": [
+              "A#",
+              "C#",
+              "E"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5"
+            ]
+          }
+        ],
+        "sevenths": [
+          {
+            "numeral": "V7",
+            "root": "F#",
+            "qualityId": "dom7",
+            "symbol": "F#7",
+            "tones": [
+              "F#",
+              "A#",
+              "C#",
+              "E"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5",
+              "b7"
+            ]
+          },
+          {
+            "numeral": "vii°7",
+            "root": "A#",
+            "qualityId": "dim7",
+            "symbol": "A#dim7",
+            "tones": [
+              "A#",
+              "C#",
+              "E",
+              "G"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5",
+              "bb7"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tonic": "F#",
+      "mode": "minor",
+      "scale": [
+        "F#",
+        "G#",
+        "A",
+        "B",
+        "C#",
+        "D",
+        "E"
+      ],
+      "triads": [
+        {
+          "numeral": "i",
+          "root": "F#",
+          "qualityId": "minor",
+          "symbol": "F#m",
+          "tones": [
+            "F#",
+            "A",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii°",
+          "root": "G#",
+          "qualityId": "dim",
+          "symbol": "G#dim",
+          "tones": [
+            "G#",
+            "B",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        },
+        {
+          "numeral": "III",
+          "root": "A",
+          "qualityId": "major",
+          "symbol": "A",
+          "tones": [
+            "A",
+            "C#",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iv",
+          "root": "B",
+          "qualityId": "minor",
+          "symbol": "Bm",
+          "tones": [
+            "B",
+            "D",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "v",
+          "root": "C#",
+          "qualityId": "minor",
+          "symbol": "C#m",
+          "tones": [
+            "C#",
+            "E",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VI",
+          "root": "D",
+          "qualityId": "major",
+          "symbol": "D",
+          "tones": [
+            "D",
+            "F#",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VII",
+          "root": "E",
+          "qualityId": "major",
+          "symbol": "E",
+          "tones": [
+            "E",
+            "G#",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "i7",
+          "root": "F#",
+          "qualityId": "min7",
+          "symbol": "F#m7",
+          "tones": [
+            "F#",
+            "A",
+            "C#",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iiø7",
+          "root": "G#",
+          "qualityId": "m7b5",
+          "symbol": "G#m7b5",
+          "tones": [
+            "G#",
+            "B",
+            "D",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IIImaj7",
+          "root": "A",
+          "qualityId": "maj7",
+          "symbol": "Amaj7",
+          "tones": [
+            "A",
+            "C#",
+            "E",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "iv7",
+          "root": "B",
+          "qualityId": "min7",
+          "symbol": "Bm7",
+          "tones": [
+            "B",
+            "D",
+            "F#",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "v7",
+          "root": "C#",
+          "qualityId": "min7",
+          "symbol": "C#m7",
+          "tones": [
+            "C#",
+            "E",
+            "G#",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "VImaj7",
+          "root": "D",
+          "qualityId": "maj7",
+          "symbol": "Dmaj7",
+          "tones": [
+            "D",
+            "F#",
+            "A",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "VII7",
+          "root": "E",
+          "qualityId": "dom7",
+          "symbol": "E7",
+          "tones": [
+            "E",
+            "G#",
+            "B",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        }
+      ],
+      "harmonicMinor": {
+        "triads": [
+          {
+            "numeral": "V",
+            "root": "C#",
+            "qualityId": "major",
+            "symbol": "C#",
+            "tones": [
+              "C#",
+              "E#",
+              "G#"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5"
+            ]
+          },
+          {
+            "numeral": "vii°",
+            "root": "E#",
+            "qualityId": "dim",
+            "symbol": "E#dim",
+            "tones": [
+              "E#",
+              "G#",
+              "B"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5"
+            ]
+          }
+        ],
+        "sevenths": [
+          {
+            "numeral": "V7",
+            "root": "C#",
+            "qualityId": "dom7",
+            "symbol": "C#7",
+            "tones": [
+              "C#",
+              "E#",
+              "G#",
+              "B"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5",
+              "b7"
+            ]
+          },
+          {
+            "numeral": "vii°7",
+            "root": "E#",
+            "qualityId": "dim7",
+            "symbol": "E#dim7",
+            "tones": [
+              "E#",
+              "G#",
+              "B",
+              "D"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5",
+              "bb7"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tonic": "C#",
+      "mode": "minor",
+      "scale": [
+        "C#",
+        "D#",
+        "E",
+        "F#",
+        "G#",
+        "A",
+        "B"
+      ],
+      "triads": [
+        {
+          "numeral": "i",
+          "root": "C#",
+          "qualityId": "minor",
+          "symbol": "C#m",
+          "tones": [
+            "C#",
+            "E",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii°",
+          "root": "D#",
+          "qualityId": "dim",
+          "symbol": "D#dim",
+          "tones": [
+            "D#",
+            "F#",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        },
+        {
+          "numeral": "III",
+          "root": "E",
+          "qualityId": "major",
+          "symbol": "E",
+          "tones": [
+            "E",
+            "G#",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iv",
+          "root": "F#",
+          "qualityId": "minor",
+          "symbol": "F#m",
+          "tones": [
+            "F#",
+            "A",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "v",
+          "root": "G#",
+          "qualityId": "minor",
+          "symbol": "G#m",
+          "tones": [
+            "G#",
+            "B",
+            "D#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VI",
+          "root": "A",
+          "qualityId": "major",
+          "symbol": "A",
+          "tones": [
+            "A",
+            "C#",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VII",
+          "root": "B",
+          "qualityId": "major",
+          "symbol": "B",
+          "tones": [
+            "B",
+            "D#",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "i7",
+          "root": "C#",
+          "qualityId": "min7",
+          "symbol": "C#m7",
+          "tones": [
+            "C#",
+            "E",
+            "G#",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iiø7",
+          "root": "D#",
+          "qualityId": "m7b5",
+          "symbol": "D#m7b5",
+          "tones": [
+            "D#",
+            "F#",
+            "A",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IIImaj7",
+          "root": "E",
+          "qualityId": "maj7",
+          "symbol": "Emaj7",
+          "tones": [
+            "E",
+            "G#",
+            "B",
+            "D#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "iv7",
+          "root": "F#",
+          "qualityId": "min7",
+          "symbol": "F#m7",
+          "tones": [
+            "F#",
+            "A",
+            "C#",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "v7",
+          "root": "G#",
+          "qualityId": "min7",
+          "symbol": "G#m7",
+          "tones": [
+            "G#",
+            "B",
+            "D#",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "VImaj7",
+          "root": "A",
+          "qualityId": "maj7",
+          "symbol": "Amaj7",
+          "tones": [
+            "A",
+            "C#",
+            "E",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "VII7",
+          "root": "B",
+          "qualityId": "dom7",
+          "symbol": "B7",
+          "tones": [
+            "B",
+            "D#",
+            "F#",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        }
+      ],
+      "harmonicMinor": {
+        "triads": [
+          {
+            "numeral": "V",
+            "root": "G#",
+            "qualityId": "major",
+            "symbol": "G#",
+            "tones": [
+              "G#",
+              "B#",
+              "D#"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5"
+            ]
+          },
+          {
+            "numeral": "vii°",
+            "root": "B#",
+            "qualityId": "dim",
+            "symbol": "B#dim",
+            "tones": [
+              "B#",
+              "D#",
+              "F#"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5"
+            ]
+          }
+        ],
+        "sevenths": [
+          {
+            "numeral": "V7",
+            "root": "G#",
+            "qualityId": "dom7",
+            "symbol": "G#7",
+            "tones": [
+              "G#",
+              "B#",
+              "D#",
+              "F#"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5",
+              "b7"
+            ]
+          },
+          {
+            "numeral": "vii°7",
+            "root": "B#",
+            "qualityId": "dim7",
+            "symbol": "B#dim7",
+            "tones": [
+              "B#",
+              "D#",
+              "F#",
+              "A"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5",
+              "bb7"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tonic": "G#",
+      "mode": "minor",
+      "scale": [
+        "G#",
+        "A#",
+        "B",
+        "C#",
+        "D#",
+        "E",
+        "F#"
+      ],
+      "triads": [
+        {
+          "numeral": "i",
+          "root": "G#",
+          "qualityId": "minor",
+          "symbol": "G#m",
+          "tones": [
+            "G#",
+            "B",
+            "D#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii°",
+          "root": "A#",
+          "qualityId": "dim",
+          "symbol": "A#dim",
+          "tones": [
+            "A#",
+            "C#",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        },
+        {
+          "numeral": "III",
+          "root": "B",
+          "qualityId": "major",
+          "symbol": "B",
+          "tones": [
+            "B",
+            "D#",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iv",
+          "root": "C#",
+          "qualityId": "minor",
+          "symbol": "C#m",
+          "tones": [
+            "C#",
+            "E",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "v",
+          "root": "D#",
+          "qualityId": "minor",
+          "symbol": "D#m",
+          "tones": [
+            "D#",
+            "F#",
+            "A#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VI",
+          "root": "E",
+          "qualityId": "major",
+          "symbol": "E",
+          "tones": [
+            "E",
+            "G#",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VII",
+          "root": "F#",
+          "qualityId": "major",
+          "symbol": "F#",
+          "tones": [
+            "F#",
+            "A#",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "i7",
+          "root": "G#",
+          "qualityId": "min7",
+          "symbol": "G#m7",
+          "tones": [
+            "G#",
+            "B",
+            "D#",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iiø7",
+          "root": "A#",
+          "qualityId": "m7b5",
+          "symbol": "A#m7b5",
+          "tones": [
+            "A#",
+            "C#",
+            "E",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IIImaj7",
+          "root": "B",
+          "qualityId": "maj7",
+          "symbol": "Bmaj7",
+          "tones": [
+            "B",
+            "D#",
+            "F#",
+            "A#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "iv7",
+          "root": "C#",
+          "qualityId": "min7",
+          "symbol": "C#m7",
+          "tones": [
+            "C#",
+            "E",
+            "G#",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "v7",
+          "root": "D#",
+          "qualityId": "min7",
+          "symbol": "D#m7",
+          "tones": [
+            "D#",
+            "F#",
+            "A#",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "VImaj7",
+          "root": "E",
+          "qualityId": "maj7",
+          "symbol": "Emaj7",
+          "tones": [
+            "E",
+            "G#",
+            "B",
+            "D#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "VII7",
+          "root": "F#",
+          "qualityId": "dom7",
+          "symbol": "F#7",
+          "tones": [
+            "F#",
+            "A#",
+            "C#",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        }
+      ],
+      "harmonicMinor": {
+        "triads": [
+          {
+            "numeral": "V",
+            "root": "D#",
+            "qualityId": "major",
+            "symbol": "D#",
+            "tones": [
+              "D#",
+              "F##",
+              "A#"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5"
+            ]
+          },
+          {
+            "numeral": "vii°",
+            "root": "F##",
+            "qualityId": "dim",
+            "symbol": "F##dim",
+            "tones": [
+              "F##",
+              "A#",
+              "C#"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5"
+            ]
+          }
+        ],
+        "sevenths": [
+          {
+            "numeral": "V7",
+            "root": "D#",
+            "qualityId": "dom7",
+            "symbol": "D#7",
+            "tones": [
+              "D#",
+              "F##",
+              "A#",
+              "C#"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5",
+              "b7"
+            ]
+          },
+          {
+            "numeral": "vii°7",
+            "root": "F##",
+            "qualityId": "dim7",
+            "symbol": "F##dim7",
+            "tones": [
+              "F##",
+              "A#",
+              "C#",
+              "E"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5",
+              "bb7"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tonic": "D#",
+      "mode": "minor",
+      "scale": [
+        "D#",
+        "E#",
+        "F#",
+        "G#",
+        "A#",
+        "B",
+        "C#"
+      ],
+      "triads": [
+        {
+          "numeral": "i",
+          "root": "D#",
+          "qualityId": "minor",
+          "symbol": "D#m",
+          "tones": [
+            "D#",
+            "F#",
+            "A#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii°",
+          "root": "E#",
+          "qualityId": "dim",
+          "symbol": "E#dim",
+          "tones": [
+            "E#",
+            "G#",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        },
+        {
+          "numeral": "III",
+          "root": "F#",
+          "qualityId": "major",
+          "symbol": "F#",
+          "tones": [
+            "F#",
+            "A#",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iv",
+          "root": "G#",
+          "qualityId": "minor",
+          "symbol": "G#m",
+          "tones": [
+            "G#",
+            "B",
+            "D#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "v",
+          "root": "A#",
+          "qualityId": "minor",
+          "symbol": "A#m",
+          "tones": [
+            "A#",
+            "C#",
+            "E#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VI",
+          "root": "B",
+          "qualityId": "major",
+          "symbol": "B",
+          "tones": [
+            "B",
+            "D#",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VII",
+          "root": "C#",
+          "qualityId": "major",
+          "symbol": "C#",
+          "tones": [
+            "C#",
+            "E#",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "i7",
+          "root": "D#",
+          "qualityId": "min7",
+          "symbol": "D#m7",
+          "tones": [
+            "D#",
+            "F#",
+            "A#",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iiø7",
+          "root": "E#",
+          "qualityId": "m7b5",
+          "symbol": "E#m7b5",
+          "tones": [
+            "E#",
+            "G#",
+            "B",
+            "D#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IIImaj7",
+          "root": "F#",
+          "qualityId": "maj7",
+          "symbol": "F#maj7",
+          "tones": [
+            "F#",
+            "A#",
+            "C#",
+            "E#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "iv7",
+          "root": "G#",
+          "qualityId": "min7",
+          "symbol": "G#m7",
+          "tones": [
+            "G#",
+            "B",
+            "D#",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "v7",
+          "root": "A#",
+          "qualityId": "min7",
+          "symbol": "A#m7",
+          "tones": [
+            "A#",
+            "C#",
+            "E#",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "VImaj7",
+          "root": "B",
+          "qualityId": "maj7",
+          "symbol": "Bmaj7",
+          "tones": [
+            "B",
+            "D#",
+            "F#",
+            "A#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "VII7",
+          "root": "C#",
+          "qualityId": "dom7",
+          "symbol": "C#7",
+          "tones": [
+            "C#",
+            "E#",
+            "G#",
+            "B"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        }
+      ],
+      "harmonicMinor": {
+        "triads": [
+          {
+            "numeral": "V",
+            "root": "A#",
+            "qualityId": "major",
+            "symbol": "A#",
+            "tones": [
+              "A#",
+              "C##",
+              "E#"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5"
+            ]
+          },
+          {
+            "numeral": "vii°",
+            "root": "C##",
+            "qualityId": "dim",
+            "symbol": "C##dim",
+            "tones": [
+              "C##",
+              "E#",
+              "G#"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5"
+            ]
+          }
+        ],
+        "sevenths": [
+          {
+            "numeral": "V7",
+            "root": "A#",
+            "qualityId": "dom7",
+            "symbol": "A#7",
+            "tones": [
+              "A#",
+              "C##",
+              "E#",
+              "G#"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5",
+              "b7"
+            ]
+          },
+          {
+            "numeral": "vii°7",
+            "root": "C##",
+            "qualityId": "dim7",
+            "symbol": "C##dim7",
+            "tones": [
+              "C##",
+              "E#",
+              "G#",
+              "B"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5",
+              "bb7"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tonic": "A#",
+      "mode": "minor",
+      "scale": [
+        "A#",
+        "B#",
+        "C#",
+        "D#",
+        "E#",
+        "F#",
+        "G#"
+      ],
+      "triads": [
+        {
+          "numeral": "i",
+          "root": "A#",
+          "qualityId": "minor",
+          "symbol": "A#m",
+          "tones": [
+            "A#",
+            "C#",
+            "E#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii°",
+          "root": "B#",
+          "qualityId": "dim",
+          "symbol": "B#dim",
+          "tones": [
+            "B#",
+            "D#",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        },
+        {
+          "numeral": "III",
+          "root": "C#",
+          "qualityId": "major",
+          "symbol": "C#",
+          "tones": [
+            "C#",
+            "E#",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iv",
+          "root": "D#",
+          "qualityId": "minor",
+          "symbol": "D#m",
+          "tones": [
+            "D#",
+            "F#",
+            "A#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "v",
+          "root": "E#",
+          "qualityId": "minor",
+          "symbol": "E#m",
+          "tones": [
+            "E#",
+            "G#",
+            "B#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VI",
+          "root": "F#",
+          "qualityId": "major",
+          "symbol": "F#",
+          "tones": [
+            "F#",
+            "A#",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VII",
+          "root": "G#",
+          "qualityId": "major",
+          "symbol": "G#",
+          "tones": [
+            "G#",
+            "B#",
+            "D#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "i7",
+          "root": "A#",
+          "qualityId": "min7",
+          "symbol": "A#m7",
+          "tones": [
+            "A#",
+            "C#",
+            "E#",
+            "G#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iiø7",
+          "root": "B#",
+          "qualityId": "m7b5",
+          "symbol": "B#m7b5",
+          "tones": [
+            "B#",
+            "D#",
+            "F#",
+            "A#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IIImaj7",
+          "root": "C#",
+          "qualityId": "maj7",
+          "symbol": "C#maj7",
+          "tones": [
+            "C#",
+            "E#",
+            "G#",
+            "B#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "iv7",
+          "root": "D#",
+          "qualityId": "min7",
+          "symbol": "D#m7",
+          "tones": [
+            "D#",
+            "F#",
+            "A#",
+            "C#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "v7",
+          "root": "E#",
+          "qualityId": "min7",
+          "symbol": "E#m7",
+          "tones": [
+            "E#",
+            "G#",
+            "B#",
+            "D#"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "VImaj7",
+          "root": "F#",
+          "qualityId": "maj7",
+          "symbol": "F#maj7",
+          "tones": [
+            "F#",
+            "A#",
+            "C#",
+            "E#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "VII7",
+          "root": "G#",
+          "qualityId": "dom7",
+          "symbol": "G#7",
+          "tones": [
+            "G#",
+            "B#",
+            "D#",
+            "F#"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        }
+      ],
+      "harmonicMinor": {
+        "triads": [
+          {
+            "numeral": "V",
+            "root": "E#",
+            "qualityId": "major",
+            "symbol": "E#",
+            "tones": [
+              "E#",
+              "G##",
+              "B#"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5"
+            ]
+          },
+          {
+            "numeral": "vii°",
+            "root": "G##",
+            "qualityId": "dim",
+            "symbol": "G##dim",
+            "tones": [
+              "G##",
+              "B#",
+              "D#"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5"
+            ]
+          }
+        ],
+        "sevenths": [
+          {
+            "numeral": "V7",
+            "root": "E#",
+            "qualityId": "dom7",
+            "symbol": "E#7",
+            "tones": [
+              "E#",
+              "G##",
+              "B#",
+              "D#"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5",
+              "b7"
+            ]
+          },
+          {
+            "numeral": "vii°7",
+            "root": "G##",
+            "qualityId": "dim7",
+            "symbol": "G##dim7",
+            "tones": [
+              "G##",
+              "B#",
+              "D#",
+              "F#"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5",
+              "bb7"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tonic": "D",
+      "mode": "minor",
+      "scale": [
+        "D",
+        "E",
+        "F",
+        "G",
+        "A",
+        "Bb",
+        "C"
+      ],
+      "triads": [
+        {
+          "numeral": "i",
+          "root": "D",
+          "qualityId": "minor",
+          "symbol": "Dm",
+          "tones": [
+            "D",
+            "F",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii°",
+          "root": "E",
+          "qualityId": "dim",
+          "symbol": "Edim",
+          "tones": [
+            "E",
+            "G",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        },
+        {
+          "numeral": "III",
+          "root": "F",
+          "qualityId": "major",
+          "symbol": "F",
+          "tones": [
+            "F",
+            "A",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iv",
+          "root": "G",
+          "qualityId": "minor",
+          "symbol": "Gm",
+          "tones": [
+            "G",
+            "Bb",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "v",
+          "root": "A",
+          "qualityId": "minor",
+          "symbol": "Am",
+          "tones": [
+            "A",
+            "C",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VI",
+          "root": "Bb",
+          "qualityId": "major",
+          "symbol": "Bb",
+          "tones": [
+            "Bb",
+            "D",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VII",
+          "root": "C",
+          "qualityId": "major",
+          "symbol": "C",
+          "tones": [
+            "C",
+            "E",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "i7",
+          "root": "D",
+          "qualityId": "min7",
+          "symbol": "Dm7",
+          "tones": [
+            "D",
+            "F",
+            "A",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iiø7",
+          "root": "E",
+          "qualityId": "m7b5",
+          "symbol": "Em7b5",
+          "tones": [
+            "E",
+            "G",
+            "Bb",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IIImaj7",
+          "root": "F",
+          "qualityId": "maj7",
+          "symbol": "Fmaj7",
+          "tones": [
+            "F",
+            "A",
+            "C",
+            "E"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "iv7",
+          "root": "G",
+          "qualityId": "min7",
+          "symbol": "Gm7",
+          "tones": [
+            "G",
+            "Bb",
+            "D",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "v7",
+          "root": "A",
+          "qualityId": "min7",
+          "symbol": "Am7",
+          "tones": [
+            "A",
+            "C",
+            "E",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "VImaj7",
+          "root": "Bb",
+          "qualityId": "maj7",
+          "symbol": "Bbmaj7",
+          "tones": [
+            "Bb",
+            "D",
+            "F",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "VII7",
+          "root": "C",
+          "qualityId": "dom7",
+          "symbol": "C7",
+          "tones": [
+            "C",
+            "E",
+            "G",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        }
+      ],
+      "harmonicMinor": {
+        "triads": [
+          {
+            "numeral": "V",
+            "root": "A",
+            "qualityId": "major",
+            "symbol": "A",
+            "tones": [
+              "A",
+              "C#",
+              "E"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5"
+            ]
+          },
+          {
+            "numeral": "vii°",
+            "root": "C#",
+            "qualityId": "dim",
+            "symbol": "C#dim",
+            "tones": [
+              "C#",
+              "E",
+              "G"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5"
+            ]
+          }
+        ],
+        "sevenths": [
+          {
+            "numeral": "V7",
+            "root": "A",
+            "qualityId": "dom7",
+            "symbol": "A7",
+            "tones": [
+              "A",
+              "C#",
+              "E",
+              "G"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5",
+              "b7"
+            ]
+          },
+          {
+            "numeral": "vii°7",
+            "root": "C#",
+            "qualityId": "dim7",
+            "symbol": "C#dim7",
+            "tones": [
+              "C#",
+              "E",
+              "G",
+              "Bb"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5",
+              "bb7"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tonic": "G",
+      "mode": "minor",
+      "scale": [
+        "G",
+        "A",
+        "Bb",
+        "C",
+        "D",
+        "Eb",
+        "F"
+      ],
+      "triads": [
+        {
+          "numeral": "i",
+          "root": "G",
+          "qualityId": "minor",
+          "symbol": "Gm",
+          "tones": [
+            "G",
+            "Bb",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii°",
+          "root": "A",
+          "qualityId": "dim",
+          "symbol": "Adim",
+          "tones": [
+            "A",
+            "C",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        },
+        {
+          "numeral": "III",
+          "root": "Bb",
+          "qualityId": "major",
+          "symbol": "Bb",
+          "tones": [
+            "Bb",
+            "D",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iv",
+          "root": "C",
+          "qualityId": "minor",
+          "symbol": "Cm",
+          "tones": [
+            "C",
+            "Eb",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "v",
+          "root": "D",
+          "qualityId": "minor",
+          "symbol": "Dm",
+          "tones": [
+            "D",
+            "F",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VI",
+          "root": "Eb",
+          "qualityId": "major",
+          "symbol": "Eb",
+          "tones": [
+            "Eb",
+            "G",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VII",
+          "root": "F",
+          "qualityId": "major",
+          "symbol": "F",
+          "tones": [
+            "F",
+            "A",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "i7",
+          "root": "G",
+          "qualityId": "min7",
+          "symbol": "Gm7",
+          "tones": [
+            "G",
+            "Bb",
+            "D",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iiø7",
+          "root": "A",
+          "qualityId": "m7b5",
+          "symbol": "Am7b5",
+          "tones": [
+            "A",
+            "C",
+            "Eb",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IIImaj7",
+          "root": "Bb",
+          "qualityId": "maj7",
+          "symbol": "Bbmaj7",
+          "tones": [
+            "Bb",
+            "D",
+            "F",
+            "A"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "iv7",
+          "root": "C",
+          "qualityId": "min7",
+          "symbol": "Cm7",
+          "tones": [
+            "C",
+            "Eb",
+            "G",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "v7",
+          "root": "D",
+          "qualityId": "min7",
+          "symbol": "Dm7",
+          "tones": [
+            "D",
+            "F",
+            "A",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "VImaj7",
+          "root": "Eb",
+          "qualityId": "maj7",
+          "symbol": "Ebmaj7",
+          "tones": [
+            "Eb",
+            "G",
+            "Bb",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "VII7",
+          "root": "F",
+          "qualityId": "dom7",
+          "symbol": "F7",
+          "tones": [
+            "F",
+            "A",
+            "C",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        }
+      ],
+      "harmonicMinor": {
+        "triads": [
+          {
+            "numeral": "V",
+            "root": "D",
+            "qualityId": "major",
+            "symbol": "D",
+            "tones": [
+              "D",
+              "F#",
+              "A"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5"
+            ]
+          },
+          {
+            "numeral": "vii°",
+            "root": "F#",
+            "qualityId": "dim",
+            "symbol": "F#dim",
+            "tones": [
+              "F#",
+              "A",
+              "C"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5"
+            ]
+          }
+        ],
+        "sevenths": [
+          {
+            "numeral": "V7",
+            "root": "D",
+            "qualityId": "dom7",
+            "symbol": "D7",
+            "tones": [
+              "D",
+              "F#",
+              "A",
+              "C"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5",
+              "b7"
+            ]
+          },
+          {
+            "numeral": "vii°7",
+            "root": "F#",
+            "qualityId": "dim7",
+            "symbol": "F#dim7",
+            "tones": [
+              "F#",
+              "A",
+              "C",
+              "Eb"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5",
+              "bb7"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tonic": "C",
+      "mode": "minor",
+      "scale": [
+        "C",
+        "D",
+        "Eb",
+        "F",
+        "G",
+        "Ab",
+        "Bb"
+      ],
+      "triads": [
+        {
+          "numeral": "i",
+          "root": "C",
+          "qualityId": "minor",
+          "symbol": "Cm",
+          "tones": [
+            "C",
+            "Eb",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii°",
+          "root": "D",
+          "qualityId": "dim",
+          "symbol": "Ddim",
+          "tones": [
+            "D",
+            "F",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        },
+        {
+          "numeral": "III",
+          "root": "Eb",
+          "qualityId": "major",
+          "symbol": "Eb",
+          "tones": [
+            "Eb",
+            "G",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iv",
+          "root": "F",
+          "qualityId": "minor",
+          "symbol": "Fm",
+          "tones": [
+            "F",
+            "Ab",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "v",
+          "root": "G",
+          "qualityId": "minor",
+          "symbol": "Gm",
+          "tones": [
+            "G",
+            "Bb",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VI",
+          "root": "Ab",
+          "qualityId": "major",
+          "symbol": "Ab",
+          "tones": [
+            "Ab",
+            "C",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VII",
+          "root": "Bb",
+          "qualityId": "major",
+          "symbol": "Bb",
+          "tones": [
+            "Bb",
+            "D",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "i7",
+          "root": "C",
+          "qualityId": "min7",
+          "symbol": "Cm7",
+          "tones": [
+            "C",
+            "Eb",
+            "G",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iiø7",
+          "root": "D",
+          "qualityId": "m7b5",
+          "symbol": "Dm7b5",
+          "tones": [
+            "D",
+            "F",
+            "Ab",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IIImaj7",
+          "root": "Eb",
+          "qualityId": "maj7",
+          "symbol": "Ebmaj7",
+          "tones": [
+            "Eb",
+            "G",
+            "Bb",
+            "D"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "iv7",
+          "root": "F",
+          "qualityId": "min7",
+          "symbol": "Fm7",
+          "tones": [
+            "F",
+            "Ab",
+            "C",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "v7",
+          "root": "G",
+          "qualityId": "min7",
+          "symbol": "Gm7",
+          "tones": [
+            "G",
+            "Bb",
+            "D",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "VImaj7",
+          "root": "Ab",
+          "qualityId": "maj7",
+          "symbol": "Abmaj7",
+          "tones": [
+            "Ab",
+            "C",
+            "Eb",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "VII7",
+          "root": "Bb",
+          "qualityId": "dom7",
+          "symbol": "Bb7",
+          "tones": [
+            "Bb",
+            "D",
+            "F",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        }
+      ],
+      "harmonicMinor": {
+        "triads": [
+          {
+            "numeral": "V",
+            "root": "G",
+            "qualityId": "major",
+            "symbol": "G",
+            "tones": [
+              "G",
+              "B",
+              "D"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5"
+            ]
+          },
+          {
+            "numeral": "vii°",
+            "root": "B",
+            "qualityId": "dim",
+            "symbol": "Bdim",
+            "tones": [
+              "B",
+              "D",
+              "F"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5"
+            ]
+          }
+        ],
+        "sevenths": [
+          {
+            "numeral": "V7",
+            "root": "G",
+            "qualityId": "dom7",
+            "symbol": "G7",
+            "tones": [
+              "G",
+              "B",
+              "D",
+              "F"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5",
+              "b7"
+            ]
+          },
+          {
+            "numeral": "vii°7",
+            "root": "B",
+            "qualityId": "dim7",
+            "symbol": "Bdim7",
+            "tones": [
+              "B",
+              "D",
+              "F",
+              "Ab"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5",
+              "bb7"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tonic": "F",
+      "mode": "minor",
+      "scale": [
+        "F",
+        "G",
+        "Ab",
+        "Bb",
+        "C",
+        "Db",
+        "Eb"
+      ],
+      "triads": [
+        {
+          "numeral": "i",
+          "root": "F",
+          "qualityId": "minor",
+          "symbol": "Fm",
+          "tones": [
+            "F",
+            "Ab",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii°",
+          "root": "G",
+          "qualityId": "dim",
+          "symbol": "Gdim",
+          "tones": [
+            "G",
+            "Bb",
+            "Db"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        },
+        {
+          "numeral": "III",
+          "root": "Ab",
+          "qualityId": "major",
+          "symbol": "Ab",
+          "tones": [
+            "Ab",
+            "C",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iv",
+          "root": "Bb",
+          "qualityId": "minor",
+          "symbol": "Bbm",
+          "tones": [
+            "Bb",
+            "Db",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "v",
+          "root": "C",
+          "qualityId": "minor",
+          "symbol": "Cm",
+          "tones": [
+            "C",
+            "Eb",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VI",
+          "root": "Db",
+          "qualityId": "major",
+          "symbol": "Db",
+          "tones": [
+            "Db",
+            "F",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VII",
+          "root": "Eb",
+          "qualityId": "major",
+          "symbol": "Eb",
+          "tones": [
+            "Eb",
+            "G",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "i7",
+          "root": "F",
+          "qualityId": "min7",
+          "symbol": "Fm7",
+          "tones": [
+            "F",
+            "Ab",
+            "C",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iiø7",
+          "root": "G",
+          "qualityId": "m7b5",
+          "symbol": "Gm7b5",
+          "tones": [
+            "G",
+            "Bb",
+            "Db",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IIImaj7",
+          "root": "Ab",
+          "qualityId": "maj7",
+          "symbol": "Abmaj7",
+          "tones": [
+            "Ab",
+            "C",
+            "Eb",
+            "G"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "iv7",
+          "root": "Bb",
+          "qualityId": "min7",
+          "symbol": "Bbm7",
+          "tones": [
+            "Bb",
+            "Db",
+            "F",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "v7",
+          "root": "C",
+          "qualityId": "min7",
+          "symbol": "Cm7",
+          "tones": [
+            "C",
+            "Eb",
+            "G",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "VImaj7",
+          "root": "Db",
+          "qualityId": "maj7",
+          "symbol": "Dbmaj7",
+          "tones": [
+            "Db",
+            "F",
+            "Ab",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "VII7",
+          "root": "Eb",
+          "qualityId": "dom7",
+          "symbol": "Eb7",
+          "tones": [
+            "Eb",
+            "G",
+            "Bb",
+            "Db"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        }
+      ],
+      "harmonicMinor": {
+        "triads": [
+          {
+            "numeral": "V",
+            "root": "C",
+            "qualityId": "major",
+            "symbol": "C",
+            "tones": [
+              "C",
+              "E",
+              "G"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5"
+            ]
+          },
+          {
+            "numeral": "vii°",
+            "root": "E",
+            "qualityId": "dim",
+            "symbol": "Edim",
+            "tones": [
+              "E",
+              "G",
+              "Bb"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5"
+            ]
+          }
+        ],
+        "sevenths": [
+          {
+            "numeral": "V7",
+            "root": "C",
+            "qualityId": "dom7",
+            "symbol": "C7",
+            "tones": [
+              "C",
+              "E",
+              "G",
+              "Bb"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5",
+              "b7"
+            ]
+          },
+          {
+            "numeral": "vii°7",
+            "root": "E",
+            "qualityId": "dim7",
+            "symbol": "Edim7",
+            "tones": [
+              "E",
+              "G",
+              "Bb",
+              "Db"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5",
+              "bb7"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tonic": "Bb",
+      "mode": "minor",
+      "scale": [
+        "Bb",
+        "C",
+        "Db",
+        "Eb",
+        "F",
+        "Gb",
+        "Ab"
+      ],
+      "triads": [
+        {
+          "numeral": "i",
+          "root": "Bb",
+          "qualityId": "minor",
+          "symbol": "Bbm",
+          "tones": [
+            "Bb",
+            "Db",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii°",
+          "root": "C",
+          "qualityId": "dim",
+          "symbol": "Cdim",
+          "tones": [
+            "C",
+            "Eb",
+            "Gb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        },
+        {
+          "numeral": "III",
+          "root": "Db",
+          "qualityId": "major",
+          "symbol": "Db",
+          "tones": [
+            "Db",
+            "F",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iv",
+          "root": "Eb",
+          "qualityId": "minor",
+          "symbol": "Ebm",
+          "tones": [
+            "Eb",
+            "Gb",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "v",
+          "root": "F",
+          "qualityId": "minor",
+          "symbol": "Fm",
+          "tones": [
+            "F",
+            "Ab",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VI",
+          "root": "Gb",
+          "qualityId": "major",
+          "symbol": "Gb",
+          "tones": [
+            "Gb",
+            "Bb",
+            "Db"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VII",
+          "root": "Ab",
+          "qualityId": "major",
+          "symbol": "Ab",
+          "tones": [
+            "Ab",
+            "C",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "i7",
+          "root": "Bb",
+          "qualityId": "min7",
+          "symbol": "Bbm7",
+          "tones": [
+            "Bb",
+            "Db",
+            "F",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iiø7",
+          "root": "C",
+          "qualityId": "m7b5",
+          "symbol": "Cm7b5",
+          "tones": [
+            "C",
+            "Eb",
+            "Gb",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IIImaj7",
+          "root": "Db",
+          "qualityId": "maj7",
+          "symbol": "Dbmaj7",
+          "tones": [
+            "Db",
+            "F",
+            "Ab",
+            "C"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "iv7",
+          "root": "Eb",
+          "qualityId": "min7",
+          "symbol": "Ebm7",
+          "tones": [
+            "Eb",
+            "Gb",
+            "Bb",
+            "Db"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "v7",
+          "root": "F",
+          "qualityId": "min7",
+          "symbol": "Fm7",
+          "tones": [
+            "F",
+            "Ab",
+            "C",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "VImaj7",
+          "root": "Gb",
+          "qualityId": "maj7",
+          "symbol": "Gbmaj7",
+          "tones": [
+            "Gb",
+            "Bb",
+            "Db",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "VII7",
+          "root": "Ab",
+          "qualityId": "dom7",
+          "symbol": "Ab7",
+          "tones": [
+            "Ab",
+            "C",
+            "Eb",
+            "Gb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        }
+      ],
+      "harmonicMinor": {
+        "triads": [
+          {
+            "numeral": "V",
+            "root": "F",
+            "qualityId": "major",
+            "symbol": "F",
+            "tones": [
+              "F",
+              "A",
+              "C"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5"
+            ]
+          },
+          {
+            "numeral": "vii°",
+            "root": "A",
+            "qualityId": "dim",
+            "symbol": "Adim",
+            "tones": [
+              "A",
+              "C",
+              "Eb"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5"
+            ]
+          }
+        ],
+        "sevenths": [
+          {
+            "numeral": "V7",
+            "root": "F",
+            "qualityId": "dom7",
+            "symbol": "F7",
+            "tones": [
+              "F",
+              "A",
+              "C",
+              "Eb"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5",
+              "b7"
+            ]
+          },
+          {
+            "numeral": "vii°7",
+            "root": "A",
+            "qualityId": "dim7",
+            "symbol": "Adim7",
+            "tones": [
+              "A",
+              "C",
+              "Eb",
+              "Gb"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5",
+              "bb7"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tonic": "Eb",
+      "mode": "minor",
+      "scale": [
+        "Eb",
+        "F",
+        "Gb",
+        "Ab",
+        "Bb",
+        "Cb",
+        "Db"
+      ],
+      "triads": [
+        {
+          "numeral": "i",
+          "root": "Eb",
+          "qualityId": "minor",
+          "symbol": "Ebm",
+          "tones": [
+            "Eb",
+            "Gb",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii°",
+          "root": "F",
+          "qualityId": "dim",
+          "symbol": "Fdim",
+          "tones": [
+            "F",
+            "Ab",
+            "Cb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        },
+        {
+          "numeral": "III",
+          "root": "Gb",
+          "qualityId": "major",
+          "symbol": "Gb",
+          "tones": [
+            "Gb",
+            "Bb",
+            "Db"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iv",
+          "root": "Ab",
+          "qualityId": "minor",
+          "symbol": "Abm",
+          "tones": [
+            "Ab",
+            "Cb",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "v",
+          "root": "Bb",
+          "qualityId": "minor",
+          "symbol": "Bbm",
+          "tones": [
+            "Bb",
+            "Db",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VI",
+          "root": "Cb",
+          "qualityId": "major",
+          "symbol": "Cb",
+          "tones": [
+            "Cb",
+            "Eb",
+            "Gb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VII",
+          "root": "Db",
+          "qualityId": "major",
+          "symbol": "Db",
+          "tones": [
+            "Db",
+            "F",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "i7",
+          "root": "Eb",
+          "qualityId": "min7",
+          "symbol": "Ebm7",
+          "tones": [
+            "Eb",
+            "Gb",
+            "Bb",
+            "Db"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iiø7",
+          "root": "F",
+          "qualityId": "m7b5",
+          "symbol": "Fm7b5",
+          "tones": [
+            "F",
+            "Ab",
+            "Cb",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IIImaj7",
+          "root": "Gb",
+          "qualityId": "maj7",
+          "symbol": "Gbmaj7",
+          "tones": [
+            "Gb",
+            "Bb",
+            "Db",
+            "F"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "iv7",
+          "root": "Ab",
+          "qualityId": "min7",
+          "symbol": "Abm7",
+          "tones": [
+            "Ab",
+            "Cb",
+            "Eb",
+            "Gb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "v7",
+          "root": "Bb",
+          "qualityId": "min7",
+          "symbol": "Bbm7",
+          "tones": [
+            "Bb",
+            "Db",
+            "F",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "VImaj7",
+          "root": "Cb",
+          "qualityId": "maj7",
+          "symbol": "Cbmaj7",
+          "tones": [
+            "Cb",
+            "Eb",
+            "Gb",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "VII7",
+          "root": "Db",
+          "qualityId": "dom7",
+          "symbol": "Db7",
+          "tones": [
+            "Db",
+            "F",
+            "Ab",
+            "Cb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        }
+      ],
+      "harmonicMinor": {
+        "triads": [
+          {
+            "numeral": "V",
+            "root": "Bb",
+            "qualityId": "major",
+            "symbol": "Bb",
+            "tones": [
+              "Bb",
+              "D",
+              "F"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5"
+            ]
+          },
+          {
+            "numeral": "vii°",
+            "root": "D",
+            "qualityId": "dim",
+            "symbol": "Ddim",
+            "tones": [
+              "D",
+              "F",
+              "Ab"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5"
+            ]
+          }
+        ],
+        "sevenths": [
+          {
+            "numeral": "V7",
+            "root": "Bb",
+            "qualityId": "dom7",
+            "symbol": "Bb7",
+            "tones": [
+              "Bb",
+              "D",
+              "F",
+              "Ab"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5",
+              "b7"
+            ]
+          },
+          {
+            "numeral": "vii°7",
+            "root": "D",
+            "qualityId": "dim7",
+            "symbol": "Ddim7",
+            "tones": [
+              "D",
+              "F",
+              "Ab",
+              "Cb"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5",
+              "bb7"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tonic": "Ab",
+      "mode": "minor",
+      "scale": [
+        "Ab",
+        "Bb",
+        "Cb",
+        "Db",
+        "Eb",
+        "Fb",
+        "Gb"
+      ],
+      "triads": [
+        {
+          "numeral": "i",
+          "root": "Ab",
+          "qualityId": "minor",
+          "symbol": "Abm",
+          "tones": [
+            "Ab",
+            "Cb",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "ii°",
+          "root": "Bb",
+          "qualityId": "dim",
+          "symbol": "Bbdim",
+          "tones": [
+            "Bb",
+            "Db",
+            "Fb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5"
+          ]
+        },
+        {
+          "numeral": "III",
+          "root": "Cb",
+          "qualityId": "major",
+          "symbol": "Cb",
+          "tones": [
+            "Cb",
+            "Eb",
+            "Gb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "iv",
+          "root": "Db",
+          "qualityId": "minor",
+          "symbol": "Dbm",
+          "tones": [
+            "Db",
+            "Fb",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "v",
+          "root": "Eb",
+          "qualityId": "minor",
+          "symbol": "Ebm",
+          "tones": [
+            "Eb",
+            "Gb",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VI",
+          "root": "Fb",
+          "qualityId": "major",
+          "symbol": "Fb",
+          "tones": [
+            "Fb",
+            "Ab",
+            "Cb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        },
+        {
+          "numeral": "VII",
+          "root": "Gb",
+          "qualityId": "major",
+          "symbol": "Gb",
+          "tones": [
+            "Gb",
+            "Bb",
+            "Db"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5"
+          ]
+        }
+      ],
+      "sevenths": [
+        {
+          "numeral": "i7",
+          "root": "Ab",
+          "qualityId": "min7",
+          "symbol": "Abm7",
+          "tones": [
+            "Ab",
+            "Cb",
+            "Eb",
+            "Gb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "iiø7",
+          "root": "Bb",
+          "qualityId": "m7b5",
+          "symbol": "Bbm7b5",
+          "tones": [
+            "Bb",
+            "Db",
+            "Fb",
+            "Ab"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "b5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "IIImaj7",
+          "root": "Cb",
+          "qualityId": "maj7",
+          "symbol": "Cbmaj7",
+          "tones": [
+            "Cb",
+            "Eb",
+            "Gb",
+            "Bb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "iv7",
+          "root": "Db",
+          "qualityId": "min7",
+          "symbol": "Dbm7",
+          "tones": [
+            "Db",
+            "Fb",
+            "Ab",
+            "Cb"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "v7",
+          "root": "Eb",
+          "qualityId": "min7",
+          "symbol": "Ebm7",
+          "tones": [
+            "Eb",
+            "Gb",
+            "Bb",
+            "Db"
+          ],
+          "functions": [
+            "R",
+            "b3",
+            "5",
+            "b7"
+          ]
+        },
+        {
+          "numeral": "VImaj7",
+          "root": "Fb",
+          "qualityId": "maj7",
+          "symbol": "Fbmaj7",
+          "tones": [
+            "Fb",
+            "Ab",
+            "Cb",
+            "Eb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "numeral": "VII7",
+          "root": "Gb",
+          "qualityId": "dom7",
+          "symbol": "Gb7",
+          "tones": [
+            "Gb",
+            "Bb",
+            "Db",
+            "Fb"
+          ],
+          "functions": [
+            "R",
+            "3",
+            "5",
+            "b7"
+          ]
+        }
+      ],
+      "harmonicMinor": {
+        "triads": [
+          {
+            "numeral": "V",
+            "root": "Eb",
+            "qualityId": "major",
+            "symbol": "Eb",
+            "tones": [
+              "Eb",
+              "G",
+              "Bb"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5"
+            ]
+          },
+          {
+            "numeral": "vii°",
+            "root": "G",
+            "qualityId": "dim",
+            "symbol": "Gdim",
+            "tones": [
+              "G",
+              "Bb",
+              "Db"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5"
+            ]
+          }
+        ],
+        "sevenths": [
+          {
+            "numeral": "V7",
+            "root": "Eb",
+            "qualityId": "dom7",
+            "symbol": "Eb7",
+            "tones": [
+              "Eb",
+              "G",
+              "Bb",
+              "Db"
+            ],
+            "functions": [
+              "R",
+              "3",
+              "5",
+              "b7"
+            ]
+          },
+          {
+            "numeral": "vii°7",
+            "root": "G",
+            "qualityId": "dim7",
+            "symbol": "Gdim7",
+            "tones": [
+              "G",
+              "Bb",
+              "Db",
+              "Fb"
+            ],
+            "functions": [
+              "R",
+              "b3",
+              "b5",
+              "bb7"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

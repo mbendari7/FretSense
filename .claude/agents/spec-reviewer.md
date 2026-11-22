@@ -38,8 +38,10 @@ rewrite the spec. You report findings, and the owner decides what to change.
 7. **Conflicts.** Contradictions inside the spec or with earlier specs, plus duplicate or reused FR IDs.
 8. **Leaking implementation.** The spec says *what*, not *how*. Flag library or algorithm choices
    that belong in plan.md.
-9. **Ownership rules.** Nothing in the spec implies the AI writes human-owned code (YIN pitch detection; the chromagram; the camera homography and pixel → (string, fret) mapping; the Viterbi fingering optimizer and its fingering cost model; the knowledge-tracing update equations; the cross-correlation estimator for round-trip latency and audio–video offset (015)) or runs training, or writes lesson prose (`content/lessons/`) or handbook text
-   (`content/handbook/`).
+9. **Authorship and content rules (Constitution IV).** Core-algorithm requirements can be checked
+   against independent references (synthetic signals, brute force, published values); lesson and
+   handbook requirements say text is original, theory-checked and owner-approved; nothing requires
+   copying book or website text. Flag old wording that still reserves this work for the owner.
 
 ## Output format
 ```

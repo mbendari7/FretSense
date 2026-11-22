@@ -1,0 +1,1246 @@
+{
+  "$schema": "fretsense/fixtures/theory/spelling v1",
+  "status": "PLACEHOLDER: awaiting owner + theory-checker sign-off (SC-001, tasks T009/T012/T063)",
+  "defaultSpelling": {
+    "why": "Edge Cases \"Default root spelling\": for a black-key pitch class (1, 3, 6, 8, 10) compare the sharp and flat root spellings by the total accidentals of the resulting tones (a double accidental counts 2; a spelling that would need a triple accidental is not a candidate); fewer wins, ties go to sharps (spec examples: F# major, D# minor). Counts: e.g. pc 1 major Db (5) vs C# (7) gives Db; pc 6 major F# (6) vs Gb (6) ties to F#; pc 3 natural-minor D# (6) vs Eb (6) ties to D#; pc 8 natural-minor G# (5) vs Ab (7) gives G#; pc 1 major triad Db F Ab (2) vs C# E# G# (3) gives Db.",
+    "scales": {
+      "major": {
+        "1": "Db",
+        "3": "Eb",
+        "6": "F#",
+        "8": "Ab",
+        "10": "Bb"
+      },
+      "dorian": {
+        "1": "C#",
+        "3": "Eb",
+        "6": "F#",
+        "8": "G#",
+        "10": "Bb"
+      },
+      "phrygian": {
+        "1": "C#",
+        "3": "D#",
+        "6": "F#",
+        "8": "G#",
+        "10": "A#"
+      },
+      "lydian": {
+        "1": "Db",
+        "3": "Eb",
+        "6": "Gb",
+        "8": "Ab",
+        "10": "Bb"
+      },
+      "mixolydian": {
+        "1": "C#",
+        "3": "Eb",
+        "6": "F#",
+        "8": "Ab",
+        "10": "Bb"
+      },
+      "natural-minor": {
+        "1": "C#",
+        "3": "D#",
+        "6": "F#",
+        "8": "G#",
+        "10": "Bb"
+      },
+      "locrian": {
+        "1": "C#",
+        "3": "D#",
+        "6": "F#",
+        "8": "G#",
+        "10": "A#"
+      },
+      "harmonic-minor": {
+        "1": "C#",
+        "3": "Eb",
+        "6": "F#",
+        "8": "G#",
+        "10": "Bb"
+      },
+      "melodic-minor": {
+        "1": "C#",
+        "3": "Eb",
+        "6": "F#",
+        "8": "Ab",
+        "10": "Bb"
+      },
+      "major-pentatonic": {
+        "1": "Db",
+        "3": "Eb",
+        "6": "F#",
+        "8": "Ab",
+        "10": "Bb"
+      },
+      "minor-pentatonic": {
+        "1": "C#",
+        "3": "D#",
+        "6": "F#",
+        "8": "G#",
+        "10": "Bb"
+      },
+      "blues": {
+        "1": "C#",
+        "3": "D#",
+        "6": "F#",
+        "8": "G#",
+        "10": "A#"
+      }
+    },
+    "chords": {
+      "major": {
+        "1": "Db",
+        "3": "Eb",
+        "6": "F#",
+        "8": "Ab",
+        "10": "Bb"
+      },
+      "minor": {
+        "1": "C#",
+        "3": "D#",
+        "6": "F#",
+        "8": "G#",
+        "10": "Bb"
+      },
+      "dim": {
+        "1": "C#",
+        "3": "D#",
+        "6": "F#",
+        "8": "G#",
+        "10": "A#"
+      },
+      "aug": {
+        "1": "Db",
+        "3": "Eb",
+        "6": "Gb",
+        "8": "Ab",
+        "10": "Bb"
+      },
+      "sus2": {
+        "1": "C#",
+        "3": "Eb",
+        "6": "F#",
+        "8": "G#",
+        "10": "Bb"
+      },
+      "sus4": {
+        "1": "C#",
+        "3": "D#",
+        "6": "F#",
+        "8": "G#",
+        "10": "Bb"
+      },
+      "dom7": {
+        "1": "C#",
+        "3": "Eb",
+        "6": "F#",
+        "8": "Ab",
+        "10": "Bb"
+      },
+      "maj7": {
+        "1": "Db",
+        "3": "Eb",
+        "6": "Gb",
+        "8": "Ab",
+        "10": "Bb"
+      },
+      "min7": {
+        "1": "C#",
+        "3": "D#",
+        "6": "F#",
+        "8": "G#",
+        "10": "Bb"
+      },
+      "m7b5": {
+        "1": "C#",
+        "3": "D#",
+        "6": "F#",
+        "8": "G#",
+        "10": "A#"
+      },
+      "dim7": {
+        "1": "C#",
+        "3": "D#",
+        "6": "F#",
+        "8": "G#",
+        "10": "A#"
+      },
+      "add9": {
+        "1": "Db",
+        "3": "Eb",
+        "6": "F#",
+        "8": "Ab",
+        "10": "Bb"
+      }
+    }
+  },
+  "whiteKeyDefaults": {
+    "why": "ASSUMPTION (flagged to the owner): the Edge Cases rule is stated for black-key roots only, and FR-005 spells Cdim7 from C, so a white-key pitch class keeps its natural letter in every context. Note that the literal fewest-accidentals count would otherwise pick Cb for B aug (Cb Eb G = 2 vs B D# F## = 4) and B# for C dim7 (B# D# F# A = 3 vs C Eb Gb Bbb = 4).",
+    "values": {
+      "0": "C",
+      "2": "D",
+      "4": "E",
+      "5": "F",
+      "7": "G",
+      "9": "A",
+      "11": "B"
+    }
+  },
+  "chromatic": {
+    "why": "FR-060 fixed map relative to the context root: 1 b2 2 b3 3 4 #4 5 b6 6 b7 7, i.e. P1 m2 M2 m3 M3 P4 A4 P5 m6 M6 m7 M7; the note is spelled as the root transposed by that interval (in C: C Db D Eb E F F# G Ab A Bb B; Cb root: b6 = Abb). Keyed by root, then by the target pitch class 0-11.",
+    "values": {
+      "C": {
+        "0": {
+          "spelled": "C",
+          "degree": "1"
+        },
+        "1": {
+          "spelled": "Db",
+          "degree": "b2"
+        },
+        "2": {
+          "spelled": "D",
+          "degree": "2"
+        },
+        "3": {
+          "spelled": "Eb",
+          "degree": "b3"
+        },
+        "4": {
+          "spelled": "E",
+          "degree": "3"
+        },
+        "5": {
+          "spelled": "F",
+          "degree": "4"
+        },
+        "6": {
+          "spelled": "F#",
+          "degree": "#4"
+        },
+        "7": {
+          "spelled": "G",
+          "degree": "5"
+        },
+        "8": {
+          "spelled": "Ab",
+          "degree": "b6"
+        },
+        "9": {
+          "spelled": "A",
+          "degree": "6"
+        },
+        "10": {
+          "spelled": "Bb",
+          "degree": "b7"
+        },
+        "11": {
+          "spelled": "B",
+          "degree": "7"
+        }
+      },
+      "D": {
+        "0": {
+          "spelled": "C",
+          "degree": "b7"
+        },
+        "1": {
+          "spelled": "C#",
+          "degree": "7"
+        },
+        "2": {
+          "spelled": "D",
+          "degree": "1"
+        },
+        "3": {
+          "spelled": "Eb",
+          "degree": "b2"
+        },
+        "4": {
+          "spelled": "E",
+          "degree": "2"
+        },
+        "5": {
+          "spelled": "F",
+          "degree": "b3"
+        },
+        "6": {
+          "spelled": "F#",
+          "degree": "3"
+        },
+        "7": {
+          "spelled": "G",
+          "degree": "4"
+        },
+        "8": {
+          "spelled": "G#",
+          "degree": "#4"
+        },
+        "9": {
+          "spelled": "A",
+          "degree": "5"
+        },
+        "10": {
+          "spelled": "Bb",
+          "degree": "b6"
+        },
+        "11": {
+          "spelled": "B",
+          "degree": "6"
+        }
+      },
+      "E": {
+        "0": {
+          "spelled": "C",
+          "degree": "b6"
+        },
+        "1": {
+          "spelled": "C#",
+          "degree": "6"
+        },
+        "2": {
+          "spelled": "D",
+          "degree": "b7"
+        },
+        "3": {
+          "spelled": "D#",
+          "degree": "7"
+        },
+        "4": {
+          "spelled": "E",
+          "degree": "1"
+        },
+        "5": {
+          "spelled": "F",
+          "degree": "b2"
+        },
+        "6": {
+          "spelled": "F#",
+          "degree": "2"
+        },
+        "7": {
+          "spelled": "G",
+          "degree": "b3"
+        },
+        "8": {
+          "spelled": "G#",
+          "degree": "3"
+        },
+        "9": {
+          "spelled": "A",
+          "degree": "4"
+        },
+        "10": {
+          "spelled": "A#",
+          "degree": "#4"
+        },
+        "11": {
+          "spelled": "B",
+          "degree": "5"
+        }
+      },
+      "F": {
+        "0": {
+          "spelled": "C",
+          "degree": "5"
+        },
+        "1": {
+          "spelled": "Db",
+          "degree": "b6"
+        },
+        "2": {
+          "spelled": "D",
+          "degree": "6"
+        },
+        "3": {
+          "spelled": "Eb",
+          "degree": "b7"
+        },
+        "4": {
+          "spelled": "E",
+          "degree": "7"
+        },
+        "5": {
+          "spelled": "F",
+          "degree": "1"
+        },
+        "6": {
+          "spelled": "Gb",
+          "degree": "b2"
+        },
+        "7": {
+          "spelled": "G",
+          "degree": "2"
+        },
+        "8": {
+          "spelled": "Ab",
+          "degree": "b3"
+        },
+        "9": {
+          "spelled": "A",
+          "degree": "3"
+        },
+        "10": {
+          "spelled": "Bb",
+          "degree": "4"
+        },
+        "11": {
+          "spelled": "B",
+          "degree": "#4"
+        }
+      },
+      "G": {
+        "0": {
+          "spelled": "C",
+          "degree": "4"
+        },
+        "1": {
+          "spelled": "C#",
+          "degree": "#4"
+        },
+        "2": {
+          "spelled": "D",
+          "degree": "5"
+        },
+        "3": {
+          "spelled": "Eb",
+          "degree": "b6"
+        },
+        "4": {
+          "spelled": "E",
+          "degree": "6"
+        },
+        "5": {
+          "spelled": "F",
+          "degree": "b7"
+        },
+        "6": {
+          "spelled": "F#",
+          "degree": "7"
+        },
+        "7": {
+          "spelled": "G",
+          "degree": "1"
+        },
+        "8": {
+          "spelled": "Ab",
+          "degree": "b2"
+        },
+        "9": {
+          "spelled": "A",
+          "degree": "2"
+        },
+        "10": {
+          "spelled": "Bb",
+          "degree": "b3"
+        },
+        "11": {
+          "spelled": "B",
+          "degree": "3"
+        }
+      },
+      "A": {
+        "0": {
+          "spelled": "C",
+          "degree": "b3"
+        },
+        "1": {
+          "spelled": "C#",
+          "degree": "3"
+        },
+        "2": {
+          "spelled": "D",
+          "degree": "4"
+        },
+        "3": {
+          "spelled": "D#",
+          "degree": "#4"
+        },
+        "4": {
+          "spelled": "E",
+          "degree": "5"
+        },
+        "5": {
+          "spelled": "F",
+          "degree": "b6"
+        },
+        "6": {
+          "spelled": "F#",
+          "degree": "6"
+        },
+        "7": {
+          "spelled": "G",
+          "degree": "b7"
+        },
+        "8": {
+          "spelled": "G#",
+          "degree": "7"
+        },
+        "9": {
+          "spelled": "A",
+          "degree": "1"
+        },
+        "10": {
+          "spelled": "Bb",
+          "degree": "b2"
+        },
+        "11": {
+          "spelled": "B",
+          "degree": "2"
+        }
+      },
+      "B": {
+        "0": {
+          "spelled": "C",
+          "degree": "b2"
+        },
+        "1": {
+          "spelled": "C#",
+          "degree": "2"
+        },
+        "2": {
+          "spelled": "D",
+          "degree": "b3"
+        },
+        "3": {
+          "spelled": "D#",
+          "degree": "3"
+        },
+        "4": {
+          "spelled": "E",
+          "degree": "4"
+        },
+        "5": {
+          "spelled": "E#",
+          "degree": "#4"
+        },
+        "6": {
+          "spelled": "F#",
+          "degree": "5"
+        },
+        "7": {
+          "spelled": "G",
+          "degree": "b6"
+        },
+        "8": {
+          "spelled": "G#",
+          "degree": "6"
+        },
+        "9": {
+          "spelled": "A",
+          "degree": "b7"
+        },
+        "10": {
+          "spelled": "A#",
+          "degree": "7"
+        },
+        "11": {
+          "spelled": "B",
+          "degree": "1"
+        }
+      },
+      "C#": {
+        "0": {
+          "spelled": "B#",
+          "degree": "7"
+        },
+        "1": {
+          "spelled": "C#",
+          "degree": "1"
+        },
+        "2": {
+          "spelled": "D",
+          "degree": "b2"
+        },
+        "3": {
+          "spelled": "D#",
+          "degree": "2"
+        },
+        "4": {
+          "spelled": "E",
+          "degree": "b3"
+        },
+        "5": {
+          "spelled": "E#",
+          "degree": "3"
+        },
+        "6": {
+          "spelled": "F#",
+          "degree": "4"
+        },
+        "7": {
+          "spelled": "F##",
+          "degree": "#4"
+        },
+        "8": {
+          "spelled": "G#",
+          "degree": "5"
+        },
+        "9": {
+          "spelled": "A",
+          "degree": "b6"
+        },
+        "10": {
+          "spelled": "A#",
+          "degree": "6"
+        },
+        "11": {
+          "spelled": "B",
+          "degree": "b7"
+        }
+      },
+      "D#": {
+        "0": {
+          "spelled": "B#",
+          "degree": "6"
+        },
+        "1": {
+          "spelled": "C#",
+          "degree": "b7"
+        },
+        "2": {
+          "spelled": "C##",
+          "degree": "7"
+        },
+        "3": {
+          "spelled": "D#",
+          "degree": "1"
+        },
+        "4": {
+          "spelled": "E",
+          "degree": "b2"
+        },
+        "5": {
+          "spelled": "E#",
+          "degree": "2"
+        },
+        "6": {
+          "spelled": "F#",
+          "degree": "b3"
+        },
+        "7": {
+          "spelled": "F##",
+          "degree": "3"
+        },
+        "8": {
+          "spelled": "G#",
+          "degree": "4"
+        },
+        "9": {
+          "spelled": "G##",
+          "degree": "#4"
+        },
+        "10": {
+          "spelled": "A#",
+          "degree": "5"
+        },
+        "11": {
+          "spelled": "B",
+          "degree": "b6"
+        }
+      },
+      "E#": {
+        "0": {
+          "spelled": "B#",
+          "degree": "5"
+        },
+        "1": {
+          "spelled": "C#",
+          "degree": "b6"
+        },
+        "2": {
+          "spelled": "C##",
+          "degree": "6"
+        },
+        "3": {
+          "spelled": "D#",
+          "degree": "b7"
+        },
+        "4": {
+          "spelled": "D##",
+          "degree": "7"
+        },
+        "5": {
+          "spelled": "E#",
+          "degree": "1"
+        },
+        "6": {
+          "spelled": "F#",
+          "degree": "b2"
+        },
+        "7": {
+          "spelled": "F##",
+          "degree": "2"
+        },
+        "8": {
+          "spelled": "G#",
+          "degree": "b3"
+        },
+        "9": {
+          "spelled": "G##",
+          "degree": "3"
+        },
+        "10": {
+          "spelled": "A#",
+          "degree": "4"
+        },
+        "11": {
+          "spelled": "A##",
+          "degree": "#4"
+        }
+      },
+      "F#": {
+        "0": {
+          "spelled": "B#",
+          "degree": "#4"
+        },
+        "1": {
+          "spelled": "C#",
+          "degree": "5"
+        },
+        "2": {
+          "spelled": "D",
+          "degree": "b6"
+        },
+        "3": {
+          "spelled": "D#",
+          "degree": "6"
+        },
+        "4": {
+          "spelled": "E",
+          "degree": "b7"
+        },
+        "5": {
+          "spelled": "E#",
+          "degree": "7"
+        },
+        "6": {
+          "spelled": "F#",
+          "degree": "1"
+        },
+        "7": {
+          "spelled": "G",
+          "degree": "b2"
+        },
+        "8": {
+          "spelled": "G#",
+          "degree": "2"
+        },
+        "9": {
+          "spelled": "A",
+          "degree": "b3"
+        },
+        "10": {
+          "spelled": "A#",
+          "degree": "3"
+        },
+        "11": {
+          "spelled": "B",
+          "degree": "4"
+        }
+      },
+      "G#": {
+        "0": {
+          "spelled": "B#",
+          "degree": "3"
+        },
+        "1": {
+          "spelled": "C#",
+          "degree": "4"
+        },
+        "2": {
+          "spelled": "C##",
+          "degree": "#4"
+        },
+        "3": {
+          "spelled": "D#",
+          "degree": "5"
+        },
+        "4": {
+          "spelled": "E",
+          "degree": "b6"
+        },
+        "5": {
+          "spelled": "E#",
+          "degree": "6"
+        },
+        "6": {
+          "spelled": "F#",
+          "degree": "b7"
+        },
+        "7": {
+          "spelled": "F##",
+          "degree": "7"
+        },
+        "8": {
+          "spelled": "G#",
+          "degree": "1"
+        },
+        "9": {
+          "spelled": "A",
+          "degree": "b2"
+        },
+        "10": {
+          "spelled": "A#",
+          "degree": "2"
+        },
+        "11": {
+          "spelled": "B",
+          "degree": "b3"
+        }
+      },
+      "A#": {
+        "0": {
+          "spelled": "B#",
+          "degree": "2"
+        },
+        "1": {
+          "spelled": "C#",
+          "degree": "b3"
+        },
+        "2": {
+          "spelled": "C##",
+          "degree": "3"
+        },
+        "3": {
+          "spelled": "D#",
+          "degree": "4"
+        },
+        "4": {
+          "spelled": "D##",
+          "degree": "#4"
+        },
+        "5": {
+          "spelled": "E#",
+          "degree": "5"
+        },
+        "6": {
+          "spelled": "F#",
+          "degree": "b6"
+        },
+        "7": {
+          "spelled": "F##",
+          "degree": "6"
+        },
+        "8": {
+          "spelled": "G#",
+          "degree": "b7"
+        },
+        "9": {
+          "spelled": "G##",
+          "degree": "7"
+        },
+        "10": {
+          "spelled": "A#",
+          "degree": "1"
+        },
+        "11": {
+          "spelled": "B",
+          "degree": "b2"
+        }
+      },
+      "B#": {
+        "0": {
+          "spelled": "B#",
+          "degree": "1"
+        },
+        "1": {
+          "spelled": "C#",
+          "degree": "b2"
+        },
+        "2": {
+          "spelled": "C##",
+          "degree": "2"
+        },
+        "3": {
+          "spelled": "D#",
+          "degree": "b3"
+        },
+        "4": {
+          "spelled": "D##",
+          "degree": "3"
+        },
+        "5": {
+          "spelled": "E#",
+          "degree": "4"
+        },
+        "6": {
+          "spelled": "E##",
+          "degree": "#4"
+        },
+        "7": {
+          "spelled": "F##",
+          "degree": "5"
+        },
+        "8": {
+          "spelled": "G#",
+          "degree": "b6"
+        },
+        "9": {
+          "spelled": "G##",
+          "degree": "6"
+        },
+        "10": {
+          "spelled": "A#",
+          "degree": "b7"
+        },
+        "11": {
+          "spelled": "A##",
+          "degree": "7"
+        }
+      },
+      "Cb": {
+        "0": {
+          "spelled": "Dbb",
+          "degree": "b2"
+        },
+        "1": {
+          "spelled": "Db",
+          "degree": "2"
+        },
+        "2": {
+          "spelled": "Ebb",
+          "degree": "b3"
+        },
+        "3": {
+          "spelled": "Eb",
+          "degree": "3"
+        },
+        "4": {
+          "spelled": "Fb",
+          "degree": "4"
+        },
+        "5": {
+          "spelled": "F",
+          "degree": "#4"
+        },
+        "6": {
+          "spelled": "Gb",
+          "degree": "5"
+        },
+        "7": {
+          "spelled": "Abb",
+          "degree": "b6"
+        },
+        "8": {
+          "spelled": "Ab",
+          "degree": "6"
+        },
+        "9": {
+          "spelled": "Bbb",
+          "degree": "b7"
+        },
+        "10": {
+          "spelled": "Bb",
+          "degree": "7"
+        },
+        "11": {
+          "spelled": "Cb",
+          "degree": "1"
+        }
+      },
+      "Db": {
+        "0": {
+          "spelled": "C",
+          "degree": "7"
+        },
+        "1": {
+          "spelled": "Db",
+          "degree": "1"
+        },
+        "2": {
+          "spelled": "Ebb",
+          "degree": "b2"
+        },
+        "3": {
+          "spelled": "Eb",
+          "degree": "2"
+        },
+        "4": {
+          "spelled": "Fb",
+          "degree": "b3"
+        },
+        "5": {
+          "spelled": "F",
+          "degree": "3"
+        },
+        "6": {
+          "spelled": "Gb",
+          "degree": "4"
+        },
+        "7": {
+          "spelled": "G",
+          "degree": "#4"
+        },
+        "8": {
+          "spelled": "Ab",
+          "degree": "5"
+        },
+        "9": {
+          "spelled": "Bbb",
+          "degree": "b6"
+        },
+        "10": {
+          "spelled": "Bb",
+          "degree": "6"
+        },
+        "11": {
+          "spelled": "Cb",
+          "degree": "b7"
+        }
+      },
+      "Eb": {
+        "0": {
+          "spelled": "C",
+          "degree": "6"
+        },
+        "1": {
+          "spelled": "Db",
+          "degree": "b7"
+        },
+        "2": {
+          "spelled": "D",
+          "degree": "7"
+        },
+        "3": {
+          "spelled": "Eb",
+          "degree": "1"
+        },
+        "4": {
+          "spelled": "Fb",
+          "degree": "b2"
+        },
+        "5": {
+          "spelled": "F",
+          "degree": "2"
+        },
+        "6": {
+          "spelled": "Gb",
+          "degree": "b3"
+        },
+        "7": {
+          "spelled": "G",
+          "degree": "3"
+        },
+        "8": {
+          "spelled": "Ab",
+          "degree": "4"
+        },
+        "9": {
+          "spelled": "A",
+          "degree": "#4"
+        },
+        "10": {
+          "spelled": "Bb",
+          "degree": "5"
+        },
+        "11": {
+          "spelled": "Cb",
+          "degree": "b6"
+        }
+      },
+      "Fb": {
+        "0": {
+          "spelled": "Dbb",
+          "degree": "b6"
+        },
+        "1": {
+          "spelled": "Db",
+          "degree": "6"
+        },
+        "2": {
+          "spelled": "Ebb",
+          "degree": "b7"
+        },
+        "3": {
+          "spelled": "Eb",
+          "degree": "7"
+        },
+        "4": {
+          "spelled": "Fb",
+          "degree": "1"
+        },
+        "5": {
+          "spelled": "Gbb",
+          "degree": "b2"
+        },
+        "6": {
+          "spelled": "Gb",
+          "degree": "2"
+        },
+        "7": {
+          "spelled": "Abb",
+          "degree": "b3"
+        },
+        "8": {
+          "spelled": "Ab",
+          "degree": "3"
+        },
+        "9": {
+          "spelled": "Bbb",
+          "degree": "4"
+        },
+        "10": {
+          "spelled": "Bb",
+          "degree": "#4"
+        },
+        "11": {
+          "spelled": "Cb",
+          "degree": "5"
+        }
+      },
+      "Gb": {
+        "0": {
+          "spelled": "C",
+          "degree": "#4"
+        },
+        "1": {
+          "spelled": "Db",
+          "degree": "5"
+        },
+        "2": {
+          "spelled": "Ebb",
+          "degree": "b6"
+        },
+        "3": {
+          "spelled": "Eb",
+          "degree": "6"
+        },
+        "4": {
+          "spelled": "Fb",
+          "degree": "b7"
+        },
+        "5": {
+          "spelled": "F",
+          "degree": "7"
+        },
+        "6": {
+          "spelled": "Gb",
+          "degree": "1"
+        },
+        "7": {
+          "spelled": "Abb",
+          "degree": "b2"
+        },
+        "8": {
+          "spelled": "Ab",
+          "degree": "2"
+        },
+        "9": {
+          "spelled": "Bbb",
+          "degree": "b3"
+        },
+        "10": {
+          "spelled": "Bb",
+          "degree": "3"
+        },
+        "11": {
+          "spelled": "Cb",
+          "degree": "4"
+        }
+      },
+      "Ab": {
+        "0": {
+          "spelled": "C",
+          "degree": "3"
+        },
+        "1": {
+          "spelled": "Db",
+          "degree": "4"
+        },
+        "2": {
+          "spelled": "D",
+          "degree": "#4"
+        },
+        "3": {
+          "spelled": "Eb",
+          "degree": "5"
+        },
+        "4": {
+          "spelled": "Fb",
+          "degree": "b6"
+        },
+        "5": {
+          "spelled": "F",
+          "degree": "6"
+        },
+        "6": {
+          "spelled": "Gb",
+          "degree": "b7"
+        },
+        "7": {
+          "spelled": "G",
+          "degree": "7"
+        },
+        "8": {
+          "spelled": "Ab",
+          "degree": "1"
+        },
+        "9": {
+          "spelled": "Bbb",
+          "degree": "b2"
+        },
+        "10": {
+          "spelled": "Bb",
+          "degree": "2"
+        },
+        "11": {
+          "spelled": "Cb",
+          "degree": "b3"
+        }
+      },
+      "Bb": {
+        "0": {
+          "spelled": "C",
+          "degree": "2"
+        },
+        "1": {
+          "spelled": "Db",
+          "degree": "b3"
+        },
+        "2": {
+          "spelled": "D",
+          "degree": "3"
+        },
+        "3": {
+          "spelled": "Eb",
+          "degree": "4"
+        },
+        "4": {
+          "spelled": "E",
+          "degree": "#4"
+        },
+        "5": {
+          "spelled": "F",
+          "degree": "5"
+        },
+        "6": {
+          "spelled": "Gb",
+          "degree": "b6"
+        },
+        "7": {
+          "spelled": "G",
+          "degree": "6"
+        },
+        "8": {
+          "spelled": "Ab",
+          "degree": "b7"
+        },
+        "9": {
+          "spelled": "A",
+          "degree": "7"
+        },
+        "10": {
+          "spelled": "Bb",
+          "degree": "1"
+        },
+        "11": {
+          "spelled": "Cb",
+          "degree": "b2"
+        }
+      }
+    }
+  }
+}

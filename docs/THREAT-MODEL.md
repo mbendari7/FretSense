@@ -1,6 +1,6 @@
 # FretSense Threat Model
 
-Status: draft (constitution v2.3.0, Principles IX and XIII). Owner: project owner. Reviewed by:
+Status: draft (constitution v3.0.0, Principles IX and XIII). Owner: project owner. Reviewed by:
 `privacy-auditor` and `security-reviewer`. Update this file whenever a feature adds a network
 call, stored media, a new permission or a new trust boundary.
 
@@ -29,7 +29,7 @@ call, stored media, a new permission or a new trust boundary.
 4. Client ↔ sync backend (opt-in only) [013].
 5. Owner's machine ↔ `ml/` training environment (local; datasets by reference).
 6. Browser sandbox ↔ local filesystem (profile export/import, user-supplied files) [001, 016].
-7. Build toolchain ↔ content (owner-authored markdown and YAML processed in CI) [001].
+7. Build toolchain ↔ content (agent-written, owner-approved markdown and YAML processed in CI) [001].
 
 ## Threats (STRIDE) and controls
 
