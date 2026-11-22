@@ -10,34 +10,34 @@
 
 ## Requirement Completeness
 
-- [ ] CHK001 Are accessible-name requirements defined for every interactive element, not only fretboard positions? [Completeness, Spec §FR-049]
-- [ ] CHK002 Is the screen-reader announcement content specified for drill feedback (correct, incorrect, revealed positions)? [Completeness, Spec §FR-032]
-- [ ] CHK003 Are focus-order and focus-visibility requirements defined for the fretboard (up to 8 × 25 markers)? [Gap, Spec §FR-049]
-- [ ] CHK004 Are requirements defined for keyboard movement across the fretboard (arrow keys by string/fret, or tab order)? [Gap, Spec §FR-049]
-- [ ] CHK005 Are reduced-motion requirements defined for feedback animations and the 600 ms auto-advance? [Gap, Spec §FR-032]
+- [x] CHK001 Are accessible-name requirements defined for every interactive element, not only fretboard positions? [Completeness, Spec §FR-049]
+- [x] CHK002 Is the screen-reader announcement content specified for drill feedback (correct, incorrect, revealed positions)? [Completeness, Spec §FR-032]
+- [x] CHK003 Are focus-order and focus-visibility requirements defined for the fretboard (up to 8 × 25 markers)? [Gap, Spec §FR-049]
+- [x] CHK004 Are requirements defined for keyboard movement across the fretboard (arrow keys by string/fret, or tab order)? [Gap, Spec §FR-049]
+- [x] CHK005 Are reduced-motion requirements defined for feedback animations and the 600 ms auto-advance? [Gap, Spec §FR-032]
 
 ## Requirement Clarity
 
-- [ ] CHK006 Is "distinguishable under deuteranopia, protanopia and tritanopia simulation" given a measurable criterion (e.g. a contrast or ΔE threshold)? [Clarity, Spec §FR-013]
-- [ ] CHK007 Is "readable from a music stand" quantified beyond the 24 px label minimum (e.g. viewing distance)? [Clarity, Spec §FR-048, Constitution VI]
-- [ ] CHK008 Is the fretboard's internal scroll at 390 px specified (which axis, whether the nut stays visible, scroll position on preset change)? [Clarity, Spec §FR-047]
+- [ ] CHK006 Is "distinguishable under deuteranopia, protanopia and tritanopia simulation" given a measurable criterion (e.g. a contrast or ΔE threshold)? [Clarity, Spec §FR-013] — **OWNER decision**
+- [ ] CHK007 Is "readable from a music stand" quantified beyond the 24 px label minimum (e.g. viewing distance)? [Clarity, Spec §FR-048, Constitution VI] — **OWNER decision**
+- [ ] CHK008 Is the fretboard's internal scroll at 390 px specified (which axis, whether the nut stays visible, scroll position on preset change)? [Clarity, Spec §FR-047] — **GAP (spec-reviewer 2026-11-22)**
 
 ## Requirement Consistency
 
-- [ ] CHK009 Is the 44 × 44 px target rule consistent with fretting positions on an 8-string, 24-fret neck at 390 px? [Consistency, Spec §FR-047, §FR-053]
-- [ ] CHK010 Are left-handed mirroring rules consistent with keyboard navigation direction and screen-reader order? [Consistency, Spec §FR-017, §FR-049]
-- [ ] CHK011 Are WCAG 2.2 AA contrast requirements applied to root markers, inlays and fret numbers in both themes? [Consistency, Spec §FR-013, §FR-048]
+- [x] CHK009 Is the 44 × 44 px target rule consistent with fretting positions on an 8-string, 24-fret neck at 390 px? [Consistency, Spec §FR-047, §FR-053]
+- [ ] CHK010 Are left-handed mirroring rules consistent with keyboard navigation direction and screen-reader order? [Consistency, Spec §FR-017, §FR-049] — **GAP (spec-reviewer 2026-11-22)**
+- [ ] CHK011 Are WCAG 2.2 AA contrast requirements applied to root markers, inlays and fret numbers in both themes? [Consistency, Spec §FR-013, §FR-048] — **GAP (spec-reviewer 2026-11-22)**
 
 ## Acceptance Criteria Quality
 
-- [ ] CHK012 Is SC-006's "automated check" specified (which tool or rule set, which screens)? [Measurability, Spec §SC-006]
-- [ ] CHK013 Is there a measurable criterion for screen-reader operability beyond automated checks (e.g. a manual pass with a named reader)? [Measurability, Gap]
+- [x] CHK012 Is SC-006's "automated check" specified (which tool or rule set, which screens)? [Measurability, Spec §SC-006]
+- [x] CHK013 Is there a measurable criterion for screen-reader operability beyond automated checks (e.g. a manual pass with a named reader)? [Measurability, Gap]
 
 ## Scenario & Edge Case Coverage
 
-- [ ] CHK014 Are requirements defined for the largest text size at 390 px (label overlap, truncation)? [Edge Case, Spec §FR-048]
-- [ ] CHK015 Are accessibility requirements defined for the instrument editor, export/import dialogs and the reset confirmation? [Coverage, Spec §FR-043, §FR-044, §FR-053]
-- [ ] CHK016 Are landscape-orientation phone requirements stated, or explicitly excluded? [Coverage, Gap]
+- [ ] CHK014 Are requirements defined for the largest text size at 390 px (label overlap, truncation)? [Edge Case, Spec §FR-048] — **GAP (spec-reviewer 2026-11-22)**
+- [ ] CHK015 Are accessibility requirements defined for the instrument editor, export/import dialogs and the reset confirmation? [Coverage, Spec §FR-043, §FR-044, §FR-053] — **GAP (spec-reviewer 2026-11-22)**
+- [x] CHK016 Are landscape-orientation phone requirements stated, or explicitly excluded? [Coverage, Gap]
 
 ## Notes
 
@@ -46,3 +46,8 @@
 - **Owner input needed**: CHK006 (a measurable colour-difference threshold), CHK007 (music-stand
   viewing distance).
 - Open for the reviewer: CHK001, CHK010–CHK012, CHK014, CHK015.
+
+## Review 2026-11-22 (spec-reviewer)
+
+- Satisfied (ticked): 9. Gaps: 5. Owner decisions: 2. Deferred: 0.
+- Gaps and owner items go to the owner with product-owner's proposed answers; they are ticked only after the spec is amended and re-checked.

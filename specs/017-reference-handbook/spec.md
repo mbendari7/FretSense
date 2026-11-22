@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-21
 
-**Status**: Draft (specify; spec-reviewer BLOCK and product-owner REVISE folded in; clarified 2026-11-22; re-review pending)
+**Status**: Draft (specify; spec-reviewer BLOCK and product-owner REVISE folded in; clarified 2026-11-22; spec-reviewer re-review PASS WITH NOTES; see reviews/ for product-owner status)
 
 **Input**: User description: "An interactive guidebook users can browse and search anytime, separate from the lessons: scales and modes, chords (every common type plus inversions and voicings), arpeggios, intervals, chord progressions (I–IV–V, ii–V–I, I–V–vi–IV, 12-bar blues, and more), keys, the circle of fifths, and a glossary. Every entry is interactive: shown on the fretboard for the user's instrument and tuning, playable as audio, transposable to any key, with labels switchable between note names, degrees and fingers. Chord voicing finder: every playable shape for a chord on the user's instrument, ranked by playability (reuse the fingering cost model). Progression explorer: choose a key and a progression, hear it with a backing loop, and see the matching scales to solo over. Fast search with fuzzy matching ('Am7', 'dorian', '2 5 1'). 'Practice this' on every entry jumps to a drill. 'Learn this' jumps to the related lesson. Users can favourite entries and build personal cheat sheets that export to PDF. All content is generated from the theory engine (no hardcoded tables), and all explanation text is original. Never copy text from books or websites; curriculum packs may only reference chapters."
 

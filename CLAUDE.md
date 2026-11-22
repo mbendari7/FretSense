@@ -38,7 +38,7 @@ highest authority. If this file disagrees with it, the constitution wins and thi
    - YIN pitch detection
    - the chromagram
    - the camera homography and pixel → (string, fret) mapping math
-      - the Viterbi fingering optimizer and its fingering cost model (005; 017 ranks voicings with it)
+   - the Viterbi fingering optimizer and its fingering cost model (005; 017 ranks voicings with it)
    - the knowledge-tracing update equations
    - the cross-correlation estimator for round-trip latency and audio–video offset (015)
    - **running** the ML training experiments
@@ -133,6 +133,50 @@ owner approval in the workflow table.
 - **Feedback:** the user-tester report path, star rating and top findings by severity.
 - **Needs your approval:** every NEEDS MAHMOUD item, change request and unapproved verdict.
 
+## Review rules (how gates pass, stop and get recorded)
+
+**Severity.** Every reviewer labels each finding BLOCKER, MAJOR or MINOR.
+- A gate **passes** when the latest round has no BLOCKER or MAJOR findings.
+- Each MINOR finding is either applied or logged as deferred in the ledger, with a reason.
+- PASS WITH NOTES counts as a pass only if none of its notes is BLOCKER or MAJOR.
+
+**Round limit.** A gate gets at most **2 re-review rounds** after the first review. If BLOCKER or
+MAJOR findings are still open after round 3, Claude stops and escalates to the owner. The
+escalation lists the open findings, what was tried and a recommendation. Claude never loops
+further on its own.
+
+**Order of authority** (higher wins when two sources disagree):
+1. Constitution.
+2. Owner decisions: clarify answers, approvals and anything the owner wrote in chat or in the
+   ledger.
+3. `docs/PRODUCT.md`.
+4. product-owner.
+5. Every other reviewer.
+
+Reviewers may **flag** an owner decision they think is wrong, as a MINOR finding tagged
+`OWNER-DECISION`. They never override one. Claude never reverses an owner decision because a
+reviewer asked; it raises the finding with the owner instead.
+
+**Approval is recorded.** "Approved" means a dated owner sign-off line in the ledger. A chat
+message counts only after Claude has copied it into the ledger, word for word, with the date.
+
+**Review ledger.** Every gate result is saved under `specs/NNN-*/reviews/`.
+- One file per review round: `YYYY-MM-DD-<agent>-r<round>.md` (e.g.
+  `2026-11-22-spec-reviewer-r1.md`).
+- Claude writes these files from the main session, because most reviewers are read-only.
+- Each file holds:
+  - the verdict, copied exactly;
+  - every finding, with its severity;
+  - **Applied:** what was changed, and where;
+  - **Deferred:** what was left, and why;
+  - **Owner sign-off:** a blank line that only the owner fills in.
+- `reviews/README.md` is the index: one row per round, giving the date, agent, round, verdict,
+  open BLOCKER/MAJOR count and sign-off.
+- Project skills run these loops and write the ledger as they go:
+  - `/loop-a NNN` runs spec-reviewer, then team loop A.
+  - `/gate-plan NNN` runs the plan gates.
+  - `/task-cycle TNNN` runs one implementation task.
+
 ## Commands
 
 **Spec Kit** (skills in `.claude/skills/`, scripts in `.specify/scripts/powershell/`):
@@ -196,7 +240,7 @@ FretSense/
 ├── data/                             # dataset manifests, splits and cards (media by reference) [007+]
 ├── fixtures/                         # theory JSON, golden audio/video clips
 ├── bench/                            # latency/accuracy/fps harnesses + baselines
-├── docs/{adr/,feedback/,AI-WORKFLOW.md,SKILLS-MATRIX.md,THREAT-MODEL.md,ARCHITECTURE.md}
+├── docs/{adr/,feedback/,PRODUCT.md,AI-WORKFLOW.md,SKILLS-MATRIX.md,THREAT-MODEL.md,ARCHITECTURE.md}
 └── .github/workflows/
 ```
 

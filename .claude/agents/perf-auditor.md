@@ -32,6 +32,9 @@ update it.
   estimate's stability, and resampler cost.
 - **ML inference:** model load time, per-call latency p50/p95, and memory, compared before and
   after int8 quantisation.
+- **Product budgets:** handbook search per-keystroke p95 (017 SC-002), Studio Live onset → tab
+  p95 (012 FR-011), Lighthouse scores and JS size budgets (018 FR-026), and demo-mode time to
+  transcribed tab (018 SC-007).
 
 ## Method
 1. Record the environment: machine, OS, browser or Node version, Rust toolchain, buffer size,

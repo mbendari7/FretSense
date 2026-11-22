@@ -8,6 +8,10 @@
 
 **Input**: User description: "$ARGUMENTS"
 
+**Practice-session value**: [How this helps a real practice session, in one or two sentences (Constitution VI)]
+
+**Release** (`docs/PRODUCT.md`): [Which release this ships in, or which slice ships in which release (Constitution VI)]
+
 ## User Scenarios & Testing *(mandatory)*
 
 <!--

@@ -22,8 +22,9 @@ plans, tasks, lessons or docs. If a test can't compile without an implementation
 and report the exact stub signature needed (from `contracts/` or `plan.md`). Don't write the stub.
 
 The owner writes YIN, the chromagram, the homography and pixel → (string, fret) mapping, the
-Viterbi fingering optimizer and the knowledge-tracing update equations, and runs all training
-experiments. For those, write tests, fixtures, benchmarks and eval harnesses only, and don't hint
+Viterbi fingering optimizer and its fingering cost model, the knowledge-tracing update equations
+and the cross-correlation estimator for round-trip latency and audio–video offset (015), and runs
+all training experiments. For those, write tests, fixtures, benchmarks and eval harnesses only, and don't hint
 at the implementation inside the test code. Parameterise instrument-dependent tests over **all**
 InstrumentProfiles.
 

@@ -18,9 +18,15 @@ check out, install or delete anything.
 ## Checks, in priority order
 1. **Constitution and ownership violations.**
    - Code with no approved spec, plan and tasks behind it.
-   - AI-written YIN pitch detection or chromagram implementation (owner-only).
-   - AI-written lesson prose in `content/lessons/`.
+   - AI-written human-owned code (owner-only): YIN pitch detection; the chromagram; the camera homography and pixel → (string, fret) mapping; the Viterbi fingering optimizer and its fingering cost model; the knowledge-tracing update equations; the cross-correlation estimator for round-trip latency and audio–video offset (015).
+   - AI-written lesson prose in `content/lessons/` or handbook text in `content/handbook/`.
    - Impure theory engine: DOM, I/O, randomness or time inside `packages/theory`.
+   - Hardcoded string count, tuning, fret count or device model outside `InstrumentProfile` or
+     shipped preset data (Constitution VIII, XIII).
+   - Content hidden, disabled or gated by progress, or an adaptive behaviour with no user
+     setting (Constitution XIII).
+   - Camera or ML enabled by default, or a feature with no audio-only path (Constitution XI).
+   - AI attribution anywhere: `Co-Authored-By` trailers, AI credited in commits, PRs or docs (Constitution VII).
 2. **Traceability.**
    - Every changed file maps to the task being implemented.
    - Every FR the task touches has tests.

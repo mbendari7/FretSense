@@ -6,7 +6,7 @@
 > requirement exists in an approved or draft spec. Paths are the target layout from `CLAUDE.md` and
 > don't exist until their tasks land. Kept in sync by the `docs-keeper` subagent.
 
-Status as of 2026-11-22: **no code yet**. 001 is in planning. 006, 007, 008, 015 and 016 are
+Status as of 2026-11-22: **no code yet**. 001 has a plan and tasks drafted. 006, 007, 008, 015 and 016 are
 specified and reviewed; 017 (reference handbook) and 018 (product shell and launch) are newly
 specified; 009–013 are specify-only drafts (012 amended as the Studio). Constitution v2.3.0 ties
 every spec to a release in [PRODUCT.md](PRODUCT.md) (ADR-0011).
@@ -119,7 +119,7 @@ every spec to a release in [PRODUCT.md](PRODUCT.md) (ADR-0011).
 | Threat model, on-device privacy, mic/camera indicators, COOP/COEP | `docs/THREAT-MODEL.md` → Constitution IX; 015 FR-022 | Drafted |
 | Dependency scanning, secrets handling | CI → security-reviewer | Planned |
 | WCAG 2.2 AA, keyboard, screen readers, colour-blind-safe fretboard | → 001 FR-013, FR-047–FR-049 | Specified |
-| ADRs, C4 architecture doc, API reference, contributing guide | `docs/adr/` (0001–0005), `docs/ARCHITECTURE.md` (planned at 001 plan) | ADRs drafted |
+| ADRs, C4 architecture doc, API reference, contributing guide | `docs/adr/` (0001–0011), `docs/ARCHITECTURE.md` (deferred, before 002) | ADRs drafted (all Proposed) |
 
 ## Product, UX and release management
 
@@ -140,4 +140,4 @@ every spec to a release in [PRODUCT.md](PRODUCT.md) (ADR-0011).
 
 | Skill | Where | Why | How tested / evidenced | Status |
 |-------|-------|-----|------------------------|--------|
-| Multi-agent orchestration: role-scoped subagents with least-privilege tools, sequenced as gates and feedback loops | `.claude/agents/` (13 agents), `CLAUDE.md` workflow table + "Team loop", `docs/AI-WORKFLOW.md` §2 | Catch spec, design, privacy and usability problems before code, while every decision stays with the owner | Gate verdicts recorded in each PR; caught mistakes logged in `docs/AI-WORKFLOW.md` §5; persona reports in `docs/feedback/` | Process defined; no team-loop run yet |
+| Multi-agent orchestration: role-scoped subagents with least-privilege tools, sequenced as gates and feedback loops | `.claude/agents/` (13 agents), `CLAUDE.md` workflow table + "Team loop", `docs/AI-WORKFLOW.md` §2 | Catch spec, design, privacy and usability problems before code, while every decision stays with the owner | Gate verdicts recorded in each PR; caught mistakes logged in `docs/AI-WORKFLOW.md` §5; persona reports in `docs/feedback/` | In use: loop A run on 001, 012, 017, 018 (2026-11-22) |

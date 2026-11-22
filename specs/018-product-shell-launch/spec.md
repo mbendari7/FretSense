@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-21
 
-**Status**: Draft (specify; spec-reviewer BLOCK and product-owner REVISE folded in; clarified 2026-11-22; re-review pending)
+**Status**: Draft (specify; spec-reviewer BLOCK and product-owner REVISE folded in; clarified 2026-11-22; spec-reviewer re-review PASS WITH NOTES; see reviews/ for product-owner status)
 
 **Input**: User description: "Everything that makes it feel like a product: a landing page (the pitch, a short demo video or GIF, a feature tour, and a 'Try it now' button); demo mode that works with NO guitar, interface or camera, where bundled recorded audio and video clips play through the real pitch, vision and transcription pipeline in the browser, so a recruiter can see everything in 60 seconds; first-run onboarding (create a profile, set up My Gear or skip, goals, and a suggested learning path); app navigation (Home (today's practice), Lessons, Handbook, Practice, Studio (record → tab and notation), Progress, Settings); a consistent design system (colour-blind-safe colours, typography, components, dark and light themes, responsive down to phones); accessibility (WCAG AA), loading and empty states, friendly error states (no mic, camera denied, device unplugged), and an offline indicator; production quality (deployed on a custom domain, PWA install, performance budget with Lighthouse at least 90, privacy-friendly opt-in analytics, error tracking, a changelog and release notes); a /docs section with a user guide, FAQ and gear setup guides."
 

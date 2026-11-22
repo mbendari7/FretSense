@@ -1,6 +1,6 @@
 # FretSense Threat Model
 
-Status: initial draft (constitution v2.2.0, Principles IX and XIII). Owner: project owner. Reviewed by:
+Status: draft (constitution v2.3.0, Principles IX and XIII). Owner: project owner. Reviewed by:
 `privacy-auditor` and `security-reviewer`. Update this file whenever a feature adds a network
 call, stored media, a new permission or a new trust boundary.
 
@@ -26,10 +26,10 @@ call, stored media, a new permission or a new trust boundary.
 1. Browser sandbox ↔ device sensors (permission prompts).
 2. Main thread ↔ workers/worklets (same origin; SharedArrayBuffer needs COOP/COEP).
 3. Client ↔ static host (host chosen in a later ADR): code and model integrity.
-6. Browser sandbox ↔ local filesystem (profile export/import, user-supplied files) [001, 016].
-7. Build toolchain ↔ content (owner-authored markdown and YAML processed in CI) [001].
 4. Client ↔ sync backend (opt-in only) [013].
 5. Owner's machine ↔ `ml/` training environment (local; datasets by reference).
+6. Browser sandbox ↔ local filesystem (profile export/import, user-supplied files) [001, 016].
+7. Build toolchain ↔ content (owner-authored markdown and YAML processed in CI) [001].
 
 ## Threats (STRIDE) and controls
 
@@ -52,6 +52,17 @@ call, stored media, a new permission or a new trust boundary.
 | T15 | Clickjacking or framing of reset/import | Tampering | `frame-ancestors 'none'` header; destructive actions hidden when framed | 001 |
 | T16 | A compromised or stale service worker keeps a bad build alive | Tampering | Prompt-to-reload updates; `navigateFallbackDenylist`; bundled Workbox; same-origin only | 001 |
 | T17 | Storage-quota exhaustion from repeated large imports | DoS | 20 MB file cap; array caps; quota errors abort the transaction with a readable message | 001 |
+
+## Not yet modelled (added when each feature is planned)
+
+These specs add assets, flows or permissions that this model doesn't cover yet. Each one must be
+added, and pass `privacy-auditor`, at that feature's `/speckit-plan` (Constitution IX).
+
+| Feature | What needs modelling |
+|---------|----------------------|
+| 012 Studio | Opt-in recordings, MusicXML / tab imports and exports, the transcription library |
+| 017 Handbook | Cheat-sheet PDF export, favourites and sheets in IndexedDB |
+| 018 Shell and launch | Opt-in analytics and error tracking (a new network flow and its consent scope), the deploy host, the bundled demo clip |
 
 ## Out of scope (for now)
 Physical access to an unlocked device, and compromise of the browser itself.

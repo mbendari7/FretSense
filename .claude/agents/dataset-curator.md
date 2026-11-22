@@ -22,7 +22,10 @@ stored by reference. Don't download or copy media into git.
    theory engine's CLI if one exists). Onsets are monotonic. Chord labels parse.
 2. **Leakage.** No recording, session, performer, song or augmentation-source spans more than one
    split. Near-duplicate audio and video (hash or fingerprint, if tooling exists) is in a single
-   split. Active-learning corrections never enter an existing test split.
+   split. Active-learning corrections never enter an existing test split. Single-performer (owner)
+   data has its own session-disjoint test set, reported separately from performer-disjoint
+   evaluation, and test-split group assignment is unchanged from the previous version
+   (Constitution X).
 3. **Balance and coverage.** Per-instrument, per-string, per-class counts. Flag classes under the
    spec's minimum.
 4. **Card accuracy.** The card's counts, sources, licences, consent status, version and known

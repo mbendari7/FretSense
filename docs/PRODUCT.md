@@ -5,6 +5,8 @@
 > what may never be broken. If this page and the constitution disagree, the constitution wins and
 > this page gets fixed. The `product-owner` subagent reads this page before every decision.
 
+**Current release:** v0.1 "Fretboard" (specification and planning; no code yet).
+
 ## One-line pitch
 
 **FretSense is the guitar and bass teacher, handbook and transcriber in one app. It hears and sees

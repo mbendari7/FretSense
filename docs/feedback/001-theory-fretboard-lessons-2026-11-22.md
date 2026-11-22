@@ -1,0 +1,85 @@
+# Feedback: Theory Engine, Interactive Fretboard and Lesson System (001), mode A, 2026-11-22
+
+Spec walkthrough of `specs/001-theory-fretboard-lessons/spec.md` (Draft, amended 2026-11-21),
+read against `docs/PRODUCT.md` (v0.1 "Fretboard"). Supporting artefacts checked only to avoid
+false findings: `contracts/ui-routes.md`, `contracts/profile-export.md`, and specs 016, 017 and 018
+(onboarding, landing page, navigation, generic states and the glossary belong to them and are not
+re-flagged here unless 001 leaves a gap they can't fill). Personas: Maya, Dev, Sam, Priya, Alex.
+
+## Summary
+- Overall: 3/5 stars. The theory engine is rigorous, nothing is locked, bass gets real drills,
+  and the no-instrument, storage-full and invalid-settings states are thought through. But the
+  drills, the core daily task, leave out things a first-time or screen-reader user hits within
+  a minute: whether labels give the answer away, which string "string 6" is, what the first drill
+  even asks, and how a walking line is entered and judged.
+- Top 3 problems:
+  1. Nothing says the fretboard hides note labels (and the screen-reader name hides the note)
+     while a drill question is open. As written, the note-finding drill can show its own answer
+     (findings 1 and 2).
+  2. The first-run defaults for drills and the explorer aren't defined. Maya's first drill could
+     be all 17 spellings on all strings over 22 frets, and Priya's first explorer view could be an
+     empty neck (findings 3 and 4).
+  3. The walking-bass drill (US6 AS3) doesn't say how 16 tapped notes are entered, corrected or
+     when they're judged. R3 can't be judged until the next bar exists, which clashes with
+     FR-032's "feedback within 100 ms" (finding 6).
+- What worked well: nothing is locked, and you can jump straight to any lesson stage (FR-065,
+  US2 AS10, SC-012). The one-tap instrument picker instead of a hidden 6-string default (FR-053).
+  Taps on the wrong string are ignored with a hint rather than marked wrong (US3 AS3). After a
+  mistake the correct positions stay until Continue. Root markers use shape, not colour only
+  (FR-013). Arrow keys follow the mirrored direction in left-handed view (FR-049). Bad drill
+  settings are rejected before the drill starts, with a reason (FR-061). Bass drills are untimed
+  and available on any instrument (US6). The bass-only lesson notice still opens the lesson
+  (US2 AS8). The export screen is honest that the file is unencrypted (FR-043). The reset text
+  says it hides progress rather than pretending to erase it (FR-044).
+
+## Findings
+| # | Persona | Severity | Where (story / screen / FR) | What happened | What I expected | Suggested acceptance criterion |
+|---|---------|----------|-----------------------------|---------------|-----------------|-------------------------------|
+| 1 | Maya, Dev | BLOCKER | US3, US4, US6 drill screens; FR-012, FR-021, FR-030 | My label mode is "Note names", which I set in the explorer and which persists (FR-021). I start "Find G on string 6" and nothing says the labels switch off. If they don't, every G is written on the neck and the drill tests nothing. | During a question the neck shows no note, degree or function labels and no scale highlights. They come back with the feedback. | While a drill question is unanswered, fretboard positions show no note/degree/function text and no context highlights, whatever the saved label mode. Only the drill's own markers (prompt string, reference position, window) show. The saved label mode is unchanged afterwards. E2E: with label mode "Note names" saved, a note-finding question's neck contains no note text. |
+| 2 | Alex | BLOCKER | US3; FR-049 (accessible names) | Position names are "String 3, fret 2, A3, degree 5". In a note-finding drill my screen reader reads the answer as I arrow along the string. The drill is either trivial or, if names are silenced, unusable. | During a question, names give string and fret only. After I answer, the feedback tells me the note. | While a drill question is unanswered, every position's accessible name is "String N, fret F" (plus "reference" or "inside window" where relevant), with no note, octave or degree. After the answer, names return to the full form. Automated a11y test on each drill type, plus the manual NVDA/VoiceOver pass. |
+| 3 | Maya | MAJOR | US3; FR-031 (settings); 018 FR-009 (Home quick drill uses "last drill settings") | FR-031 gives a default only for question count (20). On my first drill there are no "last settings", so nothing says which strings, frets or note set I get. If it's all 17 spellings on 6 strings up to fret 22, I'll quit in a minute. | A gentle first drill I can make harder. | First-run defaults are written into FR-031: note set "naturals", all strings of the active instrument, frets 0–12 (clamped to the fret count), any octave, 20 questions. They're used whenever the profile has no saved drill settings, on guitar and bass alike. SC-007 is measured with these defaults. |
+| 4 | Priya, Maya | MAJOR | US1 explorer first open; FR-011; SC-004 | The spec says what happens after I pick a root and a scale, but not what `/explore` shows the first time. A blank neck with two empty dropdowns says nothing about the product in my 60 seconds. | Something already on the neck that I can change. | On a profile with no saved explorer state, `/explore` opens with a defined default (for example C major, note names, frets 0–12), fully rendered, with root and type pickers visible without scrolling at 390 × 844 px. Afterwards it reopens in the last-used state. SC-004 is also measured from a fresh profile. |
+| 5 | Priya, Maya, Sam | MAJOR | US1, US5; `contracts/ui-routes.md` (`/` = "explorer shortcut, library, last lesson"); 018 FR-008/FR-034 (destinations: Home, Lessons, Handbook, Practice…) | 001's route table puts the explorer on its own Home, but 018's Home and bottom bar have no Explore and no Key helper. The 017 Handbook also shows scales, chords and keys on the neck. I can't tell where the explorer lives, or why there are two ways to see A Dorian. | One clear place to "see a scale" and one for "see a key", reachable from the nav. | The spec names where the explorer (US1) and the key helper (US5) are reached in the v0.1 shell: either 018 destinations or Handbook entry views. 001's `/` route defers to 018's Home. From Home, any scale is on the neck in ≤ 3 interactions (SC-004). If the explorer and Handbook stay separate, each links to the other with the same state. |
+| 6 | Dev | MAJOR | US6 AS3; FR-058 (R3 needs the next bar's beat 1; the line loops); FR-032 | I tap 16 notes over \| C \| Am \| Dm \| G \|. When is each note judged? Beat 4 of bar 1 can't be judged until I've entered bar 2's beat 1, and bar 4's beat 4 needs bar 1. Can I undo a misplaced tap? Which bar and beat am I on? FR-032's 100 ms feedback can't hold for R3. | A clear entry grid, undo, and judging when the line is complete. | The walking-bass screen shows the bars and beats with the current slot highlighted and announced ("Bar 2, beat 3, chord Am"). Undo removes the last note. Any slot can be selected and re-entered before checking. R1, R2 and R4 are judged per note within FR-032's budget; R3 for bar n is judged once bar n+1's beat 1 exists (bar 1 for the last bar). Every broken rule is shown on its slot. |
+| 7 | Dev | MAJOR | US2 AS4; FR-026 (preset replaces the whole geometry; attempts get a null instrument id) | A lesson preset names `bass4-drop-d`. On my 5-string, See and Drill switch to a 4-string I don't own, and my drill answers don't count toward my bass (null instrument id). Declining a cross-family preset isn't defined either: what does See show then? | The choice to see the lesson on my own instrument, with my answers counted to it. | Every lesson preset banner offers "Use my instrument instead", which applies the root, type, labels and window to the active instrument (window clamped) and records attempts with its instrument id. Declining a cross-family preset does the same. The banner names the preset in plain words (for example "Drop D: low string tuned down to D") and the choice is remembered per lesson. |
+| 8 | Sam | MAJOR | US7 AS3; FR-043 copy import; `contracts/profile-export.md` ("copy" gives every record a new id) | I practise on my laptop and phone, and the profile ids differ (each device created its own). I copy laptop → phone, later phone → laptop: the laptop's own attempts come back under new ids, so they're duplicated. Importing the same file twice doubles everything. SC-009 only tests restore into the same profile. | Moving progress between my two devices never duplicates attempts. | Copy import is idempotent: every record keeps an origin id, and records whose origin id already exists in the target profile (or that originated there) are skipped and counted as "unchanged" in the preview. On a fresh install whose automatic profile has no attempts, import offers "Use this file's profile" (restore with the file's profile id). Test: A → B, then B → A, then A → B again, gives 0 duplicate attempts in both profiles. |
+| 9 | Alex | MAJOR | US3–US6; FR-032 (600 ms auto-advance, kept under reduce motion); FR-049 | After a correct answer the next prompt replaces the screen after 600 ms. My screen reader is still saying "Correct, G on string 6 fret 3" when the new prompt arrives, and one of the two gets cut off. There's no way to slow it down (WCAG 2.2.1). | I control the pace. | A per-profile setting "After a correct answer": 600 ms (default), 1.5 s, or wait for Continue. The next prompt is announced only after the feedback announcement is queued, never replacing it. Covered by the manual NVDA/VoiceOver pass. |
+| 10 | Maya | MAJOR | US3 AS1 ("Find G on string 6"); FR-030; Assumptions (string 1 = highest pitched) | I don't know which string is "string 6". The spec never says whether string 6 is drawn at the top or bottom of the neck, and the prompt is just a number. On bass it's "string 4" or "string 5", which differs by instrument. | The prompt tells me which string in words I understand, and the neck shows it. | Drill prompts name the string by number and open note ("string 6, low E"; on 5-string bass "string 5, low B"), in the context spelling. The prompted string is highlighted (shape or thickness, not colour only). The spec states the neck orientation (lowest-pitched string at the bottom, as the player looks down) and that it's the same in every screen. |
+| 11 | Maya | MAJOR | US1 AS2/AS4/AS6, US5 AS1–AS2 (labels b3, b7, m7b5, vii°, viiø7, E#); 017 FR-012a covers Handbook entries only | Degree labels, chord symbols and Roman numerals appear in the explorer, key helper and drill summaries with no explanation. When F# major shows "E#" I think it's a bug. 017's glossary is one tap away in the Handbook, but not on 001's screens. | Tap a strange label and see what it means, without leaving. | Every degree, function, chord symbol, Roman numeral and drill-settings term on 001 screens (explorer, key helper, drill setup and summary) opens its 017 glossary definition in place in one tap or key press. Spellings like E#, Cb and double accidentals link to a "why is it spelled this way" entry. A build check fails on any 001 label missing from the glossary. |
+| 12 | Alex | MAJOR | US4 AS3 (chord-tone window 5–8); FR-036; FR-057 (arpeggio window) | The window is presumably shaded on the neck. Nothing says how it's shown without colour or announced. Blind, I don't know where frets 5–8 begin, so a G outside it is "wrong" for a reason I couldn't perceive. | The window is in the prompt text and marked by more than colour. | The prompt text includes the window ("b7 of A7, frets 5 to 8"), positions inside it have "inside window" in their accessible name, and the window boundary is drawn with a line or pattern, not only a tint. An incorrect-because-outside answer says "Outside frets 5 to 8". |
+| 13 | Maya, Sam | MINOR | US3 AS4; FR-034; Edge Cases (interrupted drill) | There's no "End drill" control, and leaving only pauses the drill. If I stop at question 12 of 20, do I see what I got right? And is a paused drill still there after I close the app? | End early and still get a summary. | An "End drill" control shows the summary for the answered questions, marked "ended early" (still no Drill-stage completion, FR-028). The spec states whether a paused session survives an app reload. |
+| 14 | Dev | MINOR | US3 AS1–AS6; US1 AS1–AS4 | Every note-finding scenario and most explorer scenarios are 6-string. Exact-octave mode is only specified on guitar, and bass octave numbers (E1, B0) are where people get it wrong. | Bass in the acceptance scenarios, not just in property tests. | US3 gains a bass scenario: 5-string BEADG, exact octave, "Find E1 on string 5", only fret 5 correct and fret 17 (E2) incorrect. US1 gains a 5-string degrees-label scenario. |
+| 15 | Maya | MINOR | FR-031 note-set names ("naturals + sharps"); FR-034 ("median response time"); US1 AS7 ("F#3") | "Naturals", "median" and octave numbers aren't words I know. | Plain labels with the term underneath. | UI copy uses plain labels ("Letters only (A–G)", "Typical time") with the technical term secondary and linked to the glossary. |
+| 16 | Sam | MINOR | FR-043 export preview ("every attempt with its time and response time") | After months I'll have thousands of attempts. Listing every one before export is a wall I'll scroll past. | A summary, with details if I want them. | The export screen shows counts per record type and date range first, with the full list expandable (virtualised). The unencrypted warning stays above the fold. |
+| 17 | Sam | MINOR | FR-066a preview counts ("added, restored, updated, hidden") | "Hidden" and "restored" mean nothing unless you know about tombstones. | Words that describe my progress. | The preview explains each count in a sentence ("12 answers you reset earlier will come back"). |
+| 18 | Alex | MINOR | FR-013; 018 FR-015 (marker categories distinguishable) | 018 tests "marker categories", but 001 never lists them: in-scale, root, tapped, correct, incorrect, revealed answer, interval reference, window, R–5–O shape. | A list the 018 check can test against. | 001 lists its fretboard marker categories, each with its shape or label and accessible-name suffix. Every pair is in 018's SC-005 simulation check. |
+| 19 | Alex | MINOR | FR-047 (neck scrolls inside its area); FR-049 | On a phone the neck scrolls horizontally. When I arrow to fret 15, it may be off screen. | Focus scrolls into view. | Moving focus on the fretboard scrolls the focused position fully into view (and not under the bottom bar, 018 FR-016). |
+| 20 | Maya | MINOR | US5; FR-038 (30 keys) | A flat list of 30 keys includes Cb major and A# minor, which look like typos to me. | Common keys first, rare spellings grouped. | Keys are listed in circle-of-fifths order, with enharmonic pairs (B/Cb, F#/Gb, C#/Db) side by side and the 7-accidental spellings visually secondary. |
+| 21 | Priya, Dev | IDEA | US1 tap a position; US6 walking bass; 017 FR-017 (playback ships in v0.1 core) | The Handbook plays scales in v0.1, but the explorer and the bass drills are silent. I tap a note and nothing happens. Dev can't hear the walking line he just wrote. | Reuse 017's playback. | Backlog: tapping a position in the explorer can play it (off by default, a toggle), and the walking-bass and chord-tone-lock drills offer "Play my line" after checking. |
+| 22 | Sam | IDEA | US7; FR-041 | Weighting brings up string 3 again and again, and I don't know why. | A reason. | Backlog: the drill summary says "More questions on string 3: you missed 40% there", with a link to the adaptive-weighting setting. |
+| 23 | Sam | IDEA | US2 library | Once my book pack has 30 lessons, I want to type "modes" and jump. | Library filter. | Backlog (016 or 017): a text filter over lesson titles and topic tags in the library. |
+
+## Persona quotes
+> Maya: "I picked 'Find G on string 6' and the board already said G everywhere. Then I didn't
+> know if string 6 was the top one or the bottom one. What's a b3?"
+
+> Dev: "Root–fifth–octave and chord-tone lock on my five-string, finally. But the lesson switched
+> me to a four-string I don't own, and the walking-bass drill didn't say when it would tell me I'd
+> messed up beat four."
+
+> Sam: "I love that I can jump straight to the Drill. I'm scared of the export, though: I moved my
+> progress phone → laptop → phone and it looked like I'd practised twice as much."
+
+> Priya: "If the fretboard is already lit up when I land, I get it in five seconds. If it's blank
+> with two dropdowns, I'm gone. And is this the 'Handbook' or the 'Explorer'? Your nav doesn't
+> say."
+
+> Alex: "The keyboard model is good, and the root shape is good. But my screen reader reads out the
+> answer in a note-finding drill, and the next question talks over 'Correct'."
+
+## Metrics (Mode B)
+Not applicable (Mode A spec walkthrough; nothing was run).
+
+| Task | Persona | Time | Completed? |
+|------|---------|------|------------|
+| — | — | — | — |

@@ -10,43 +10,43 @@
 
 ## Requirement Completeness
 
-- [ ] CHK001 Are the common record fields (id, local profile id, created, updated, schema version, tombstone) required for every persisted record type, with no exceptions listed? [Completeness, Spec §FR-066]
-- [ ] CHK002 Is every persisted record type in 001 named, so SC-013's "every record type" check has a closed list? [Completeness, Spec §SC-013, Gap]
-- [ ] CHK003 Are the fields of an attempt that count as its "immutable payload" listed explicitly? [Completeness, Spec §FR-066a]
-- [ ] CHK004 Does the spec say whether tombstoned records are included in exports? [Gap, Spec §FR-043]
-- [ ] CHK005 Is the behaviour defined when an import references an instrument id that doesn't exist in the file or on the device? [Gap, Spec §FR-043]
-- [ ] CHK006 Are migration requirements defined for older export schema versions, including what happens if a migration step fails? [Completeness, Recovery, Spec §FR-043]
+- [ ] CHK001 Are the common record fields (id, local profile id, created, updated, schema version, tombstone) required for every persisted record type, with no exceptions listed? [Completeness, Spec §FR-066] — **GAP (spec-reviewer 2026-11-22)**
+- [ ] CHK002 Is every persisted record type in 001 named, so SC-013's "every record type" check has a closed list? [Completeness, Spec §SC-013, Gap] — **GAP (spec-reviewer 2026-11-22)**
+- [ ] CHK003 Are the fields of an attempt that count as its "immutable payload" listed explicitly? [Completeness, Spec §FR-066a] — **GAP (spec-reviewer 2026-11-22)**
+- [x] CHK004 Does the spec say whether tombstoned records are included in exports? [Gap, Spec §FR-043]
+- [x] CHK005 Is the behaviour defined when an import references an instrument id that doesn't exist in the file or on the device? [Gap, Spec §FR-043]
+- [x] CHK006 Are migration requirements defined for older export schema versions, including what happens if a migration step fails? [Completeness, Recovery, Spec §FR-043]
 
 ## Requirement Clarity
 
-- [ ] CHK007 Is "newest updated wins" defined with an ordering that holds under clock skew between devices? [Clarity, Spec §FR-066a]
-- [ ] CHK008 Is the tie-break ("the lexicographically larger id of the writing device") unambiguous about which id is meant and where it is stored? [Ambiguity, Spec §FR-066a]
-- [ ] CHK009 Is "restore" vs "copy" import chosen by a rule the user can see and predict, rather than implied? [Clarity, Spec §FR-043]
-- [ ] CHK010 Is the geometry id's input (family + ordered open strings, spelling included) defined precisely enough that two devices always compute the same id? [Clarity, Spec §FR-051]
-- [ ] CHK011 Is it stated whether enharmonically equal tunings (Eb2 vs D#2) share a geometry id? [Ambiguity, Spec §FR-051]
+- [ ] CHK007 Is "newest updated wins" defined with an ordering that holds under clock skew between devices? [Clarity, Spec §FR-066a] — **GAP (spec-reviewer 2026-11-22)**
+- [x] CHK008 Is the tie-break ("the lexicographically larger id of the writing device") unambiguous about which id is meant and where it is stored? [Ambiguity, Spec §FR-066a]
+- [ ] CHK009 Is "restore" vs "copy" import chosen by a rule the user can see and predict, rather than implied? [Clarity, Spec §FR-043] — **GAP (spec-reviewer 2026-11-22)**
+- [x] CHK010 Is the geometry id's input (family + ordered open strings, spelling included) defined precisely enough that two devices always compute the same id? [Clarity, Spec §FR-051]
+- [x] CHK011 Is it stated whether enharmonically equal tunings (Eb2 vs D#2) share a geometry id? [Ambiguity, Spec §FR-051]
 
 ## Requirement Consistency
 
-- [ ] CHK012 Are reset (FR-044), tombstones (FR-066) and restore-import (FR-066a) consistent, so that export → reset → import can satisfy SC-009? [Consistency, Spec §FR-044, §FR-066a, §SC-009]
-- [ ] CHK013 Is FR-043's rejection rule (attempt payload conflict) consistent with FR-066a's generic merge for later sync? [Consistency, Spec §FR-043, §FR-066a]
-- [ ] CHK014 Do FR-053 (geometry id changes on tuning edits) and FR-041 (item keys) agree on which attempts count toward an item? [Consistency, Spec §FR-041, §FR-053]
-- [ ] CHK015 Does the profile settings record (FR-067) own the same fields that 016 FR-009 refers to, so 016 adds rather than moves fields? [Consistency, Spec §FR-067]
+- [x] CHK012 Are reset (FR-044), tombstones (FR-066) and restore-import (FR-066a) consistent, so that export → reset → import can satisfy SC-009? [Consistency, Spec §FR-044, §FR-066a, §SC-009]
+- [x] CHK013 Is FR-043's rejection rule (attempt payload conflict) consistent with FR-066a's generic merge for later sync? [Consistency, Spec §FR-043, §FR-066a]
+- [x] CHK014 Do FR-053 (geometry id changes on tuning edits) and FR-041 (item keys) agree on which attempts count toward an item? [Consistency, Spec §FR-041, §FR-053]
+- [x] CHK015 Does the profile settings record (FR-067) own the same fields that 016 FR-009 refers to, so 016 adds rather than moves fields? [Consistency, Spec §FR-067]
 
 ## Acceptance Criteria Quality
 
-- [ ] CHK016 Are the merge properties SC-013 tests (convergence, idempotence, no id in two profiles) stated as measurable outcomes? [Measurability, Spec §SC-013]
-- [ ] CHK017 Is the import size limit (20 MB) justified against the stated scale (≤ 50,000 attempts)? [Measurability, Spec §FR-043, Assumption]
+- [ ] CHK016 Are the merge properties SC-013 tests (convergence, idempotence, no id in two profiles) stated as measurable outcomes? [Measurability, Spec §SC-013] — **GAP (spec-reviewer 2026-11-22)**
+- [ ] CHK017 Is the import size limit (20 MB) justified against the stated scale (≤ 50,000 attempts)? [Measurability, Spec §FR-043, Assumption] — **GAP (spec-reviewer 2026-11-22)**
 
 ## Edge Case & Recovery Coverage
 
-- [ ] CHK018 Are requirements defined for an import interrupted part-way (tab closed, storage quota hit)? [Recovery, Gap]
-- [ ] CHK019 Is the behaviour specified when persistent storage is denied and the browser evicts data? [Edge Case, Spec §FR-045]
-- [ ] CHK020 Are requirements defined for importing a file whose local profile id matches a tombstoned or erased profile (016)? [Edge Case, Spec §FR-043]
-- [ ] CHK021 Is the "deleted instrument" grouping in all-time stats defined for attempts whose instrument is tombstoned but whose geometry matches a live instrument? [Edge Case, Spec §FR-053]
+- [x] CHK018 Are requirements defined for an import interrupted part-way (tab closed, storage quota hit)? [Recovery, Gap]
+- [ ] CHK019 Is the behaviour specified when persistent storage is denied and the browser evicts data? [Edge Case, Spec §FR-045] — **GAP (spec-reviewer 2026-11-22)**
+- [ ] CHK020 Are requirements defined for importing a file whose local profile id matches a tombstoned or erased profile (016)? [Edge Case, Spec §FR-043] — **Deferred → 016**
+- [ ] CHK021 Is the "deleted instrument" grouping in all-time stats defined for attempts whose instrument is tombstoned but whose geometry matches a live instrument? [Edge Case, Spec §FR-053] — **GAP (spec-reviewer 2026-11-22)**
 
 ## Dependencies & Assumptions
 
-- [ ] CHK022 Is the assumption that 013 will use the FR-066a generic merge recorded where 013 will read it? [Assumption, Dependency, Spec §FR-066a]
+- [ ] CHK022 Is the assumption that 013 will use the FR-066a generic merge recorded where 013 will read it? [Assumption, Dependency, Spec §FR-066a] — **Deferred → 013**
 
 ## Notes
 
@@ -57,3 +57,8 @@
 - **Deferred to 016**: CHK020 (tombstoned or erased profile id on import).
 - **Deferred to 013**: CHK022.
 - Open: CHK017 (20 MB justification), CHK019 (eviction beyond FR-045's reminder), CHK021.
+
+## Review 2026-11-22 (spec-reviewer)
+
+- Satisfied (ticked): 11. Gaps: 9. Owner decisions: 0. Deferred: 2.
+- Gaps and owner items go to the owner with product-owner's proposed answers; they are ticked only after the spec is amended and re-checked.

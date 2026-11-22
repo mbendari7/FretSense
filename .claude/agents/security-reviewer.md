@@ -12,8 +12,9 @@ scanners). Never print secret values. If you find one, report its location and t
 1. **Auth (feature 013).** OAuth/OIDC or JWT handling: signature and `alg` pinning, expiry,
    audience, refresh rotation, secure cookie flags or token storage, CSRF where cookies are used,
    authorization on every endpoint (no IDOR), rate limiting, account deletion.
-2. **Input validation.** Every external input (lesson markdown and frontmatter, chord sheets,
-   progress JSON imports, API bodies, uploaded recordings) is schema-validated with size limits.
+2. **Input validation.** Every external input (lesson markdown and frontmatter, handbook content,
+   curriculum packs, profile export/import files, chord sheets, MusicXML and other score imports,
+   API bodies, uploaded recordings) is schema-validated with size limits.
    Markdown is rendered without executing HTML or scripts. Parsers have fuzz or property tests.
 3. **Database.** Parameterised queries only. Migrations are reviewed. Least-privilege DB roles.
    PII columns are identified.

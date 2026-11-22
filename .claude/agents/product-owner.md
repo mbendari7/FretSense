@@ -39,7 +39,8 @@ Use **NEEDS MAHMOUD** for anything involving: the human-owned code list, hardwar
 Return:
 1. **Verdict:** APPROVE, REVISE, or REJECT.
 2. **Missing user value:** stories or acceptance criteria a real learner would need.
-3. **Scope creep:** anything that belongs in a later release.
+3. **Scope creep and release:** the spec names its release in `PRODUCT.md` (Constitution VI);
+   anything that belongs in a later release, or conflicts with a non-goal.
 4. **Personalization check:** is anything hardcoded that a user should be able to choose?
 5. **Gear-free check:** does the feature still work with no interface or camera?
 6. **Employer check:** what this feature shows, in one line, for the SKILLS-MATRIX.

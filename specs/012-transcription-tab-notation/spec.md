@@ -6,7 +6,7 @@
 
 **Status**: Draft (amended 2026-11-21: transcription becomes the headline feature of the **Studio**
 destination, with live input, playback, a library and export formats; spec-reviewer BLOCK and
-product-owner REVISE folded in; clarified 2026-11-22; re-review and plan pending)
+product-owner REVISE folded in; clarified 2026-11-22; spec-reviewer re-review PASS WITH NOTES, product-owner REVISE (small); see reviews/)
 
 **Input**: User description: "Automatic transcription: record yourself playing → tab and notation output, with rhythm and onset detection." Amended: "Make transcription a headline feature of the 'Studio' page: record or play live → notes with string and fret (from audio + vision fusion) → tab and standard notation, editable, playable, and exportable (MusicXML, PDF, Guitar Pro or plain text tab)."
 

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "deny": [
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git tag *)",
+      "Bash(git merge *)",
+      "Bash(git rebase *)",
+      "Bash(git reset --hard *)",
+      "Bash(git commit)",
+      "Bash(git push)",
+      "PowerShell(git commit *)",
+      "PowerShell(git push *)",
+      "PowerShell(git tag *)",
+      "PowerShell(git merge *)",
+      "PowerShell(git rebase *)",
+      "PowerShell(git reset --hard *)",
+      "PowerShell(git commit)",
+      "PowerShell(git push)",
+      "Edit(content/lessons/**)",
+      "Edit(content/handbook/**)"
+    ]
+  },
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  }
+}

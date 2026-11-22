@@ -21,7 +21,8 @@ start training runs. Training is owner-only (Constitution IV).
 2. A confusion matrix (or a task-appropriate equivalent, such as a per-note F1 table for
    transcription or a calibration plot for knowledge tracing).
 3. **Per-instrument** results (guitar, 4-string bass, 5-string bass) where the task applies, with
-   sample counts.
+   sample counts. Single-performer (owner) results are reported separately, on a session-disjoint
+   test set (Constitution X).
 4. A baseline comparison (the DSP baseline or the simpler model named in the spec). The model
    must beat it by the spec's margin, with a confidence interval or bootstrap where the spec asks.
 5. Reproducibility: config file, seed, pinned dependency lock, dataset version, code commit, and
