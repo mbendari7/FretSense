@@ -11,6 +11,8 @@ FretSense has three goals of equal weight: (a) a teaching tool that any guitaris
 owner included, uses every practice session and that adapts to them; (b) a deep, rigorously
 evaluated ML and machine-vision system; (c) a showcase of fundamental engineering skills, each used
 where it is genuinely needed. A feature that would not help a real practice session does not ship.
+The product vision, pillars, release plan and non-goals live in `docs/PRODUCT.md`, which is
+subordinate to this constitution.
 
 ## Core Principles
 
@@ -58,14 +60,15 @@ implementation-equivalent pseudocode):
 
 - YIN pitch detection; the chromagram;
 - the camera homography and pixel → (string, fret) mapping math;
-- the Viterbi / dynamic-programming fingering optimizer;
+- the Viterbi / dynamic-programming fingering optimizer and its fingering cost model;
 - the knowledge-tracing update equations;
 - the cross-correlation estimator for round-trip audio latency and audio–video offset;
 - running ML training experiments (launching runs, choosing hyperparameters, accepting results).
 
 Agents MAY write tests, fixtures, benchmarks, evaluation harnesses, data tooling and pipelines
 around these, explain them, and review them. The owner writes all lesson prose in
-`content/lessons/`; agents MUST NOT write lesson prose or copy book text.
+`content/lessons/` and all handbook explanation and glossary text in `content/handbook/`; agents
+MUST NOT write that text or copy book or website text.
 
 Rationale: the portfolio must honestly demonstrate the owner's own algorithmic and ML skill.
 
@@ -91,7 +94,8 @@ Rationale: feedback that lags the hand is useless; unbacked numbers are not cred
 - Several local profiles MAY share one device; each profile owns its gear, settings, paths and
   progress, and no profile can see another's data.
 - Every screen MUST be usable at a 390 px phone viewport and readable from a music stand.
-- Each feature spec MUST state how it helps a real practice session.
+- Each feature spec MUST state how it helps a real practice session, and which release in
+  `docs/PRODUCT.md` it belongs to (or which slice of it ships in which release).
 
 Rationale: users practise with an instrument in hand, often away from a desk or network.
 
@@ -239,11 +243,14 @@ pace; forced sequencing and hardcoded setups exclude most players.
 
 ## Governance
 
-- This constitution supersedes `CLAUDE.md`, specs, plans, tasks and all other guidance; conflicts
-  are resolved by amending the lower document.
+- This constitution supersedes `docs/PRODUCT.md`, `CLAUDE.md`, specs, plans, tasks and all other
+  guidance; conflicts are resolved by amending the lower document. `docs/PRODUCT.md` in turn
+  guides product decisions (scope, priority, release placement) in specs and in `product-owner`
+  reviews; a spec that conflicts with its release plan or non-goals MUST change, or the plan is
+  amended first with owner approval.
 - Amendments require an ADR, owner approval, and a semantic version bump (MAJOR: principle removed
   or redefined; MINOR: principle/section added or materially expanded; PATCH: wording).
 - `/speckit-analyze` and every reviewing subagent MUST treat any constitution violation as
   CRITICAL. CRITICAL findings block implementation and merge.
 
-**Version**: 2.2.0 | **Ratified**: 2026-11-21 | **Last Amended**: 2026-11-21
+**Version**: 2.3.0 | **Ratified**: 2026-11-21 | **Last Amended**: 2026-11-21

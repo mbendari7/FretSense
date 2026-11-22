@@ -6,7 +6,9 @@ learning paths, lesson stages and curriculum packs. The built-in curriculum is g
 delivered as a curriculum pack; users create packs mapping lessons to any book or course (the
 owner's *Guitar Theory for Dummies* pack is one example, not a dependency). **Nothing is locked**:
 the curriculum recommends, never forces. Lessons have stages Read → See → Drill → Play →
-Camera-coach. Features are capability-oriented (see the roadmap in `README.md`).
+Camera-coach. Features are capability-oriented and ship in product releases v0.1–v1.0. The vision,
+pillars, release plan and non-goals are in `docs/PRODUCT.md` (the product north star, below the
+constitution); every spec names its release.
 
 The three goals matter equally:
 1. **A teaching tool any guitarist or bassist (the owner included) uses every session**, that adapts
@@ -14,7 +16,7 @@ The three goals matter equally:
 2. **A deep ML and vision system**: real models, datasets, evaluation and MLOps.
 3. **Fundamental engineering skills**, each used where it's genuinely needed (`docs/SKILLS-MATRIX.md`).
 
-**This is not vibe coding.** The constitution (`.specify/memory/constitution.md`, v2.2.0) is the
+**This is not vibe coding.** The constitution (`.specify/memory/constitution.md`, v2.3.0) is the
 highest authority. If this file disagrees with it, the constitution wins and this file gets fixed.
 
 ---
@@ -36,13 +38,14 @@ highest authority. If this file disagrees with it, the constitution wins and thi
    - YIN pitch detection
    - the chromagram
    - the camera homography and pixel → (string, fret) mapping math
-   - the Viterbi fingering optimizer
+      - the Viterbi fingering optimizer and its fingering cost model (005; 017 ranks voicings with it)
    - the knowledge-tracing update equations
    - the cross-correlation estimator for round-trip latency and audio–video offset (015)
    - **running** the ML training experiments
 
    Claude may test, benchmark, explain and review these, and build tooling around them.
-7. **The owner writes all lesson prose** in `content/lessons/`. Claude may propose schemas and
+7. **The owner writes all lesson prose** in `content/lessons/`, and all handbook explanation and
+   glossary text in `content/handbook/` (017). Claude may propose schemas and
    check the theory, but never writes the prose or copies book text.
 8. **Instrument-agnostic, any gear.** No hardcoded 6 strings, tuning or fret count outside the
    `InstrumentProfile` definitions (ADR-0003). No hardcoded device model outside shipped preset
@@ -177,6 +180,7 @@ FretSense/
 ├── .specify/                         # constitution, templates, scripts
 ├── specs/NNN-<feature>/              # spec, plan, research, data-model, contracts, quickstart, tasks, checklists
 ├── content/lessons/                  # owner-written lessons (_template.md is the only AI-made file)
+├── content/handbook/                 # owner-written handbook explanations and glossary [017]
 ├── content/packs/                    # curriculum packs (built-in General Theory; _template.yaml)
 ├── packages/
 │   ├── theory/                       # pure TS domain: notes, intervals, InstrumentProfile, fretboard graph

@@ -23,6 +23,7 @@ more than one package, it adds a dependency, or it trades off accuracy, latency 
 | [0008](0008-local-persistence-and-sync-ready-records.md) | Local persistence and sync-ready records (IndexedDB, UUID + HLC, tombstones, geometry ids) | Proposed | 2026-11-21 |
 | [0009](0009-content-pipeline.md) | Content pipeline: lessons, curriculum packs, tags | Proposed | 2026-11-21 |
 | [0010](0010-svg-fretboard.md) | SVG fretboard rendering | Proposed | 2026-11-21 |
+| [0011](0011-constitution-v2-3-product-north-star.md) | Constitution v2.3.0: `docs/PRODUCT.md` as the product north star; every spec names its release | Proposed | 2026-11-21 |
 
 ## Template
 

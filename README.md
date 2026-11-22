@@ -1,12 +1,15 @@
 # FretSense
 
-An interactive **guitar and bass** theory handbook that teaches on the fretboard, listens to your
-real instrument through whatever audio interface or USB amp you own, and (optionally) watches your
-hands on camera to coach technique. It's **personalised for every player**: your gear, goals,
-learning paths, lesson structure and curriculum. Nothing is locked. Everything runs on your own
-device, with no account.
+**The guitar and bass teacher, handbook and transcriber in one app.** FretSense gives you the
+structured lessons of a theory book or online course, interactive fretboard visuals for your own
+instrument and tuning, a complete reference handbook, and a Studio that hears (any audio interface,
+USB amp or the laptop mic) and optionally sees (camera + ML) you play, then writes it out as tab and
+notation. It's **personalised for every player**: your gear, goals, learning paths, lesson
+structure and curriculum. Nothing is locked. Everything runs on your own device, with no account.
 
-> **Status (2026-11-21): specification phase, no application code yet.** This repo is built
+**Product vision, pillars, release plan and non-goals: [docs/PRODUCT.md](docs/PRODUCT.md).**
+
+> **Status (2026-11-22): specification phase, no application code yet.** This repo is built
 > strictly spec-first: constitution → spec → clarify → plan → tasks → analyze → implement. See
 > [docs/AI-WORKFLOW.md](docs/AI-WORKFLOW.md) for the process and
 > [docs/SKILLS-MATRIX.md](docs/SKILLS-MATRIX.md) for the engineering skills each feature demonstrates.
@@ -23,6 +26,9 @@ device, with no account.
    camera homography, the Viterbi fingering optimizer, the knowledge-tracing updates, and the
    latency/A-V cross-correlation estimator. I also run every training experiment and write every
    lesson.
+4. **To ship a real product**, not a demo: a landing page, onboarding, one design system,
+   accessibility, a performance budget, a demo mode for people without a guitar, and versioned
+   releases.
 
 ## How it's personalised
 
@@ -52,28 +58,24 @@ Lesson stages become available when their enabling feature ships.
 | Keys, progressions, harmony | 001 + 005 | 015 + 004 / 009 | 010 |
 | Bass: root–fifth–octave, arpeggios, walking lines, chord-tone lock | 001 | 015 + 002 + 003 | 010 |
 | Paths, packs, profiles, My Gear | 001 + 016 | | |
+| Reference handbook: scales, chords, voicings, arpeggios, progressions, keys, glossary | 017 | 015 + 003 | |
 | Adaptive suggestions, spaced review, practice plans | 006 | | |
+| Studio: playing → tab and notation | 012 | 015 + 012 | 010 (positions) |
 
-## Roadmap
+## Roadmap: product releases
 
-| # | Feature | Spec |
-|---|---------|------|
-| 001 | Theory engine, fretboard and lessons (guitar + bass) | [spec](specs/001-theory-fretboard-lessons/spec.md) |
-| 016 | Personalisation: profiles, My Gear, onboarding, paths, packs (right after 001) | [spec](specs/016-personalization/spec.md) |
-| 015 | Audio I/O and device management (after 016) | [spec](specs/015-audio-io-device-management/spec.md) |
-| 002 | DSP pitch detection (YIN), guitar + bass | planned |
-| 003 | Play-along drills + timing/onset detection | planned |
-| 004 | Chord recognition baseline (chromagram templates) | planned |
-| 005 | Chord sheet analyzer + Viterbi fingering optimizer | planned |
-| 006 | Adaptive curriculum: concept DAG, knowledge tracing, spaced repetition, planner | [spec](specs/006-adaptive-curriculum/spec.md) |
-| 007 | ML data platform: labelling, datasets, pipelines, tracking, registry | [spec](specs/007-ml-data-platform/spec.md) |
-| 008 | Vision I: hand + neck tracking → (string, fret) | [spec](specs/008-vision-hand-neck-tracking/spec.md) |
-| 009 | ML audio models: chord CNN + polyphonic transcription | [draft](specs/009-ml-audio-models/spec.md) |
-| 010 | Audio-visual fusion + camera coaching | [draft](specs/010-av-fusion-coaching/spec.md) |
-| 011 | Vision II: picking hand, posture, technique events | [draft](specs/011-vision-picking-posture-technique/spec.md) |
-| 012 | Transcription to tab and notation | [draft](specs/012-transcription-tab-notation/spec.md) |
-| 013 | Optional sync backend (FastAPI, PostgreSQL, auth); not this term | [draft](specs/013-sync-backend/spec.md) |
-| 014 | ESP32 LED fretboard (stretch goal) | planned |
+Specs are numbered in the order they were written, not the order they ship. Each release is
+usable on its own and has a 2-minute demo script. Goals, exit criteria and demo scripts are in
+[docs/PRODUCT.md](docs/PRODUCT.md#release-plan).
+
+| Release | Goal | Specs |
+|---------|------|-------|
+| **v0.1 "Fretboard"** | Usable with no gear: lessons, tap drills, handbook, personal paths, offline | [001](specs/001-theory-fretboard-lessons/spec.md) theory engine, fretboard and lessons · [016](specs/016-personalization/spec.md) profiles, My Gear, onboarding, paths, packs · [017](specs/017-reference-handbook/spec.md) handbook (core) · [018](specs/018-product-shell-launch/spec.md) product shell and onboarding |
+| **v0.2 "It hears you"** | Listens to your real instrument through any gear and scores play-along drills | [015](specs/015-audio-io-device-management/spec.md) audio I/O and devices · 002 YIN pitch detection *(planned)* · 003 play-along drills and onsets *(planned)* |
+| **v0.3 "It teaches you"** | Plans your practice, recognises chords, finds fingerings; complete handbook | [006](specs/006-adaptive-curriculum/spec.md) adaptive curriculum · 004 chord recognition baseline *(planned)* · 005 chord sheets and fingering optimizer *(planned)* · [017](specs/017-reference-handbook/spec.md) handbook (complete: voicing finder, progression explorer, cheat sheets) |
+| **v0.4 "It sees you"** | Camera knows which string and fret you're on, fused with audio for coaching | [007](specs/007-ml-data-platform/spec.md) ML data platform · [008](specs/008-vision-hand-neck-tracking/spec.md) hand and neck tracking · [010](specs/010-av-fusion-coaching/spec.md) audio-visual fusion and coaching |
+| **v1.0 "It writes it down"** | Studio: playing → editable, playable, exportable tab and notation; demo mode with no gear | [009](specs/009-ml-audio-models/spec.md) ML audio models · [011](specs/011-vision-picking-posture-technique/spec.md) picking, posture, technique · [012](specs/012-transcription-tab-notation/spec.md) Studio transcription · [018](specs/018-product-shell-launch/spec.md) launch polish and demo mode |
+| **Later** | Opt-in extras | [013](specs/013-sync-backend/spec.md) sync backend · 014 ESP32 LED fretboard *(planned)* |
 
 The dependency graph and the per-feature skill map are in [docs/AI-WORKFLOW.md](docs/AI-WORKFLOW.md#3-roadmap-one-spec-per-feature).
 
@@ -101,6 +103,7 @@ pnpm --filter web dev   # local PWA
 
 ## Project rules
 
-- [Constitution v2.2.0](.specify/memory/constitution.md): the highest authority
+- [Constitution v2.3.0](.specify/memory/constitution.md): the highest authority
+- [Product](docs/PRODUCT.md): vision, pillars, release plan, non-goals
 - [CLAUDE.md](CLAUDE.md): agent rules, gates, git rules
 - [ADRs](docs/adr/README.md), [Threat model](docs/THREAT-MODEL.md)

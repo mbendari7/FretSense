@@ -6,9 +6,10 @@
 > requirement exists in an approved or draft spec. Paths are the target layout from `CLAUDE.md` and
 > don't exist until their tasks land. Kept in sync by the `docs-keeper` subagent.
 
-Status as of 2026-11-21: **no code yet**. 001 is in planning. 006, 007, 008, 015 and 016 are
-specified and reviewed, and 009–013 are specify-only drafts. Constitution v2.2.0 makes the app
-personalised for every user (ADR-0006).
+Status as of 2026-11-22: **no code yet**. 001 is in planning. 006, 007, 008, 015 and 016 are
+specified and reviewed; 017 (reference handbook) and 018 (product shell and launch) are newly
+specified; 009–013 are specify-only drafts (012 amended as the Studio). Constitution v2.3.0 ties
+every spec to a release in [PRODUCT.md](PRODUCT.md) (ADR-0011).
 
 ## Data structures and algorithms
 
@@ -21,6 +22,8 @@ personalised for every user (ADR-0006).
 | Review-queue structure (priority queue if justified) | `packages/learner` → 006 FR-014 | Due-item retrieval in < 5 ms at 5k items | Benchmarks at the FR-014 scale; the choice is justified in the plan | Specified (data structure open) |
 | Lock-free SPSC ring buffer | `packages/audio-io` → 015 FR-020 | Audio thread → analysis worker without locks or allocation | Concurrency stress tests, no-allocation checks | Specified |
 | Chord-symbol parsing (trie or hash map) | `packages/theory/parse` → 005 | Chord sheets and labels | Property/fuzz tests, round-trip with canonical symbols | Planned (005) |
+| Fuzzy search with typo tolerance and alias ranking | → 017 FR-020, FR-021 | "Am7", "dorian", "2 5 1" found mid-practice | Search fixture ≥ 200 queries; per-keystroke latency (017 SC-002) | Specified |
+| Constrained voicing enumeration ranked by a cost model | → 017 FR-022–FR-024 (cost model owner-written in 005) | Every playable chord shape on any instrument and tuning | Constraint checks on ≥ 50 cases; golden shapes in top 3 (017 SC-005) | Specified (v0.3) |
 | HMM / Bayesian likelihood fusion | `packages/fusion` → 010 FR-003 | Exact (string, fret) from audio + vision | Held-out accuracy vs rules baseline (010 SC-002) | Specified (draft) |
 
 ## Systems and concurrency
@@ -117,6 +120,21 @@ personalised for every user (ADR-0006).
 | Dependency scanning, secrets handling | CI → security-reviewer | Planned |
 | WCAG 2.2 AA, keyboard, screen readers, colour-blind-safe fretboard | → 001 FR-013, FR-047–FR-049 | Specified |
 | ADRs, C4 architecture doc, API reference, contributing guide | `docs/adr/` (0001–0005), `docs/ARCHITECTURE.md` (planned at 001 plan) | ADRs drafted |
+
+## Product, UX and release management
+
+| Skill | Where | Why it's needed | How it's tested or evidenced | Status |
+|-------|-------|-----------------|------------------------------|--------|
+| Product thinking: vision, pillars, non-goals, release slicing | `docs/PRODUCT.md`; Constitution VI (v2.3.0, ADR-0011); release tags in 012, 017, 018 | Each release is usable alone and scope is checkable against non-goals | `product-owner` verdicts; release exit criteria and 2-minute demo scripts (PRODUCT.md) | Defined |
+| UX design: onboarding, navigation, Home "today's practice" | `apps/web` → 018 US2, US3, FR-005–FR-012; 016 FR-010–FR-013 | A first drill in ≤ 2 min with no gear; practice in 2 taps when returning | Timed first-run sessions (018 SC-001), returning-user E2E (SC-002), user-tester Mode A/B reports | Specified |
+| Design system: tokens, component library, themes, style guide | `apps/web/ui` → 018 US4, FR-013–FR-017 | One consistent product across every feature | Visual regression of the style guide in both themes at 5 widths (018 SC-009) | Specified |
+| Accessibility: WCAG 2.2 AA, colour-blind-safe tokens, text alternatives | → 018 FR-015, FR-033; 017 FR-038; 001 FR-047–FR-049 | Usable by keyboard, screen-reader and colour-blind players | Automated a11y scan per route and theme, colour-vision simulation of tokens, keyboard-only runs (018 SC-004, SC-005; 017 SC-010) | Specified |
+| Performance budgets enforced in CI | `.github/workflows` → 018 FR-026 | Fast first load on phones; the budget can't silently regress | Lighthouse ≥ 90 in 4 categories and JS size budgets as a blocking CI check (018 SC-003) | Specified |
+| Release management: semantic versions, changelog, release notes, "What's new" | → 018 FR-030; PRODUCT.md release plan | Users and reviewers see what changed and when | Changelog check per release; "What's new" once-per-update test (018 SC-011) | Specified |
+| Graceful error states and an error catalogue | → 018 FR-018–FR-021 | No dead ends when the mic, camera or device fails | Every catalogue condition triggered in an automated test (018 SC-010) | Specified |
+| Privacy-preserving, opt-in telemetry | → 018 FR-028, FR-029 | Product insight without sending personal data or media | Network-capture E2E with consent off and on (018 SC-008); privacy-auditor | Specified (v1.0) |
+| Demo mode through the real pipeline | → 018 US6, FR-022–FR-025 | Anyone can see the whole product in 60 s with no gear | Timed clean-browser run, 0 permission prompts, output vs clip labels (018 SC-007) | Specified (v1.0) |
+| Interchange formats: MusicXML, PDF, text tab (Guitar Pro after v1.0) | → 012 FR-007, FR-015–FR-018 | Transcriptions usable outside the app | Schema validation, exact MusicXML round trip, opens in an independent app (012 SC-006) | Specified (v1.0) |
 
 ## AI-assisted engineering process
 
