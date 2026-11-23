@@ -39,7 +39,7 @@ export function LibraryScreen() {
       <div className="page">
         <h1>Lessons</h1>
         <div className="empty">
-          <p>The lesson library is being written. Until it lands, everything else works without it:</p>
+          <p>The first lessons are being written. Until they land, everything else works without them:</p>
           <div className="row-actions">
             <Link className="button primary" to="/drills/note-finding">Start a note-finding drill</Link>
             <Link className="button" to="/explore">Explore scales and chords</Link>
@@ -189,11 +189,15 @@ function SeeStage({ lesson }: { lesson: CompiledLesson }) {
 
 function toSettings(d: DrillDefinition, base: DrillSettings): DrillSettings {
   const p = d.params;
+  // FR-027: a lesson's own notes replace the default note set, keeping the lesson's spellings.
+  const { noteSet: _noteSet, ...rest } = base;
+  const names = p.notes?.filter((n) => !!parsePc(n));
   return {
-    ...base,
+    ...(names?.length ? rest : base),
     ...(p.strings ? { strings: p.strings.filter((x) => x <= base.strings.length) } : {}),
     ...(p.frets ? { fromFret: p.frets[0], toFret: p.frets[1] } : {}),
     ...(p.count ? { count: p.count } : {}),
+    ...(names?.length ? { noteNames: names } : {}),
     ...(p.notes ? { notes: p.notes.map((n) => { const r = parsePc(n); return r ? ({ C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }[r.letter] + r.accidental + 12) % 12 : 0; }) } : {}),
     ...(p.intervals ? { intervals: p.intervals } : {}),
     ...(p.direction ? { direction: p.direction } : {}),

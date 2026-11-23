@@ -20,34 +20,56 @@ const noteQ = (n = 0): Question => ({
   group: 'String 6',
 });
 
-/** Root–fifth–octave from C2 (string 3 fret 3 on EADG): 5th G2, octave C3. One attempt per question (FR-040). */
+/**
+ * Root–fifth–octave on C on EADG, strings 1–3, frets 3–5: root C2 (string 3 fret 3), 5th G2 (string 2
+ * fret 5), octave C3 (string 1 fret 5). One attempt per question (FR-040).
+ * T100a authorised change (spec.md FR-057): "FR-056 uses the same indicator with three fixed steps,
+ * numbered by tone and not by tap order: Step 1 root ("R"), Step 2 5th ("5"), Step 3 octave"; FR-056
+ * "in any order". The root is a step the user plays, so there is no reference.
+ */
 const rfoQ = (): Question => ({
-  drillType: 'bass-root-fifth-octave',
-  itemKey: 'bs|bass-root-fifth-octave|major',
-  prompt: { drillType: 'bass-root-fifth-octave', root: { string: 3, fret: 3 }, qualityId: 'major' },
-  text: 'Play the 5th, then the octave, from this root (C)',
+  drillType: 'root-fifth-octave',
+  itemKey: 'rfo|0',
+  prompt: { drillType: 'root-fifth-octave', root: { string: 3, fret: 3 }, qualityId: 'major' },
+  text: 'Play C, its 5th and its octave',
   steps: [
+    { label: 'R', valid: [{ string: 3, fret: 3 }], accepts: [0] },
     { label: '5', valid: [{ string: 2, fret: 5 }], accepts: [7] },
     { label: 'octave', valid: [{ string: 1, fret: 5 }], accepts: [0] },
   ],
-  reference: [{ string: 3, fret: 3 }],
-  group: 'Major',
+  reference: [],
+  window: { from: 3, to: 5 },
+  group: 'Root C',
 });
 
-/** Am7 arpeggio from A1 (string 4 fret 5): C, E, G. FR-057: each step is judged; the drill continues. */
+/**
+ * Am7 arpeggio from A1 (string 4 fret 5): A, C, E, G. FR-057: each step is judged; the drill continues.
+ * T100a authorised change (spec.md FR-057): "the root is Step 1 and is played by the user, not given";
+ * US6 scenario 2: Am7 = A, C, E, G. (A1 = 33: string 4 fret 5 / string 3 open; C2 = 36; E2 = 40; G2 = 43.)
+ */
 const arpQ = (): Question => ({
-  drillType: 'bass-arpeggio',
-  itemKey: 'bs|bass-arpeggio|min7',
-  prompt: { drillType: 'bass-arpeggio', root: { string: 4, fret: 5 }, qualityId: 'min7' },
-  text: 'Play the Am7 arpeggio up from this root (A)',
+  drillType: 'arpeggio',
+  itemKey: 'bs|arpeggio|min7',
+  prompt: { drillType: 'arpeggio', root: { string: 4, fret: 5 }, qualityId: 'min7' },
+  text: 'Play the Am7 arpeggio',
   steps: [
+    { label: 'R', valid: [{ string: 4, fret: 5 }, { string: 3, fret: 0 }], accepts: [9] },
     { label: 'b3', valid: [{ string: 4, fret: 8 }, { string: 3, fret: 3 }], accepts: [0] },
     { label: '5', valid: [{ string: 3, fret: 7 }, { string: 2, fret: 2 }], accepts: [4] },
     { label: 'b7', valid: [{ string: 2, fret: 5 }, { string: 1, fret: 0 }], accepts: [7] },
   ],
-  reference: [{ string: 4, fret: 5 }],
+  reference: [],
   group: 'Minor 7th',
 });
+
+/** Taps in order until the question finishes; returns the finished result (undefined if it never does). */
+function play(s: DrillSession, taps: { string: number; fret: number }[]) {
+  for (const [i, t] of taps.entries()) {
+    const r = s.tap(t, 100 * (i + 1));
+    if (r?.finished) return r.finished;
+  }
+  return undefined;
+}
 
 describe('FR-033 response time and single-step judging', () => {
   it('starts running; a correct tap finishes the question with the time since display', () => {
@@ -115,38 +137,60 @@ describe('FR-040 one attempt per question', () => {
   });
 });
 
-describe('FR-056 multi-step root–fifth–octave: one judged unit', () => {
-  it('correct steps advance the step index without finishing', () => {
+describe('FR-056 multi-step root–fifth–octave: one judged unit, taps in any order', () => {
+  it('correct taps do not finish the question until all three tones are played', () => {
     const s = new DrillSession([rfoQ()], 0);
-    const r1 = s.tap({ string: 2, fret: 5 }, 100);
-    expect(r1).toEqual({ correct: true });
-    expect(s.snapshot().stepIndex).toBe(1);
-    const r2 = s.tap({ string: 1, fret: 5 }, 900);
-    expect(r2?.finished).toMatchObject({ correct: true, responseMs: 900 });
-    expect(r2?.finished?.taps).toEqual([{ string: 2, fret: 5 }, { string: 1, fret: 5 }]);
+    expect(s.tap({ string: 3, fret: 3 }, 100)).toEqual({ correct: true });
+    expect(s.tap({ string: 2, fret: 5 }, 400)).toEqual({ correct: true });
+    const r3 = s.tap({ string: 1, fret: 5 }, 900);
+    expect(r3?.finished).toMatchObject({ correct: true, responseMs: 900 });
+    expect(r3?.finished?.taps).toEqual([{ string: 3, fret: 3 }, { string: 2, fret: 5 }, { string: 1, fret: 5 }]);
   });
 
-  it('a wrong tap ends the multi-step question as incorrect', () => {
+  it.each([
+    ['octave, root, 5th', [{ string: 1, fret: 5 }, { string: 3, fret: 3 }, { string: 2, fret: 5 }]],
+    ['5th, octave, root', [{ string: 2, fret: 5 }, { string: 1, fret: 5 }, { string: 3, fret: 3 }]],
+    ['root, octave, 5th', [{ string: 3, fret: 3 }, { string: 1, fret: 5 }, { string: 2, fret: 5 }]],
+  ])('any order is correct: %s', (_l, taps) => {
+    const r = play(new DrillSession([rfoQ()], 0), taps);
+    expect(r?.correct).toBe(true);
+    expect(r?.taps).toEqual(taps);
+  });
+
+  it('a wrong tap makes the question incorrect (one attempt is recorded)', () => {
     const s = new DrillSession([rfoQ()], 0);
-    const r = s.tap({ string: 2, fret: 6 }, 100);
-    expect(r?.finished?.correct).toBe(false);
+    const r = play(s, [{ string: 2, fret: 4 }, { string: 3, fret: 3 }, { string: 2, fret: 5 }, { string: 1, fret: 5 }]);
+    expect(r?.correct).toBe(false);
     expect(s.snapshot().answered).toHaveLength(1);
   });
 
-  it('a wrong second step ends it as incorrect, even after a correct first step', () => {
-    const s = new DrillSession([rfoQ()], 0);
-    s.tap({ string: 2, fret: 5 }, 100);
-    expect(s.tap({ string: 1, fret: 7 }, 200)?.finished?.correct).toBe(false);
+  it('a wrong last tone makes it incorrect, even after the root and 5th are right', () => {
+    const r = play(new DrillSession([rfoQ()], 0), [{ string: 3, fret: 3 }, { string: 2, fret: 5 }, { string: 1, fret: 4 }]);
+    expect(r?.correct).toBe(false);
   });
 });
 
 describe('FR-057 arpeggio: each step is judged and the drill continues to the next step', () => {
-  it('a wrong tone at step 1 is flagged but does not end the arpeggio', () => {
+  it('Step 1 is the root A, played by the user: tapping A1 is correct and moves to the b3', () => {
     const s = new DrillSession([arpQ()], 0);
-    const r = s.tap({ string: 4, fret: 7 }, 100); // B, not C
-    expect(r?.correct).toBe(false);
+    expect(s.tap({ string: 4, fret: 5 }, 100)?.correct).toBe(true);
     expect(s.snapshot().stepIndex).toBe(1);
-    expect(s.tap({ string: 3, fret: 7 }, 200)?.correct).toBe(true);
+    expect(s.tap({ string: 3, fret: 3 }, 200)?.correct).toBe(true); // C2
+  });
+
+  it('a wrong root at Step 1 is flagged but does not end the arpeggio', () => {
+    const s = new DrillSession([arpQ()], 0);
+    const r = s.tap({ string: 4, fret: 7 }, 100); // B1, not A1
+    expect(r?.correct).toBe(false);
+    expect(r?.finished).toBeUndefined();
+    expect(s.snapshot().stepIndex).toBe(1);
+    expect(s.tap({ string: 4, fret: 8 }, 200)?.correct).toBe(true); // C2
+  });
+
+  it('US6-2: A, C, E, G in ascending order is correct and finishes after the 4th tone', () => {
+    const r = play(new DrillSession([arpQ()], 0), [{ string: 4, fret: 5 }, { string: 3, fret: 3 }, { string: 3, fret: 7 }, { string: 2, fret: 5 }]);
+    expect(r?.correct).toBe(true);
+    expect(r?.taps).toHaveLength(4);
   });
 });
 
@@ -170,13 +214,42 @@ describe('Edge Cases: interrupted drill (pause / resume)', () => {
     expect(s.tap({ string: 6, fret: 3 }, 60_450)?.finished?.responseMs).toBe(450);
   });
 
-  it('resume discards a partly entered multi-step answer (the question is shown again)', () => {
+  // Spec change (product-owner 2026-11-22, provisional), Edge Cases "Interrupted drill": "A multi-step
+  // question (root–fifth–octave, arpeggio) keeps its judged steps, taps, placed and revealed positions,
+  // and continues at the next pending step; nothing is recorded for it until its last step is judged".
+  // Replaces the earlier "resume discards a partly entered multi-step answer". Paused-time exclusion
+  // is checked in DrillRunner.multistep-interrupt.test.tsx (pause() takes no time argument here).
+  it('resume keeps a partly entered root–fifth–octave answer and continues at the next pending step', () => {
     const s = new DrillSession([rfoQ()], 0);
-    s.tap({ string: 2, fret: 5 }, 100);
+    s.tap({ string: 2, fret: 5 }, 100); // Step 2 (5th) ✓
     s.pause();
     s.resume(5000);
-    expect(s.snapshot().stepIndex).toBe(0);
-    expect(s.snapshot().taps).toHaveLength(0);
+    const snap = s.snapshot();
+    expect(snap.taps.map((t) => [t.pos.string, t.pos.fret, t.correct])).toEqual([[2, 5, true]]);
+    expect(snap.stepResults[1]?.correct).toBe(true);
+    expect(snap.stepIndex, 'the next pending step is Step 1').toBe(0);
+    expect(snap.answered).toHaveLength(0);
+    s.tap({ string: 3, fret: 3 }, 5100);
+    const done = s.tap({ string: 1, fret: 5 }, 5200)?.finished;
+    expect(done?.correct).toBe(true);
+    expect(done?.taps.map((t) => `${t.string}/${t.fret}`)).toEqual(['2/5', '3/3', '1/5']);
+  });
+
+  it('resume keeps a partly entered arpeggio answer (Step 1 ✓, Step 2 ✗) and continues at Step 3', () => {
+    const s = new DrillSession([arpQ()], 0);
+    s.tap({ string: 4, fret: 5 }, 100); // A1 ✓
+    s.tap({ string: 4, fret: 7 }, 200); // B1 ✗ for the b3
+    s.pause();
+    s.resume(5000);
+    const snap = s.snapshot();
+    expect(snap.stepResults.slice(0, 2).map((r) => r?.correct)).toEqual([true, false]);
+    expect(snap.stepIndex).toBe(2);
+    expect(snap.taps).toHaveLength(2);
+    expect(snap.answered).toHaveLength(0);
+    s.tap({ string: 3, fret: 7 }, 5100);
+    const done = s.tap({ string: 2, fret: 5 }, 5200)?.finished;
+    expect(done?.correct).toBe(false);
+    expect(done?.taps.map((t) => `${t.string}/${t.fret}`)).toEqual(['4/5', '4/7', '3/7', '2/5']);
   });
 
   it('answered questions are kept across pause and resume', () => {

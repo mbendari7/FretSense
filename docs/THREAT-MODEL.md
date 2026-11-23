@@ -51,7 +51,7 @@ call, stored media, a new permission or a new trust boundary.
 | T14 | A crafted or corrupt import causes data loss or HLC poisoning (far-future timestamps) | Tampering | HLC future bound (24 h); local clock never advances past it; preview + confirm with "hidden" counts; whole-file rejection; one transaction | 001 |
 | T15 | Clickjacking or framing of reset/import | Tampering | `frame-ancestors 'none'` header; destructive actions hidden when framed | 001 |
 | T16 | A compromised or stale service worker keeps a bad build alive | Tampering | Prompt-to-reload updates; `navigateFallbackDenylist`; bundled Workbox; same-origin only | 001 |
-| T17 | Storage-quota exhaustion from repeated large imports | DoS | 20 MB file cap; array caps; quota errors abort the transaction with a readable message | 001 |
+| T17 | Storage-quota exhaustion from repeated large imports | DoS | 50 MB file cap (FR-043); array caps; quota errors abort the transaction with a readable message | 001 |
 
 ## Not yet modelled (added when each feature is planned)
 

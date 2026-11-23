@@ -10,7 +10,7 @@ import { InstrumentSwitcher } from './GearScreen';
 
 /** US1 fretboard explorer (FR-011–FR-021). Query params make views shareable. */
 export function ExploreScreen() {
-  return <InstrumentGate>{(inst) => <Explorer key={inst.id} profile={inst.profile} />}</InstrumentGate>;
+  return <InstrumentGate title="Explore">{(inst) => <Explorer key={inst.id} profile={inst.profile} />}</InstrumentGate>;
 }
 
 const SCALE_IDS = new Set(SCALES.map((s) => s.id));

@@ -217,10 +217,10 @@ describe('FR-040 prompt: a strict discriminated union per drillType (data-model 
     { drillType: 'note-finding', pitchClass: 0, string: 2, midi: 60 },
     { drillType: 'interval', root: pos, interval: 'M3' },
     { drillType: 'chord-tone', root: 'A', qualityId: 'dom7', function: 'b7' },
-    { drillType: 'bass-root-fifth-octave', root: pos, qualityId: 'major' },
-    { drillType: 'bass-arpeggio', root: pos, qualityId: 'min7' },
-    { drillType: 'bass-walking', key: { tonic: 'C', mode: 'major' }, chords: [{ root: 'C', quality: 'maj7' }, { root: 'A', quality: 'min7' }] },
-    { drillType: 'bass-octave-shapes', root: pos },
+    { drillType: 'root-fifth-octave', root: pos, qualityId: 'major' },
+    { drillType: 'arpeggio', root: pos, qualityId: 'min7' },
+    { drillType: 'walking-bass', key: { tonic: 'C', mode: 'major' }, chords: [{ root: 'C', quality: 'maj7' }, { root: 'A', quality: 'min7' }] },
+    { drillType: 'chord-tone-lock', key: { tonic: 'C', mode: 'major' }, chords: [{ root: 'C', quality: 'major' }, { root: 'G', quality: 'dom7' }] },
   ])('accepts $drillType', (p) => {
     expect(promptSchema.safeParse(p).success).toBe(true);
   });
@@ -232,7 +232,7 @@ describe('FR-040 prompt: a strict discriminated union per drillType (data-model 
   it('rejects unknown keys at every level', () => {
     expect(promptSchema.safeParse({ drillType: 'interval', root: pos, interval: 'M3', hint: 'x' }).success).toBe(false);
     expect(promptSchema.safeParse({ drillType: 'interval', root: { ...pos, z: 1 }, interval: 'M3' }).success).toBe(false);
-    expect(promptSchema.safeParse({ drillType: 'bass-walking', key: { tonic: 'C', mode: 'major', x: 1 }, chords: [] }).success).toBe(false);
+    expect(promptSchema.safeParse({ drillType: 'walking-bass', key: { tonic: 'C', mode: 'major', x: 1 }, chords: [] }).success).toBe(false);
   });
 
   it('note-finding pitch class is 0–11', () => {
@@ -253,8 +253,9 @@ describe('FR-041 itemKey grammar (data-model §3.1)', () => {
     'iv|P8|down',
     'ct|dom7|b7',
     'ct|major|R',
-    'bs|bass-walking|min7',
-    'bs|bass-root-fifth-octave|major',
+    'bs|walking-bass|min7',
+    'rfo|0',
+    'rfo|11',
   ])('accepts %s', (k) => {
     expect(ITEM_KEY_PATTERN.test(k)).toBe(true);
   });
@@ -267,6 +268,8 @@ describe('FR-041 itemKey grammar (data-model §3.1)', () => {
     ['missing pitch class', 'nf|guitar:E2-A2-D3-G3-B3-E4|6'],
     ['pitch class 12', 'nf|guitar:E2-A2-D3-G3-B3-E4|6|12'],
     ['pitch class 99', 'nf|guitar:E2-A2-D3-G3-B3-E4|6|99'],
+    ['root–fifth–octave root pitch class 12', 'rfo|12'],
+    ['root–fifth–octave without a root', 'rfo|'],
   ])('rejects %s', (_l, k) => {
     expect(ITEM_KEY_PATTERN.test(k)).toBe(false);
     expect(attemptSchema.safeParse({ ...attempt, itemKey: k }).success).toBe(false);
@@ -276,7 +279,8 @@ describe('FR-041 itemKey grammar (data-model §3.1)', () => {
     expect(itemKey.noteFinding('guitar:E2-A2-D3-G3-B3-E4', 6, 7)).toBe('nf|guitar:E2-A2-D3-G3-B3-E4|6|7');
     expect(itemKey.interval('M3', 'down')).toBe('iv|M3|down');
     expect(itemKey.chordTone('dom7', 'b7')).toBe('ct|dom7|b7');
-    expect(itemKey.bass('bass-arpeggio', 'min7')).toBe('bs|bass-arpeggio|min7');
+    expect(itemKey.bass('arpeggio', 'min7')).toBe('bs|arpeggio|min7');
+    expect(itemKey.rootFifthOctave(7)).toBe('rfo|7');
   });
 
   it('property: every note-finding key over every preset, string and pitch class matches the grammar', () => {

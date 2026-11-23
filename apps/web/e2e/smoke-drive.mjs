@@ -27,7 +27,7 @@ async function run(name, viewport) {
   await page.waitForTimeout(200);
   await page.screenshot({ path: `${out}/${name}-5-drill.png`, fullPage: true });
   for (let i = 0; i < 25; i++) {
-    const next = page.getByRole('button', { name: 'Next question' });
+    const next = page.getByRole('button', { name: 'Continue' });
     if (await page.getByRole('heading', { name: 'Drill finished' }).isVisible()) break;
     await page.getByRole('button', { name: /String \d, fret 5/ }).first().click();
     await page.waitForTimeout(80);

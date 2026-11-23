@@ -31,5 +31,14 @@ export function summarize(answered: readonly { group: string; correct: boolean; 
   };
 }
 
+/**
+ * FR-034 per-string figures for multi-step questions: each counts toward the string of its Step 1
+ * (root) position. Questions without a root string (single-step drills) are left out.
+ */
+export function byRootString(xs: readonly AnsweredQuestion[]): GroupStat[] {
+  const rows = xs.filter((a) => a.rootString !== undefined).map((a) => ({ group: `String ${a.rootString}`, correct: a.correct, responseMs: a.responseMs }));
+  return summarize(rows).groups;
+}
+
 export const fromAnswered = (xs: readonly AnsweredQuestion[]) =>
   xs.map((a) => ({ group: a.question.group, correct: a.correct, responseMs: a.responseMs }));

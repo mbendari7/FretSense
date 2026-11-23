@@ -9,9 +9,13 @@ export function fretsenseContent(contentDir = resolve(import.meta.dirname, '../.
   return {
     name: 'fretsense-content',
     resolveId: (source) => (source === id ? resolved : undefined),
+    // Watch content/ through the dev server's watcher. addWatchFile() on a directory makes Vite's
+    // import analysis try to import the directory itself, which broke `pnpm dev` with a 500.
+    configureServer(server) {
+      server.watcher.add(contentDir);
+    },
     load(loadId) {
       if (loadId !== resolved) return undefined;
-      this.addWatchFile(contentDir);
       return `export default ${JSON.stringify(compileContent(contentDir))};`;
     },
     handleHotUpdate(ctx) {

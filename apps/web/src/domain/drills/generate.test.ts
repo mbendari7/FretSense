@@ -214,14 +214,16 @@ describe('FR-061 unanswerable settings are rejected before the drill starts, wit
     ['a string the instrument does not have', base('note-finding', std6, { strings: [7] })],
     ['F on string 1 at fret 0 only (string 1 is E)', base('note-finding', std6, { strings: [1], fromFret: 0, toFret: 0, notes: [5] })],
     ['an octave up on one string within 5 frets', base('interval', std6, { strings: [1], fromFret: 0, toFret: 5, intervals: ['P8'], direction: 'up' })],
-    ['an octave shape inside 3 frets of one string', base('bass-octave-shapes', bass4, { strings: [1], fromFret: 0, toFret: 3 })],
+    // FR-056: the 5th is 7 semitones above the root, so on one string it is 7 frets away; frets 0–3 can never hold it.
+    ['a root–fifth–octave inside frets 0–3 of one string', base('root-fifth-octave', bass4, { strings: [1], fromFret: 0, toFret: 3 })],
     ['count 4', base('note-finding', std6, { count: 4 })],
     ['count 101', base('note-finding', std6, { count: 101 })],
   ])('%s', (_l, s) => {
-    const v = validateSettings(s.type.startsWith('bass') ? bass4 : std6, s);
+    const prof = s.type === 'root-fifth-octave' ? bass4 : std6;
+    const v = validateSettings(prof, s);
     expect(v.ok).toBe(false);
     if (!v.ok) expect(v.reason.length).toBeGreaterThan(5);
-    const g = generateQuestions({ profile: s.type.startsWith('bass') ? bass4 : std6, settings: s, rng: mulberry32(1), histories: new Map(), adaptive: false });
+    const g = generateQuestions({ profile: prof, settings: s, rng: mulberry32(1), histories: new Map(), adaptive: false });
     expect(g.ok).toBe(false);
   });
 
@@ -301,7 +303,7 @@ describe('FR-061 / FR-035 interval drill: exact target pitch, every question ans
 
 // =============================================================================================
 describe('FR-061 / FR-036 chord-tone drill', () => {
-  it('property: valid answers are exactly the positions of the named tone in the allowed area', () => {
+  it('property: valid answers are exactly the positions of the named tone inside the question’s FR-036 window [s, s + 3] on the chosen strings', () => {
     fc.assert(
       fc.property(
         anyProfile.chain((p) => fc.tuple(
@@ -331,9 +333,17 @@ describe('FR-061 / FR-036 chord-tone drill', () => {
             expect(QUALITY_FNS[qualityId]).toContain(fn);
             expect(functions).toContain(fn);
             const tone = pcOf(ROOT_PC[root]! + FN_SEMITONES[fn]!);
+            // FR-036: an inclusive window [s, s + w − 1], default w = 4, chosen so it fits the fret range.
+            const w = q.window;
+            expect(w, 'chord-tone question states its window').toBeDefined();
+            expect(w!.from).toBeGreaterThanOrEqual(from);
+            expect(w!.to).toBeLessThanOrEqual(to);
+            expect(w!.to).toBeGreaterThanOrEqual(w!.from);
+            expect(w!.to - w!.from + 1).toBeLessThanOrEqual(4);
+            if (to - from + 1 >= 4) expect(w!.to - w!.from + 1).toBe(4);
             const valid = q.steps[0]!.valid;
-            expect(valid.length).toBeGreaterThan(0);
-            expect(sortPos(valid)).toEqual(sortPos(brute(p, r.strings, from, to, (m) => pcOf(m) === tone)));
+            expect(valid.length).toBeGreaterThan(0); // FR-061: the window holds the tone
+            expect(sortPos(valid)).toEqual(sortPos(brute(p, r.strings, w!.from, w!.to, (m) => pcOf(m) === tone)));
             expect(q.itemKey).toBe(`ct|${qualityId}|${fn}`);
           }
         },
@@ -367,44 +377,37 @@ describe('FR-061 / FR-036 chord-tone drill', () => {
 
 // =============================================================================================
 describe('FR-061 / FR-056 / FR-057 bass shape drills: exact pitches, answerable', () => {
-  const OFFSETS: Record<string, (q: string) => number[]> = {
-    'bass-root-fifth-octave': () => [7, 12],
-    'bass-octave-shapes': () => [12],
-    'bass-arpeggio': (ql) => QUALITY_FNS[ql]!.slice(1).map((f) => FN_SEMITONES[f]!),
-  };
+  // T100a authorised change (spec.md FR-057, 2026-11-22): "Steps are numbered from 1 in ascending
+  // order, one per chord tone in FR-005 order; the root is Step 1 and is played by the user, not
+  // given." and "FR-056 uses the same indicator with three fixed steps, numbered by tone and not by
+  // tap order: Step 1 root ("R"), Step 2 5th ("5"), Step 3 octave". So these questions carry no
+  // reference; steps[0] is the root. These tests used to read the root from q.reference.
+  const midiOf = (p: InstrumentProfile) => (x: FretPosition) => posMidi(p, x);
+  const inArea = (x: FretPosition, strings: readonly number[], from: number, to: number) => strings.includes(x.string) && x.fret >= from && x.fret <= to;
+  const span = (...xs: FretPosition[]) => Math.max(...xs.map((x) => x.fret)) - Math.min(...xs.map((x) => x.fret));
 
-  it.each(['bass-root-fifth-octave', 'bass-arpeggio', 'bass-octave-shapes'] as const)('property (%s): every step has an exact-pitch answer in the allowed area', (type) => {
+  it('property (arpeggio): no reference; one step per chord tone in FR-005 order, Step 1 the root; every step is every position of one exact pitch', () => {
     fc.assert(
       fc.property(anyProfile.chain((p) => fc.tuple(fc.constant(p), rangeFor(p), fc.subarray(Object.keys(QUALITY_FNS), { minLength: 1 }))), ([p, r, qualities]) => {
         const from = Math.min(r.a, r.b);
         const to = Math.max(r.a, r.b);
-        const s: DrillSettings = { type, strings: r.strings, fromFret: from, toFret: to, count: r.count, octaveMode: 'any', qualities };
-        const v = validateSettings(p, s);
-        if (!v.ok) return;
+        const s: DrillSettings = { type: 'arpeggio', strings: r.strings, fromFret: from, toFret: to, count: r.count, octaveMode: 'any', qualities };
+        if (!validateSettings(p, s).ok) return;
+        const m = midiOf(p);
         for (const q of gen(p, s, r.seed)) {
-          const ref = q.reference[0]!;
-          expect(r.strings).toContain(ref.string);
-          expect(ref.fret).toBeGreaterThanOrEqual(from);
-          expect(ref.fret).toBeLessThanOrEqual(to);
-          const ql = q.prompt.drillType === 'bass-octave-shapes' ? 'major' : (q.prompt as { qualityId: string }).qualityId;
-          const offs = OFFSETS[type]!(ql);
-          expect(q.steps.length).toBeGreaterThanOrEqual(offs.length);
-          const exact = offs.map((o) => brute(p, r.strings, from, to, (m) => m === posMidi(p, ref) + o));
-          offs.forEach((_o, i) => {
-            const valid = q.steps[i]!.valid;
-            expect(valid.length).toBeGreaterThan(0);
-            if (type !== 'bass-root-fifth-octave') {
-              expect(sortPos(valid)).toEqual(sortPos(exact[i]!));
-              return;
-            }
-            // FR-056: exact pitches only, and every position that can complete a shape spanning
-            // ≤ 4 frets (max − min ≤ 3) with the root and some position of the other step is accepted.
-            const exactKeys = new Set(sortPos(exact[i]!));
-            for (const v of valid) expect(exactKeys.has(key(v))).toBe(true);
-            const other = exact[1 - i]!;
-            const fits = exact[i]!.filter((x) => other.some((y) => Math.max(ref.fret, x.fret, y.fret) - Math.min(ref.fret, x.fret, y.fret) <= 3));
-            const validKeys = new Set(sortPos(valid));
-            for (const x of fits) expect(validKeys.has(key(x)), `${key(x)} fits a 4-fret shape`).toBe(true);
+          expect(q.reference).toEqual([]);
+          const ql = (q.prompt as { qualityId: string }).qualityId;
+          const fns = QUALITY_FNS[ql]!;
+          expect(q.steps.length, `${ql}: one step per chord tone`).toBe(fns.length);
+          const w = q.window ?? { from, to };
+          expect(w.from).toBeGreaterThanOrEqual(from);
+          expect(w.to).toBeLessThanOrEqual(to);
+          const root = q.steps[0]!.valid;
+          expect(root.length).toBeGreaterThan(0);
+          const rm = m(root[0]!);
+          fns.forEach((f, i) => {
+            const exact = brute(p, r.strings, w.from, w.to, (x) => x === rm + FN_SEMITONES[f]!);
+            expect(sortPos(q.steps[i]!.valid), `${ql} step ${i + 1} (${f})`).toEqual(sortPos(exact));
           });
         }
       }),
@@ -412,51 +415,103 @@ describe('FR-061 / FR-056 / FR-057 bass shape drills: exact pitches, answerable'
     );
   });
 
-  it('FR-056 / FR-061: every root–fifth–octave question has a shape spanning at most 4 frets (max − min ≤ 3) from its root', () => {
-    for (const p of PRESET_PROFILES) {
-      for (const q of gen(p, base('bass-root-fifth-octave', p, { qualities: ['major'], count: 100 }), 13)) {
-        const ref = q.reference[0]!;
-        const fifths = q.steps[0]!.valid;
-        const octaves = q.steps[1]!.valid;
-        const ok = fifths.some((f) => octaves.some((o) => Math.max(ref.fret, f.fret, o.fret) - Math.min(ref.fret, f.fret, o.fret) <= 3));
-        expect(ok, `${p.geometryId} root ${key(ref)} has no playable shape`).toBe(true);
-      }
+  it('property (root-fifth-octave): no reference; 3 steps root, 5th, octave of exact pitches; every position completing a shape of span ≤ 3 is accepted', () => {
+    fc.assert(
+      fc.property(anyProfile.chain((p) => fc.tuple(fc.constant(p), rangeFor(p))), ([p, r]) => {
+        const from = Math.min(r.a, r.b);
+        const to = Math.max(r.a, r.b);
+        const s: DrillSettings = { type: 'root-fifth-octave', strings: r.strings, fromFret: from, toFret: to, count: r.count, octaveMode: 'any', qualities: ['major'] };
+        if (!validateSettings(p, s).ok) return;
+        const m = midiOf(p);
+        for (const q of gen(p, s, r.seed)) {
+          expect(q.reference).toEqual([]);
+          expect(q.steps.length).toBe(3);
+          const [roots, fifths, octaves] = q.steps.map((st) => st.valid) as [FretPosition[], FretPosition[], FretPosition[]];
+          for (const x of [...roots, ...fifths, ...octaves]) expect(inArea(x, r.strings, from, to), key(x)).toBe(true);
+          expect(roots.length).toBeGreaterThan(0);
+          const pc = pcOf(m(roots[0]!));
+          for (const x of roots) expect(pcOf(m(x))).toBe(pc);
+          // FR-041: a root–fifth–octave item is (root-fifth-octave, root pitch class).
+          expect(q.itemKey).toBe(`rfo|${pc}`);
+          // Exact pitches: each 5th / octave is 7 / 12 semitones above some accepted root.
+          for (const x of fifths) expect(roots.some((y) => m(x) === m(y) + 7), `5th ${key(x)}`).toBe(true);
+          for (const x of octaves) expect(roots.some((y) => m(x) === m(y) + 12), `octave ${key(x)}`).toBe(true);
+          // FR-056 / FR-061: a playable shape exists, and every exact position completing one is accepted.
+          let any = false;
+          for (const y of roots) {
+            const f5 = brute(p, r.strings, from, to, (x) => x === m(y) + 7);
+            const f8 = brute(p, r.strings, from, to, (x) => x === m(y) + 12);
+            for (const a of f5) for (const b of f8) {
+              if (span(y, a, b) > 3) continue;
+              any = true;
+              expect(sortPos(fifths)).toContain(key(a));
+              expect(sortPos(octaves)).toContain(key(b));
+            }
+          }
+          expect(any, `rfo|${pc}: no shape spanning ≤ 4 frets`).toBe(true);
+        }
+      }),
+      { numRuns: 80 },
+    );
+  });
+
+  /** Taps in order until the session finishes the question; returns the finished result. */
+  const play = (q: Question, taps: FretPosition[]) => {
+    const session = new DrillSession([q], 0);
+    for (const [i, t] of taps.entries()) {
+      const r = session.tap(t, 100 * (i + 1));
+      if (r?.finished) return r.finished;
     }
+    return undefined;
+  };
+  const cQuestion = () => {
+    const q = findQ(bass4, base('root-fifth-octave', bass4, { qualities: ['major'], count: 100 }),
+      (x) => x.itemKey === 'rfo|0' && x.steps[0]!.valid.some((v) => v.string === 3 && v.fret === 3)); // A string fret 3 = C2 (MIDI 36)
+    expect(q, 'no rfo|0 question whose Step 1 (the root) accepts C2 at string 3 fret 3').toBeDefined();
+    return q!;
+  };
+
+  it('US6-1: C root–fifth–octave on 4-string EADG: C2, G2 and C3 played in any order are correct', () => {
+    const c = cQuestion();
+    const C2 = { string: 3, fret: 3 }, G2 = { string: 2, fret: 5 }, C3 = { string: 1, fret: 5 }; // 36, 43, 48
+    expect([C2, G2, C3].map((x) => posMidi(bass4, x))).toEqual([36, 43, 48]);
+    expect(play(c!, [C2, G2, C3])?.correct).toBe(true);
+    expect(play(c!, [C3, C2, G2])?.correct).toBe(true);
+    expect(play(c!, [G2, C3, C2])?.correct).toBe(true);
   });
 
-  it('US6-1: C root–fifth–octave on 4-string EADG accepts C, G and the C above', () => {
-    const c = findQ(bass4, base('bass-root-fifth-octave', bass4, { qualities: ['major'], count: 100 }), (q) => q.reference[0]!.string === 3 && q.reference[0]!.fret === 3); // A string fret 3 = C2 (MIDI 36)
-    expect(c).toBeDefined();
-    expect(judgeTap(c!, 0, { string: 2, fret: 5 })).toBe(true); // G2 = 43 on the D string
-    expect(judgeTap(c!, 1, { string: 1, fret: 5 })).toBe(true); // C3 = 48 on the G string
-    expect(judgeTap(c!, 1, { string: 2, fret: 10 })).toBe(false); // C3 on the D string: frets 3..10 span 8 > 4 (FR-056)
-    expect(judgeTap(c!, 1, { string: 3, fret: 3 })).toBe(false); // C2, not the octave
+  it('US6-1 / FR-056: C3 on the D string (fret 10) with C2 at fret 3 spans 8 frets, so the shape is incorrect', () => {
+    const c = cQuestion();
+    expect(posMidi(bass4, { string: 2, fret: 10 })).toBe(48);
+    const r = play(c, [{ string: 3, fret: 3 }, { string: 2, fret: 5 }, { string: 2, fret: 10 }, { string: 1, fret: 5 }]);
+    expect(r?.correct).toBe(false);
   });
 
-  it('FR-056: the whole shape must span ≤ 4 frets — 5th and octave each near the root but 6 frets apart is incorrect', () => {
-    // Root C2 at A string fret 3. 5th G2 at G string fret 0 (3 frets below) and octave C3 at G string
-    // fret 5 (2 above): frets {0, 3, 5} span 6 frets (max − min = 5 > 3), so the pattern is not accepted.
-    const c = findQ(bass4, base('bass-root-fifth-octave', bass4, { qualities: ['major'], count: 100 }), (q) => q.reference[0]!.string === 3 && q.reference[0]!.fret === 3)!;
-    const session = new DrillSession([c], 0);
-    session.tap({ string: 1, fret: 0 }, 100);
-    const r = session.tap({ string: 1, fret: 5 }, 200);
-    expect(r?.finished?.correct ?? r?.correct).toBe(false);
+  it('FR-056: the whole shape must span ≤ 4 frets — root fret 3, 5th open G string, octave fret 5 span 6 frets: incorrect', () => {
+    // Root C2 at A string fret 3, 5th G2 at G string fret 0, octave C3 at G string fret 5: frets
+    // {0, 3, 5}, max − min = 5 > 3.
+    const c = cQuestion();
+    expect(posMidi(bass4, { string: 1, fret: 0 })).toBe(43);
+    const r = play(c, [{ string: 3, fret: 3 }, { string: 1, fret: 0 }, { string: 1, fret: 5 }, { string: 2, fret: 5 }]);
+    expect(r?.correct).toBe(false);
   });
 
-  it('US6-2: Am7 arpeggio asks C, E, G in ascending order above the root A', () => {
-    const qs = gen(bass4, base('bass-arpeggio', bass4, { qualities: ['min7'], count: 50 }), 19);
-    const a = qs.find((q) => pcOf(posMidi(bass4, q.reference[0]!)) === 9);
+  it('US6-2: an Am7 arpeggio has 4 steps A, C, E, G ascending, the root A first, with no reference', () => {
+    const qs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].flatMap((seed) => gen(bass4, base('arpeggio', bass4, { qualities: ['min7'], count: 50 }), seed));
+    const a = qs.find((q) => q.steps[0]?.valid[0] && pcOf(posMidi(bass4, q.steps[0].valid[0])) === 9);
     expect(a).toBeDefined();
-    const rm = posMidi(bass4, a!.reference[0]!);
-    const pitches = a!.steps.slice(0, 3).map((st) => posMidi(bass4, st.valid[0]!) - rm);
-    expect(pitches).toEqual([3, 7, 10]);
+    expect(a!.reference).toEqual([]);
+    expect(a!.steps).toHaveLength(4);
+    const rm = posMidi(bass4, a!.steps[0]!.valid[0]!);
+    for (const st of a!.steps) expect(new Set(st.valid.map((x) => posMidi(bass4, x))).size, 'each step is one exact pitch').toBe(1);
+    expect(a!.steps.map((st) => posMidi(bass4, st.valid[0]!) - rm)).toEqual([0, 3, 7, 10]);
   });
 });
 
 // =============================================================================================
 describe('FR-058 walking bass rules', () => {
   const s = (chords: { root: string; quality: string }[]): DrillSettings =>
-    base('bass-walking', bass4, { key: { tonic: 'C', mode: 'major' }, chords, count: 20 });
+    base('walking-bass', bass4, { key: { tonic: 'C', mode: 'major' }, chords, count: 20 });
   const bar1 = (chords: { root: string; quality: string }[]) => gen(bass4, s(chords), 1).find((q) => q.group.startsWith('C'))!;
   /** A position sounding pitch class pc on 4-string EADG, frets 0–12. */
   const at = (pc: number) => brute(bass4, [1, 2, 3, 4], 0, 12, (m) => pcOf(m) === pc)[0]!;
@@ -507,7 +562,7 @@ describe('FR-058 walking bass rules', () => {
       fc.property(anyProfile.chain((p) => fc.tuple(fc.constant(p), rangeFor(p))), ([p, r]) => {
         const from = Math.min(r.a, r.b);
         const to = Math.max(r.a, r.b);
-        const st: DrillSettings = { type: 'bass-walking', strings: r.strings, fromFret: from, toFret: to, count: r.count, octaveMode: 'any', key: { tonic: 'C', mode: 'major' }, chords: [{ root: 'C', quality: 'major' }, { root: 'A', quality: 'minor' }, { root: 'D', quality: 'minor' }, { root: 'G', quality: 'dom7' }] };
+        const st: DrillSettings = { type: 'walking-bass', strings: r.strings, fromFret: from, toFret: to, count: r.count, octaveMode: 'any', key: { tonic: 'C', mode: 'major' }, chords: [{ root: 'C', quality: 'major' }, { root: 'A', quality: 'minor' }, { root: 'D', quality: 'minor' }, { root: 'G', quality: 'dom7' }] };
         if (!validateSettings(p, st).ok) return;
         for (const q of gen(p, st, r.seed)) {
           expect(q.steps).toHaveLength(4);
@@ -566,20 +621,13 @@ describe('FR-061 settings that name unknown theory objects are rejected or skipp
   });
 
   it('bass shapes: an unknown quality is rejected; omitted qualities still give answerable questions', () => {
-    expect(validateSettings(bass4, base('bass-arpeggio', bass4, { qualities: ['nonsense'] })).ok).toBe(false);
-    const { qualities: _q, ...rest } = base('bass-root-fifth-octave', bass4, { count: 10 });
+    expect(validateSettings(bass4, base('arpeggio', bass4, { qualities: ['nonsense'] })).ok).toBe(false);
+    const { qualities: _q, ...rest } = base('root-fifth-octave', bass4, { count: 10 });
     for (const q of gen(bass4, rest as DrillSettings)) expect(q.steps.every((st) => st.valid.length > 0)).toBe(true);
   });
 
-  it('bass octave shapes: the step is the exact octave above the reference', () => {
-    for (const q of gen(bass5, base('bass-octave-shapes', bass5, { count: 20 }))) {
-      expect(q.prompt.drillType).toBe('bass-octave-shapes');
-      for (const v of q.steps[0]!.valid) expect(posMidi(bass5, v)).toBe(posMidi(bass5, q.reference[0]!) + 12);
-    }
-  });
-
   it('walking bass: an unknown tonic or chord root is rejected; an unknown chord quality yields no bar for it', () => {
-    const w = (over: Partial<DrillSettings>) => base('bass-walking', bass4, { key: { tonic: 'C', mode: 'major' }, chords: [{ root: 'C', quality: 'major' }, { root: 'G', quality: 'major' }], ...over });
+    const w = (over: Partial<DrillSettings>) => base('walking-bass', bass4, { key: { tonic: 'C', mode: 'major' }, chords: [{ root: 'C', quality: 'major' }, { root: 'G', quality: 'major' }], ...over });
     expect(validateSettings(bass4, w({ key: { tonic: 'H', mode: 'major' } })).ok).toBe(false);
     expect(validateSettings(bass4, w({ chords: [{ root: 'C', quality: 'major' }, { root: 'Q', quality: 'major' }] })).ok).toBe(false);
     const qs = gen(bass4, w({ chords: [{ root: 'C', quality: 'major' }, { root: 'G', quality: 'nonsense' }] }));
@@ -588,19 +636,19 @@ describe('FR-061 settings that name unknown theory objects are rejected or skipp
   });
 
   it('walking bass in a minor key: beat 3 accepts the key’s scale tones (Ab over Cm in C minor)', () => {
-    const s = base('bass-walking', bass4, { key: { tonic: 'C', mode: 'minor' }, chords: [{ root: 'C', quality: 'minor' }, { root: 'G', quality: 'minor' }], count: 20 });
+    const s = base('walking-bass', bass4, { key: { tonic: 'C', mode: 'minor' }, chords: [{ root: 'C', quality: 'minor' }, { root: 'G', quality: 'minor' }], count: 20 });
     const q = gen(bass4, s).find((x) => x.group.startsWith('C'))!;
     const ab = brute(bass4, [1, 2, 3, 4], 0, 12, (m) => pcOf(m) === 8)[0]!;
     expect(judgeTap(q, 2, ab)).toBe(true);
   });
 
   it('walking bass with chords omitted still yields 4-beat bars', () => {
-    const { chords: _c, ...rest } = base('bass-walking', bass4, { key: { tonic: 'C', mode: 'major' }, count: 5 });
+    const { chords: _c, ...rest } = base('walking-bass', bass4, { key: { tonic: 'C', mode: 'major' }, count: 5 });
     for (const q of gen(bass4, rest as DrillSettings)) expect(q.steps).toHaveLength(4);
   });
 
   it('every drill type has a display label', () => {
-    for (const t of ['note-finding', 'interval', 'chord-tone', 'bass-root-fifth-octave', 'bass-arpeggio', 'bass-walking', 'bass-octave-shapes'] as const) {
+    for (const t of ['note-finding', 'interval', 'chord-tone', 'root-fifth-octave', 'arpeggio', 'walking-bass', 'chord-tone-lock'] as const) {
       expect(DRILL_LABELS[t].length).toBeGreaterThan(0);
     }
   });

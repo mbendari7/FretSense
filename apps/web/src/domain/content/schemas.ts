@@ -40,7 +40,7 @@ export const drillDefinitionSchema = z
   .strictObject({
     id,
     // FN-7 (provisional): walking bass is hidden until full FR-058 ships.
-    type: z.enum(DRILL_TYPES).refine((t) => t !== 'bass-walking', 'walking-bass drills are not available yet'),
+    type: z.enum(DRILL_TYPES).refine((t) => t !== 'walking-bass' && t !== 'chord-tone-lock', 'walking-bass and chord-tone-lock drills are not available yet'),
     title: z.string().max(120).optional(),
     instruments,
     params: z

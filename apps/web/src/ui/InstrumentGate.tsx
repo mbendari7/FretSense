@@ -4,12 +4,17 @@ import { Link } from 'react-router';
 import type { InstrumentRecord } from '../domain/records';
 import { useApp, useAppState } from './hooks';
 
-/** FR-053: screens that need an instrument show the picker first; nothing is assumed. */
-export function InstrumentGate({ children }: { children: (inst: InstrumentRecord) => ReactNode }) {
+/**
+ * FR-053: screens that need an instrument show the picker first; nothing is assumed.
+ * FR-048: the picker's heading is an h2; a gate that is the whole route passes `title`, the
+ * route's one h1, so the route keeps exactly one h1 while the picker shows.
+ */
+export function InstrumentGate({ children, title }: { children: (inst: InstrumentRecord) => ReactNode; title?: string }) {
   const app = useApp();
   useAppState();
   const inst = app.activeInstrument() ?? app.liveInstruments()[0];
   if (inst) return <>{children(inst)}</>;
+  if (title) return <div className="page"><h1>{title}</h1><InstrumentPicker /></div>;
   return <InstrumentPicker />;
 }
 
@@ -19,7 +24,7 @@ export function InstrumentPicker() {
   const left = s.settings?.display.handedness === 'left';
   return (
     <section className="picker" aria-labelledby="picker-h">
-      <h1 id="picker-h">What do you play?</h1>
+      <h2 id="picker-h">What do you play?</h2>
       <p className="lede">Pick your instrument and tuning. You can change it, or add more, in My Gear.</p>
       <div className="preset-grid">
         {presets().map((p) => (

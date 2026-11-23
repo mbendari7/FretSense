@@ -205,6 +205,37 @@ green, then the listed gates run. Commits reference `[Txxx][FR-xxx]` and are mad
 
 ---
 
+## Phase 11: v0.1 feedback round (loop D → loop A, 2026-11-22)
+
+Spec changes FN-2..FN-11, R2-*, R3-*, A2-* (spec.md, provisional or owner-approved; ledger in `reviews/`). Test-first: each test task runs red before its implementation task.
+
+- [ ] T090 test-writer: red unit tests `apps/web/src/domain/drills/generate.test.ts` + `apps/web/src/domain/drills/prompts.test.ts` for prompt wording (FR-030 open-string spelling, FR-036 chord words + ordinal function + quality-name table), spelling consistency within a question (FR-032), any-octave feedback without octave numbers (FR-049), drill-type ids and itemKeys per spec Key Entities / FR-041 (spec-reviewer r1 #18) [FR-030, FR-032, FR-036, FR-041, FR-049] → gates: theory-checker
+- [ ] T091 Implement T090 in `apps/web/src/domain/drills/` and `apps/web/src/ui/screens/DrillRunner.tsx`; align `data-model.md` §3.1 drill-type ids and itemKeys to the spec [FR-030, FR-032, FR-036, FR-041, FR-049] → gates: theory-checker, code-reviewer
+- [ ] T092 test-writer: red unit tests `apps/web/src/domain/merge.test.ts` + `apps/web/src/application/app.test.ts` for restore precedence (1)–(5), completion revive-after-reset with only the new stage, copy-import tombstone rules, preview counts and the "nothing new to import" case [FR-043, FR-044, FR-066a, SC-009, SC-013] → gates: code-reviewer
+- [ ] T093 Implement T092 in `apps/web/src/domain/merge.ts`, `apps/web/src/application/app.ts` and `apps/web/src/ui/screens/ProgressScreen.tsx` (copy-mode warning, mode heading); align data-model §4 [FR-043, FR-044, FR-066a] → gates: privacy-auditor, security-reviewer, code-reviewer
+- [ ] T094 test-writer: red component/E2E tests for the fretboard: fret-0 full targets (FR-032a), nut labels in instrument spelling while unanswered, scroll cue + range indicator + "Jump to frets" group (FR-047), focus rules (route change, drill start, Home key + hint, Continue returns focus), "Question N of M" live region (FR-049) [FR-032a, FR-047, FR-049] → gates: code-reviewer
+- [ ] T095 Implement T094 in `apps/web/src/ui/fretboard/Fretboard.tsx`, `apps/web/src/ui/Layout.tsx`, `apps/web/src/ui/screens/DrillRunner.tsx` [FR-032a, FR-047, FR-049] → gates: perf-auditor, code-reviewer
+- [ ] T096 test-writer: red tests for the drill summary (missed list in question order, first 10 + "Show all (N)", "See progress"/"Back to drills" targets, focus to heading, 0-answered state, Drill stage recorded at the last judged question) and the empty-library / Home wording (FR-034, Edge Cases) [FR-028, FR-034] → gates: code-reviewer
+- [ ] T097 Implement T096 in `apps/web/src/ui/screens/DrillRunner.tsx`, `LessonScreens.tsx`, `HomeScreen.tsx` [FR-028, FR-034] → gates: code-reviewer
+- [ ] T091a FR-031 note sets and FR-035/FR-036 UI defaults (theory-checker T091 r1 #3, #8, #9): test-writer red tests for the 4 note sets (letters only, the default of 7 naturals; letters and sharps; letters and flats; all 17 spellings), with prompts spelled by the chosen set; DrillsScreen defaults (intervals {M2,m3,M3,P4,P5,P8}, all 7 natural roots, a d5 chip); one stable spelling per rfo group label; then implement [FR-031, FR-035, FR-036, FR-041] → gates: theory-checker, code-reviewer
+- [ ] T093a Legacy drill-id migration (code-reviewer T091 r1 #4; product-owner decision, provisional): test-writer red tests (a v0.1-shaped export with `bass-*` ids imports with zero rejections; stored legacy attempts load; re-export writes the migrated ids; old rfo keys and octave-shapes attempts land under the legacy id, count toward totals and are never offered or used for mastery; unmapped unknown ids still reject the file); then implement one versioned migration step on load and import; data-model §3.1 [FR-043, FR-041, SC-013] → gates: code-reviewer, privacy-auditor
+- [ ] T099a FR-036 window-width setting (code-reviewer r1 #10; backlog, needed before the v0.1 release): test-writer red tests for the setting, its default 4 and its clamp to the fret range; then implement [FR-036] → gates: theory-checker, code-reviewer
+- [ ] T100 Mode B2 fix group (product-owner triage, provisional CRs): test-writer red tests, then implement:
+  - step indicator states and missed-step summary (FR-057, FR-056; CR-B2-2);
+  - string chips with low/high naming and the active instrument named in setup (FR-031; CR-B2-5, CR-B2-8);
+  - My Gear status in view and focused (FR-053; CR-B2-7);
+  - empty-library text (FR-022; CR-B2-9);
+  - one h1 per route (FR-048; CR-B2-11);
+  - interval prompt states its fret range (FR-035; CR-B2-13);
+  - plain record kinds and Close-only for nothing-new (FR-066a; CR-B2-14);
+  - Tab order from the board (FR-048 bug).
+  [FR-022, FR-031, FR-035, FR-048, FR-053, FR-056, FR-057, FR-066a] → gates: code-reviewer, theory-checker
+- [ ] T100a Arpeggio root played as Step 1 (FR-057 and US6 scenario 2, product-owner 2026-11-22). Today the generator gives the root as a reference. Also FR-056 fixed steps R/5/8, labels "root"/"octave", and a fixed seed for the DrillRunner.nut property test. test-writer red first. [FR-056, FR-057] → gates: code-reviewer, theory-checker
+- [ ] T100b FR-056 valid-shape judging and FR-056a wrong-tap charging; FR-057 window fit, the "up from its lowest A" prompt and wrong-step reasons; "root" in missed lists; add9 R-3-5-9 (pending owner). test-writer red first; theory-checker writes the US6 1b fixtures. [FR-056, FR-056a, FR-057] → gates: code-reviewer, theory-checker
+- [ ] T100c Arpeggio one attempt per question (FR-040, FR-057); multi-step resume at the next pending step, excluding paused time; End-drill "Your unfinished question wasn't saved."; Progress units (FR-034, FR-042); weighting counts FR-040 attempts (FR-041). test-writer red first. [FR-034, FR-040, FR-041, FR-042, FR-057] → gates: code-reviewer
+- [ ] T098 Walking bass and chord-tone lock (FR-058, FR-059; deferred group, needed before the v0.1 release): test-writer red tests for the looping line, slots, Undo, Check line, R1–R4 messages, revealed-note captions, stand-alone I–vi–ii–V in a chosen major key, strings + fret-range settings; feedback names each valid position by its own note when a step accepts several pitch classes (theory-checker r2 #1); then implement [FR-058, FR-059, FR-065, SC-012] → gates: theory-checker, code-reviewer
+- [ ] T099 user-tester Mode B on the result, then product-owner triage (team loop D) [CLAUDE.md loop D]
+
 ## Dependencies and execution order
 
 ```text

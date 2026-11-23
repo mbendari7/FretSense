@@ -231,8 +231,12 @@ legend { font-weight: 700; margin-bottom: 6px; font-size: 0.9rem; }
 .steps { display: flex; gap: 6px; flex-wrap: wrap; list-style: none; padding: 0; margin: 6px 0; }
 .steps li { padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-soft); }
 .steps li.now { border-color: var(--m-ref); color: var(--ink); font-weight: 700; }
-.steps li.done { border-color: var(--m-ok); color: var(--m-ok); }
-.steps li.done::before { content: '✓ '; }
+.steps li.correct { border-color: var(--m-ok); color: var(--m-ok); }
+.steps li.missed { border-color: var(--m-bad); border-style: dashed; color: var(--ink); }
+.steps .step-icon { margin-right: 4px; }
+.steps .step-state { font-size: 0.85em; }
+.runner-title { font-size: 1.1rem; margin: 0; }
+.runner-foot { margin-top: 10px; }
 .feedback { min-height: 60px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 8px 0; font-size: calc(var(--step) * 1.1); }
 .fb-icon { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; color: #fff; font-weight: 700; }
 .feedback.ok .fb-icon { background: var(--m-ok); }
@@ -276,8 +280,23 @@ legend { font-weight: 700; margin-bottom: 6px; font-size: 0.9rem; }
 .fb-openzone { fill: var(--surface); stroke: var(--line); }
 .mk-revealed { fill: rgba(86, 180, 233, 0.28); }
 .m-revealed .fb-label, .m-outline .fb-label { fill: var(--ink); }
-.scroll-cue { margin: 0 0 6px; font-size: 0.85rem; color: var(--ink-soft); }
-.fretboard-scroll.overflows { box-shadow: inset -18px 0 14px -14px rgba(0, 0, 0, 0.35); border-radius: 4px; }
+/* FR-047: sticky nut column, clipped-edge cues, range indicator and "Jump to frets" (T095) */
+.fretboard-frame { position: relative; }
+.fretboard-scroll.overflows { border-radius: 4px; }
+.fb-nutbg { fill: var(--surface); }
+.fb-coledge { stroke: var(--line); stroke-width: 2; }
+.fb-nutname { fill: var(--ink); font-size: 14px; font-weight: 700; }
+.fb-cue { position: absolute; top: 50%; transform: translateY(-50%); display: grid; place-items: center; width: 28px; height: 44px; border-radius: 8px; background: var(--surface); border: 2px solid var(--ink-soft); color: var(--ink); pointer-events: none; opacity: 0.92; }
+.fb-cue-left { left: 0; }
+.fb-cue-right { right: 0; }
+.fb-scrollbar { display: flex; flex-direction: column; gap: 4px; margin: 0 0 8px; }
+.fb-range { margin: 0; font-size: 0.9rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.fb-jump { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.fb-jump-label { font-weight: 700; font-size: 0.9rem; white-space: nowrap; }
+.fb-jump-row { display: flex; gap: 6px; overflow-x: auto; overscroll-behavior-x: contain; min-width: 0; padding: 2px; }
+.fb-jump-btn { min-width: 44px; min-height: 44px; padding: 0 12px; white-space: nowrap; }
+.announce .count { display: block; margin-top: 8px; }
+.kb-hint { font-weight: 400; }
 .hint { color: var(--ink-soft); font-weight: 700; margin: 4px 0; }
 .missed { margin: 4px 0 12px; padding-left: 20px; }
 .prompt:focus { outline: none; }

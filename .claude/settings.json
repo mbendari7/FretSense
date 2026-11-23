@@ -17,9 +17,7 @@
       "PowerShell(git rebase *)",
       "PowerShell(git reset --hard *)",
       "PowerShell(git commit)",
-      "PowerShell(git push)",
-      "Edit(content/lessons/**)",
-      "Edit(content/handbook/**)"
+      "PowerShell(git push)"
     ]
   },
   "attribution": {

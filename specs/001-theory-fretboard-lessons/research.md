@@ -177,7 +177,7 @@ Everything else can proceed.
 
 ## R9. Weak-spot weighting (FR-041)
 
-- **Decision**: for each candidate item, with n = its attempts among the last 50 and m = its misses,
+- **Decision**: for each candidate item, with n = its attempts among the last 50 and m = its misses, n and m count FR-040 attempts; for root–fifth–octave and arpeggio that is one per question (a miss if any step was missed), so the 50-attempt window is 50 questions (product-owner 2026-11-22, provisional).
   weight w = 1 + 3·(m + 1)/(n + 2) (a Laplace-smoothed miss rate, scaled). Prompts are drawn by
   weighted sampling with a seeded PRNG (a small, documented 32-bit generator in the domain layer).
   With adaptive weighting off, w = 1 for every valid item (US7-5).

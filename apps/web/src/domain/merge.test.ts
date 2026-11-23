@@ -87,14 +87,10 @@ describe('FR-066a attempts are immutable (restore precedence)', () => {
     expect(mergeAttempt(undefined, inc, fresh)).toEqual({ kind: 'write', record: inc, change: 'added' });
   });
 
-  it('no local copy, incoming tombstone: written as hidden (tombstones are kept for merging)', () => {
+  // spec FR-066a: "(6) no local copy, incoming copy tombstoned ⇒ not written and not counted in any preview count (it hides nothing)."
+  it('no local copy, incoming tombstone: not written and not counted (rule 6)', () => {
     const inc = attempt({ deleted: true });
-    const r = mergeAttempt(undefined, inc, fresh);
-    expect(r.kind).toBe('write');
-    if (r.kind === 'write') {
-      expect(r.record.deleted).toBe(true);
-      expect(r.change).toBe('hidden');
-    }
+    expect(mergeAttempt(undefined, inc, fresh)).toEqual({ kind: 'keep' });
   });
 
   it('same id, identical payload, both live: no-op', () => {
@@ -370,6 +366,102 @@ describe('FR-066a / FR-043 lesson completion: natural key, per-stage union (earl
         const r1 = mergeCompletion(a, b);
         const after = r1.kind === 'write' ? r1.record : a;
         expect(mergeCompletion(after, b)).toEqual({ kind: 'keep' });
+      }),
+    );
+  });
+});
+
+// =============================================================================================
+// T092 (red, test-first): FR-066a "Restore precedence for records with the same id or natural key"
+// (1)–(5), owner-approved 2026-11-22 (R2-3, R3-1), plus the FN-10b completion tombstone rules.
+// Expected outcomes are read off the numbered rule list in spec.md FR-066a, one case per rule and
+// record type; nothing is derived from merge.ts.
+// =============================================================================================
+describe('FR-066a restore precedence (1)–(5), per record type', () => {
+  const A = '55555555-5555-4555-8555-555555555555';
+
+  describe('(1) attempts only: a different immutable payload ⇒ conflict', () => {
+    it.each([
+      ['both live', false, false],
+      ['local tombstoned', true, false],
+      ['incoming tombstoned', false, true],
+      ['both tombstoned', true, true],
+    ] as const)('%s: conflict wins over every tombstone rule', (_n, ld, id) => {
+      const r = mergeAttempt(attempt({ deleted: ld, updated: h(3) }), attempt({ deleted: id, updated: h(4), payloadHash: 'c'.repeat(64), outcome: 'incorrect' }), fresh);
+      expect(r.kind).toBe('conflict');
+    });
+  });
+
+  describe('(2) local tombstoned, incoming live ⇒ un-delete', () => {
+    it('attempt: restored', () => {
+      expect(mergeAttempt(attempt({ deleted: true, updated: h(9) }), attempt({ updated: h(1) }), fresh)).toMatchObject({ kind: 'write', change: 'restored', record: { deleted: false } });
+    });
+    it('instrument: restored, even when the local tombstone is newer', () => {
+      expect(mergeInstrument(instrument({ deleted: true, updated: h(9) }), instrument({ updated: h(1) }), fresh)).toMatchObject({ kind: 'write', change: 'restored', record: { deleted: false } });
+    });
+    it('completion: restored (counted as restored), keeping the per-stage union with the earliest time', () => {
+      const r = mergeCompletion(completion(A, { read: h(4) }, { deleted: true, updated: h(9) }), completion(A, { read: h(2), see: h(3) }, { updated: h(5) }));
+      expect(r).toMatchObject({ kind: 'write', change: 'restored', record: { deleted: false, stages: { read: h(2), see: h(3) } } });
+    });
+  });
+
+  describe('(3) local live, incoming tombstoned ⇒ applies only if its HLC is newer than the local last update', () => {
+    it.each([
+      ['newer ⇒ hidden', 6, true],
+      ['equal ⇒ no-op', 5, false],
+      ['older ⇒ no-op', 4, false],
+    ] as const)('%s (attempt, instrument, completion)', (_n, inc, applies) => {
+      const ra = mergeAttempt(attempt({ updated: h(5) }), attempt({ deleted: true, updated: h(inc) }), fresh);
+      const ri = mergeInstrument(instrument({ updated: h(5) }), instrument({ deleted: true, updated: h(inc) }), fresh);
+      const rc = mergeCompletion(completion(A, { read: h(1) }, { updated: h(5) }), completion(A, { read: h(1) }, { deleted: true, updated: h(inc) }));
+      for (const r of [ra, ri, rc]) {
+        if (applies) expect(r).toMatchObject({ kind: 'write', change: 'hidden', record: { deleted: true } });
+        else expect(r).toEqual({ kind: 'keep' });
+      }
+    });
+  });
+
+  describe('(4) both live ⇒ the type rule', () => {
+    it('attempts identical ⇒ no-op', () => {
+      expect(mergeAttempt(attempt({ updated: h(1) }), attempt({ updated: h(7) }), fresh)).toEqual({ kind: 'keep' });
+    });
+    it('completion: per-stage union, earliest kept', () => {
+      expect(mergeCompletion(completion(A, { read: h(4) }), completion(A, { read: h(2), drill: h(8) }))).toMatchObject({ kind: 'write', record: { stages: { read: h(2), drill: h(8) } } });
+    });
+    it('instrument: newest updated wins', () => {
+      expect(mergeInstrument(instrument({ updated: h(1) }), instrument({ name: 'New', updated: h(2) }), fresh)).toMatchObject({ kind: 'write', record: { name: 'New' } });
+    });
+  });
+
+  describe('(5) both tombstoned ⇒ no-op', () => {
+    it.each([
+      ['incoming newer', 2, 8],
+      ['incoming older', 8, 2],
+      ['equal', 5, 5],
+    ] as const)('%s: attempt, instrument and completion all keep', (_n, lu, iu) => {
+      expect(mergeAttempt(attempt({ deleted: true, updated: h(lu) }), attempt({ deleted: true, updated: h(iu) }), fresh)).toEqual({ kind: 'keep' });
+      expect(mergeInstrument(instrument({ deleted: true, updated: h(lu) }), instrument({ deleted: true, name: 'Other', updated: h(iu) }), fresh)).toEqual({ kind: 'keep' });
+      expect(mergeCompletion(completion(A, { read: h(1) }, { deleted: true, updated: h(lu) }), completion(A, { see: h(1) }, { deleted: true, updated: h(iu) }))).toEqual({ kind: 'keep' });
+    });
+  });
+
+  it('property (SC-013): restore merge of completion is idempotent over every tombstone combination', () => {
+    fc.assert(
+      fc.property(fc.boolean(), fc.boolean(), fc.integer({ min: 0, max: 20 }), fc.integer({ min: 0, max: 20 }), fc.integer({ min: 0, max: 20 }), fc.integer({ min: 0, max: 20 }), (ld, id, lu, iu, ls, is) => {
+        const local = completion(A, { read: h(ls, 0, WA) }, { deleted: ld, updated: h(lu, 0, WA) });
+        const inc = completion(A, { see: h(is, 0, WB) }, { deleted: id, updated: h(iu, 0, WB) });
+        const r1 = mergeCompletion(local, inc);
+        const after = r1.kind === 'write' ? r1.record : local;
+        expect(mergeCompletion(after, inc)).toEqual({ kind: 'keep' });
+      }),
+    );
+  });
+
+  it('property (SC-013): restore merge of instruments never resurrects or rewrites a record when both copies are tombstoned', () => {
+    fc.assert(
+      fc.property(fc.integer({ min: 0, max: 20 }), fc.integer({ min: 0, max: 20 }), (lu, iu) => {
+        const r = mergeInstrument(instrument({ deleted: true, updated: h(lu, 0, WA) }), instrument({ deleted: true, name: 'Incoming', updated: h(iu, 0, WB) }), fresh);
+        expect(r).toEqual({ kind: 'keep' });
       }),
     );
   });

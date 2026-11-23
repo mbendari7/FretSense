@@ -36,7 +36,7 @@ Two kinds of data:
 | `DrillSettings` | strings, fret range, count (5–100), note set, interval set, direction, qualities, functions, window width, octave mode | FR-030–FR-036; rejected before start if unanswerable (FR-061) |
 | `Question` | prompt, `validAnswers: FretPosition[]` (non-empty), item key | FR-061 |
 | `ItemKey` | note-finding `(geometryId, string, pitchClass)`; interval `(interval, direction)`; chord tone `(quality, function)`; bass `(drillType, quality)` | FR-041 |
-| `DrillSession` (in memory) | definition, settings, seed, questions, answers, state `idle → running ⇄ paused → completed \| abandoned` | Paused on background or leave; resume re-shows the current question and restarts its timer (Edge Cases) |
+| `DrillSession` (in memory) | definition, settings, seed, questions, answers, state `idle → running ⇄ paused → completed \| abandoned` | Paused on background or leave; resume re-shows the current question; a single-step question's timer restarts, a multi-step question keeps its judged steps and continues at the next pending step with paused time excluded (Edge Cases) |
 | `Lesson` (compiled content) | `id`, `title`, `level`, `tags`, `instruments`, `concepts`, `bodyHtml` (sanitised), `preset?`, `drills`, `songs`, `needs`, reserved `play`, `cameraCoach` | FR-022–FR-025, FR-068 |
 | `CurriculumPack` (compiled or imported) | `id`, `title`, `source?`, `schemaVersion`, `sections: { title, label?, lessons: lessonId[] }[]` | FR-063 |
 | `TagVocabulary` | `{ goal: string[], genre: string[], topic: string[], 'level-hint': string[] }` | FR-068 |
@@ -70,12 +70,28 @@ Two kinds of data:
 
 - **`itemKey`** grammar (a string, so it can be indexed):
   `nf|<geometryId>|<string>|<pitchClass 0-11>`, `iv|<interval e.g. M3>|<up\|down>`,
-  `ct|<qualityId>|<function e.g. b7>`, `bs|<drillType>|<qualityId>`.
+  `ct|<qualityId>|<function e.g. b7>`, `rfo|<root pitchClass 0-11>` (root–fifth–octave, FR-041),
+  `bs|<drillType>|<qualityId>` (arpeggio, walking-bass, chord-tone-lock). *(T091: aligned to the
+  spec's frozen encodings, spec-reviewer r1 #18.)*
 - **`prompt`** per `drillType`: `note-finding {pitchClass, string?, midi?}`,
   `interval {root: FretPosition, interval}`, `chord-tone {root, qualityId, function}`,
-  `bass-root-fifth-octave {root, qualityId}`, `bass-arpeggio {root, qualityId}`,
-  `bass-walking {key, chords}`, `bass-octave-shapes {root}`. Every object is strict (unknown keys
-  rejected).
+  `root-fifth-octave {root, qualityId}`, `arpeggio {root, qualityId}`,
+  `walking-bass {key, chords}`, `chord-tone-lock {key, chords}`. `drillType` is exactly the spec's
+  seven ids (Key Entities). Every object is strict (unknown keys rejected).
+- **v0.1 migration (T093a, provisional product-owner decision 2026-11-22).** Attempts stored by the
+  v0.1 pre-release (4695363) are migrated once, on load (written back) and on import (before
+  validation), by the pure `domain/migrate.ts`. The original `payloadHash` is checked first, then the
+  migrated payload is re-hashed, so every path gives the same hash.
+  - `bass-arpeggio` → `arpeggio` and `bass-walking` → `walking-bass`: drillType, `prompt.drillType`
+    and `bs|<id>|<q>` itemKeys are renamed.
+  - v0.1 root–fifth–octave attempts (`bs|bass-root-fifth-octave|<q>`, no root pitch class) and every
+    `bass-octave-shapes` attempt become `drillType: 'legacy'`, with prompt `{ drillType: 'legacy',
+    legacyDrillType, root, qualityId | null }` and itemKey `lg|<old drillType>|<q>`.
+  - Legacy attempts are kept in storage and exports only; they are not shown on Progress. `legacy` is not in the drill-type list:
+    it is never offered as a drill and never matches a generated item key, so it never feeds
+    weighting or mastery.
+  - Any other unknown drill type still rejects the whole file (FR-043).
+  - Records keep `schemaVersion: 1`; the migration is idempotent, so no version bump is needed.
 - **`payloadHash`** = lowercase hex SHA-256 of the canonical JSON (keys sorted by code point, no
   whitespace, UTF-8, integers only, `null` for absent optional fields) of exactly: `id`,
   `localProfileId`, `drillType`, `instrumentId`, `geometryId`, `modality`, `prompt`, `answer`,
@@ -134,11 +150,11 @@ truth (006 FR-025).
 
 1. Check `File.size` ≤ 50 MB **before** reading the file → read text → a linear pre-scan counts
    bracket depth outside strings and rejects at > 16 → `JSON.parse` → reject prototype keys at any
-   depth → Zod-validate the whole file with strict schemas (unknown fields rejected; caps:
+   depth → check the envelope (format, schemaVersion, attempts is an array of ≤ 200,000) → migrate v0.1 attempts (T093a, carried by array index) → Zod-validate the whole file with strict schemas (unknown fields rejected; caps:
    instruments ≤ 50, attempts ≤ 200,000, lessonCompletion ≤ 1,000; names ≤ 60 and other text ≤ 200,
    NFC-normalised, with control, bidi-override (U+202A–202E, U+2066–2069) and zero-width
    (U+200B–200F) characters rejected) → recompute every `payloadHash` → reject any HLC whose wall
-   time is > 24 h ahead of the device clock → migrate to the current version. Lookups use `Map` and
+   time is > 24 h ahead of the device clock → reject duplicate ids within a store and lesson-completion duplicates. Lookups use `Map` and
    `Object.hasOwn`; parsed data is never deep-merged or `Object.assign`-ed. On any failure: reject,
    with no change and a readable reason.
 2. **Restore** (the file's `localProfile.id` is the active local profile): for each record,
@@ -150,7 +166,7 @@ truth (006 FR-025).
    - profile settings: matched by natural key; per-field LWW on `fieldUpdated`;
    - instruments: an incoming live record replaces a local tombstone (fresh `updated`); otherwise
      the newest `updated` wins (HLC order, ties by writer id);
-   - completion (tombstones: see spec Clarifications 2026-11-22, FN-10 provisional; a live incoming record un-deletes, keeping the union; an incoming tombstone applies only if newer): matched by natural key `(localProfileId, lessonId)`; per-stage union (earliest
+   - completion (FN-10b, FR-066a restore precedence (1)–(5); a live incoming record un-deletes a local tombstone, keeping the per-stage union; an incoming tombstone applies only if newer; both tombstoned ⇒ no-op; copy import follows FR-043 instead): matched by natural key `(localProfileId, lessonId)`; per-stage union (earliest
      Hlc kept per stage);
    - the local HLC receives the largest incoming `updated` (research R5 receive rule).
    Before writing, the user sees a preview (added, restored, updated, hidden by incoming tombstones,

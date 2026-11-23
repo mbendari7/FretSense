@@ -19,6 +19,9 @@ export function Layout() {
   // Move focus to the new page on navigation so keyboard and screen-reader users aren't left on <body>.
   useEffect(() => {
     if (first.current) { first.current = false; return; }
+    // FR-049: drill start overrides the route-change rule (a view that already placed focus, e.g. a
+    // running drill's fretboard start position, keeps it).
+    if ((document.activeElement as HTMLElement | null)?.closest?.('[data-route-focus-override]')) return;
     const h1 = mainRef.current?.querySelector('h1') as HTMLElement | null;
     if (h1) { h1.tabIndex = -1; h1.focus({ preventScroll: true }); } else mainRef.current?.focus({ preventScroll: true });
     window.scrollTo(0, 0);

@@ -1,14 +1,25 @@
-# Built-in curriculum pack (FR-063, T044): structure only until the lessons exist (T046).
-# The order is a suggestion; nothing is locked.
+# Built-in curriculum pack (FR-063, T044, T046). The order is a suggestion; nothing is locked.
 id: general-theory
 title: General Theory
 schema_version: 1
 sections:
   - title: Find your way around the neck
-    lessons: []
+    lessons:
+      - musical-alphabet
+      - natural-notes-low-strings
+      - sharps-and-flats
+  - title: Intervals by shape
+    lessons:
+      - octave-shapes
+      - thirds-and-fifths
   - title: Scales
-    lessons: []
+    lessons:
+      - major-scale
   - title: Chords and keys
-    lessons: []
+    lessons:
+      - triads
+      - seventh-chords
   - title: Bass foundations
-    lessons: []
+    lessons:
+      - root-fifth-octave
+      - arpeggios-over-changes
