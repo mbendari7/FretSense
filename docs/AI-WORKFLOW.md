@@ -275,6 +275,35 @@ Targets come from the specs and ADR-0002.
 | FRs with ≥1 test or eval | — | 100% | — | — | — |
 | Tasks traced to an FR | — | 100% | — | — | — |
 
+## Token budget
+
+Token and cost work is governed by [ADR-0013](adr/0013-token-budget.md) (Status: Accepted by the owner, 2026-11-25). Measurements are in [`docs/token-budget/`](token-budget/).
+
+**Approach**
+
+- **Model tiering:** opus for spec-reviewer, architecture-reviewer and product-owner; sonnet for code-reviewer, test-writer, user-tester, theory-checker, ml-evaluator, privacy-auditor and security-reviewer; haiku for docs-keeper, dataset-curator and perf-auditor.
+- **Scoped reads:** reviewers read only the FR-IDs and spec parts their task names.
+- **Diff-only re-reviews:** a re-review resumes the same reviewer with SendMessage instead of starting fresh.
+- **Gate selection:** `scripts/select-gates.mjs` picks the gates from the changed paths.
+- **Proportional loop A:** a spec change with 5 or fewer FR-IDs runs spec-reviewer and product-owner only.
+- **Trimmed CLAUDE.md:** detailed rules moved to path-scoped `.claude/rules/`.
+- **Spec 001 split** into an index plus parts.
+
+**Tools:** RTK, Serena, Context7 and ccusage (see [README "Dev tooling"](../README.md#dev-tooling)).
+
+**Before and after**
+
+| Measure | Baseline | After |
+|---|---|---|
+| Tokens and cost | 305,492,921 tokens, $192.43 (7 days) | 5,763,664 tokens, $2.0025 (T099a task cycle) |
+| Model share of cost | Opus 99.1% (7 days) | Opus 81.6% / Sonnet 18.4% (T099a) |
+| CLAUDE.md size | 2,583 words | 981 words |
+| Subagent tokens per sonnet gate, r1 | not measured | 23,689 – 24,416 |
+
+The per-task baseline was not measured, so the cycle figure has no before value.
+
+**Key finding:** 91% of the T099a cycle's tokens were main-session Opus cache reads. The recommendation (not measured) is a fresh session per `/task-cycle`. RTK, Serena and Context7 were not active during the measurement (restart and approval pending).
+
 ## 5. Where the AI got it wrong
 
 This is an honest log of AI output that was rejected, corrected, or caught by a gate. Catching
@@ -301,6 +330,12 @@ these mistakes is the point of the process.
 | 2026-11-22 | 001 implement (T091/T095) | AI agent (main session + implementer agent) | Interval drill wiring; T091a/T093a task ticks | Fixed the interval spelling only on the feedback-text path; the board's reference and revealed labels still used sharp spellings ("A#2" under a "B♭" prompt). Also ticked T091a/T093a before their gates passed, and told the implementer to name the whole settings range "inside window" | code-reviewer r2 (MAJOR #1, MINOR #12); implementer gap report | Unticked the tasks; red tests first for the board spelling; "inside window" limited to questions that state one |
 | 2026-11-22 | 001 implement (T091 r2 #1 fix) | AI agent (implementer) | `ui/markers.ts` spelledAt | Second partial fix of the interval board spelling: only the question's own notes got its spelling; every other revealed position, including the user's wrong tap, still fell back to sharp defaults. The red test only checked for "G#", so it passed | code-reviewer r3 (MAJOR #1) | Red test for the tapped position name and other revealed positions; escalated to owner at the round limit |
 | 2026-11-22 | 001 implement (T100b) | AI agent (main session + implementer agent) | FR-040 arpeggio attempts; T100b US6 tests | Implemented FR-040's per-step arpeggio recording without first checking its effect on weighting, Progress totals, pause/resume and End drill, so the change had to be reversed by a spec change (one attempt per question). Also several new US6 tests were written while the implementation was landing, so they were never seen red | implementer side-effect report; product-owner review; test-writer report | Check a spec rule's downstream effects with product-owner before implementing; red tests for the reversal come first; code-reviewer r3 asked to judge whether green-on-arrival tests can catch regressions |
+| 2026-11-25 | Token budget: `select-gates.mjs` v1 | AI agent (main session) | `scripts/select-gates.mjs` v1 | No rule for `apps/web/src/domain/drills/**`, so on T099a it printed only code-reviewer, while tasks.md tagged theory-checker | Comparison with tasks.md | Fixed test-first: drills and `ui/fretboard` now map to theory-checker |
+| 2026-11-25 | Token budget: `/loop-a` FR count | AI agent (main session) | FR-count grep `^[+-][^+-]` | Would skip markdown bullet lines such as `+- **FR-001**`, and missed untracked spec files | Synthetic-diff self-test before use | Fixed before use |
+| 2026-11-25 | Token budget: Context7 in `.mcp.json` | AI agent (main session) | Context7 entry written from memory | Wrong header name | Checked upstash/context7's README | Now uses `Authorization: Bearer ${CONTEXT7_API_KEY:-}` |
+| 2026-11-25 | Token budget: baseline ccusage run | AI agent (main session) | First ccusage run | Sent its anonymous daily ping (telemetry on by default) before telemetry was disabled | Recorded in `baseline.md` | Later runs set `CCUSAGE_TELEMETRY_DISABLED=1` |
+| 2026-11-25 | Token budget: RTK setup | AI agent (main session) | Assumed `rtk init` for a project installs a hook | Wrong: in project mode it only adds instructions to CLAUDE.md, and only `-g` installs the hook. Bare `pnpm test` is not rewritten (`pnpm vitest run` is) | Found during setup | Hook added by hand to the project `.claude/settings.json` |
+| 2026-11-25 | 001 spec split review | spec-reviewer | Split-structure review without a verbatim check | Has only Read, Grep and Glob, so it could not run `git show` for the verbatim spot-check of the split | Review gap recorded in `specs/001-theory-fretboard-lessons/reviews/2026-11-25-spec-reviewer-split-r1.md` | Main agent ran a line-by-line check: 928/928 lines unchanged |
 
 ## 6. AI involvement per PR
 

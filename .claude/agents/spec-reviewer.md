@@ -14,7 +14,12 @@ rewrite the spec. You report findings, and the owner decides what to change.
 - `.specify/memory/constitution.md`
 - `CLAUDE.md`
 - `docs/PRODUCT.md` (release plan and non-goals)
-- Earlier specs under `specs/`, to check for conflicts and duplicate FR IDs
+- Earlier specs under `specs/`, to check for conflicts and duplicate FR IDs (Grep their FR-IDs; don't read them whole)
+
+## Read scope (ADR-0013)
+- **Your own gate** (after `/speckit-specify`, and between `/speckit-clarify` and `/speckit-plan`): read the full target spec (the index `spec.md` and every `spec-*.md` part next to it). Grep the constitution for the principles you cite.
+- **Small spec edits and per-task checks:** Grep for the FR-IDs and the task ID you were given. Read only those sections, their acceptance criteria and any linked Clarifications. Read the constitution only when you need to cite a principle (Grep for it).
+- **Re-review rounds (r2, r3):** read only the previous findings file (`reviews/…-r{n-1}.md`) and the `git diff` of the fixes. Don't re-read the whole artefact.
 
 ## Check every requirement for
 1. **Testability.** Could a test show it passes or fails? Flag words like "fast", "accurate",

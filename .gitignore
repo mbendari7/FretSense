@@ -17,3 +17,8 @@ Thumbs.db
 # Env
 .env
 .env.*
+
+# Dev tooling (ADR-0013): Serena local overrides and caches, RTK local data
+.serena/project.local.yml
+.serena/cache/
+.rtk/

@@ -653,3 +653,70 @@ describe('FR-061 settings that name unknown theory objects are rejected or skipp
     }
   });
 });
+
+// =============================================================================================
+// T099a [FR-036] window width: the window is [s, s + w − 1], default w = 4, w clamped to 1..range size.
+// Expected widths come from the FR-036 wording and the clamp rule, not from the implementation.
+describe('FR-036 chord-tone window width setting', () => {
+  const PROFILES = presets().map((p) => [p.presetId, p.profile] as const);
+  const ct = (p: InstrumentProfile, over: Partial<DrillSettings> = {}) =>
+    base('chord-tone', p, { roots: ['C', 'E', 'G', 'A'], qualities: ['major', 'dom7'], functions: ['R', '3', '5', 'b7'], count: 20, ...over });
+  const widthsOf = (qs: Question[]) => qs.map((q) => q.window!.to - q.window!.from + 1);
+
+  it.each(PROFILES)('%s: no windowWidth means width 4 (frets 0 to 12)', (_id, p) => {
+    const qs = gen(p, ct(p, { fromFret: 0, toFret: Math.min(12, p.fretCount) }), 7);
+    expect(widthsOf(qs).every((w) => w === 4)).toBe(true);
+  });
+
+  it.each(PROFILES.flatMap(([id]) => [[id, 6], [id, 2]] as const))('%s: windowWidth %s gives exactly that width, and the prompt names the window frets', (id, w) => {
+    const p = presetById(id)!.profile;
+    const qs = gen(p, ct(p, { windowWidth: w }), 11);
+    for (const q of qs) {
+      expect(q.window!.to - q.window!.from + 1).toBe(w);
+      const m = /frets (\d+) to (\d+)/.exec(q.text);
+      expect(m, `prompt "${q.text}" names the frets`).not.toBeNull();
+      expect([Number(m![1]), Number(m![2])]).toEqual([q.window!.from, q.window!.to]);
+    }
+  });
+
+  it.each(PROFILES)('%s: windowWidth larger than the fret range clamps to the range size (frets 3-5, width 6 gives 3)', (_id, p) => {
+    const qs = gen(p, ct(p, { fromFret: 3, toFret: 5, windowWidth: 6 }), 5);
+    expect(widthsOf(qs).every((w) => w === 3)).toBe(true);
+    for (const q of qs) expect([q.window!.from, q.window!.to]).toEqual([3, 5]);
+  });
+
+  it.each(PROFILES)('%s: windowWidth NaN falls back to the default width 4 and the drill still generates', (_id, p) => {
+    const qs = gen(p, ct(p, { fromFret: 0, toFret: Math.min(12, p.fretCount), windowWidth: NaN }), 5);
+    expect(qs.length).toBeGreaterThan(0);
+    expect(widthsOf(qs).every((w) => w === 4)).toBe(true);
+  });
+
+  it.each(PROFILES)('%s: windowWidth 2.7 truncates to width 2', (_id, p) => {
+    expect(widthsOf(gen(p, ct(p, { windowWidth: 2.7 }), 5)).every((w) => w === 2)).toBe(true);
+  });
+
+  it.each(PROFILES)('%s: a one-fret range (frets 5-5) with windowWidth 4 gives width 1, window [5,5]', (_id, p) => {
+    const qs = gen(p, ct(p, { fromFret: 5, toFret: 5, windowWidth: 4 }), 5);
+    for (const q of qs) expect([q.window!.from, q.window!.to]).toEqual([5, 5]);
+  });
+
+  it.each(PROFILES)('%s: windowWidth 0 clamps up to width 1', (_id, p) => {
+    const qs = gen(p, ct(p, { windowWidth: 0 }), 5);
+    expect(widthsOf(qs).every((w) => w === 1)).toBe(true);
+  });
+
+  it.each(PROFILES)('%s: every valid position lies inside the question window, within the fret range (20 questions, fixed seed)', (_id, p) => {
+    for (const w of [undefined, 2, 6]) {
+      const s = ct(p, { windowWidth: w });
+      for (const q of gen(p, s, 42)) {
+        expect(q.steps[0]!.valid.length).toBeGreaterThan(0);
+        for (const v of q.steps[0]!.valid) {
+          expect(v.fret).toBeGreaterThanOrEqual(q.window!.from);
+          expect(v.fret).toBeLessThanOrEqual(q.window!.to);
+        }
+        expect(q.window!.from).toBeGreaterThanOrEqual(s.fromFret);
+        expect(q.window!.to).toBeLessThanOrEqual(s.toFret);
+      }
+    }
+  });
+});

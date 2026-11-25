@@ -11,6 +11,9 @@ user-invocable: true
 disable-model-invocation: false
 ---
 
+> **Gates (ADR-0013).** Read `.claude/rules/workflow.md` for the gate that follows this step,
+> the review rules and the ledger format (moved there from CLAUDE.md).
+
 
 ## User Input
 

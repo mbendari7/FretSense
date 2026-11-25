@@ -19,6 +19,8 @@ export interface DrillSettings {
   readonly roots?: readonly string[]; // pitch-class note names for chord drills
   readonly qualities?: readonly string[];
   readonly functions?: readonly string[];
+  /** FR-036 chord-tone window width in frets; absent means 4. Clamped to 1 … the fret-range size. */
+  readonly windowWidth?: number;
   readonly key?: { tonic: string; mode: 'major' | 'minor' };
   readonly chords?: readonly { root: string; quality: string }[];
 }

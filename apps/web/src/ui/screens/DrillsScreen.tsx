@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router';
 import { CHORDS, PC_FLAT, pretty } from '../common';
 import { DRILL_TYPES, type DrillType } from '../../domain/records';
 import { DRILL_LABELS, type DrillSettings } from '../../domain/drills/types';
-import { validateSettings, intervalName, stringChipName } from '../../domain/drills/generate';
+import { validateSettings, intervalName, stringChipName, CHORD_TONE_WINDOW_DEFAULT } from '../../domain/drills/generate';
 import { InstrumentGate } from '../InstrumentGate';
 import { useAppState } from '../hooks';
 import { DrillRunner } from './DrillRunner';
@@ -149,6 +149,9 @@ function DrillSetup({ type, profile, instrumentId, instrumentName }: { type: Dri
           <fieldset className="inline"><legend>Chord roots</legend>
             {PC_FLAT.map((n) => <label key={n} className="chip"><input type="checkbox" checked={s.roots?.includes(n) ?? false} onChange={() => set({ roots: toggle(s.roots, n) })} /> {pretty(n)}</label>)}
           </fieldset>
+        )}
+        {type === 'chord-tone' && (
+          <label>Window width <input type="number" min={1} max={Math.max(1, s.toFret - s.fromFret + 1)} value={Math.max(1, Math.min(s.windowWidth ?? CHORD_TONE_WINDOW_DEFAULT, s.toFret - s.fromFret + 1))} onChange={(e) => set({ windowWidth: Math.max(1, Math.min(s.toFret - s.fromFret + 1, Math.trunc(+e.target.value) || 1)) })} /> frets</label>
         )}
         {type === 'walking-bass' && (
           <p className="muted">Progression: {s.chords?.map((c) => `${pretty(c.root)}${CHORDS.find((q) => q.id === c.quality)?.symbolSuffix ?? ''}`).join(' → ')} in {s.key?.tonic} {s.key?.mode}. Each chord is one bar of four beats.</p>

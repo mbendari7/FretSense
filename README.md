@@ -101,6 +101,17 @@ pnpm test               # unit + property tests
 pnpm --filter web dev   # local PWA
 ```
 
+## Dev tooling
+
+Optional developer tools that cut AI-agent token use (ADR-0013, `docs/adr/0013-token-budget.md`). None of them is a dependency of FretSense, and none ships with the app; nothing is added to any `package.json`.
+
+- **RTK** (github.com/rtk-ai/rtk), the "Rust Token Killer": compresses shell command output (git, vitest, tsc, lint) before the agent reads it. Install: `winget install rtk-ai.rtk`. Check: `rtk gain` shows the savings dashboard (a different crates.io project is also called rtk). Hook: the project `.claude/settings.json` has a `PreToolUse` hook for the Bash tool (`rtk hook claude`); it only covers the Bash tool, not PowerShell. `git status/diff/log` are rewritten; bare `pnpm test` is not, so use `cd packages/theory && pnpm vitest run` for compressed test output. Restart Claude Code after installing so `rtk` is on PATH.
+- **Serena** (github.com/oraios/serena): MCP server for symbol-level code lookup via the TypeScript language server. Install (per its README Quick Start, not a marketplace): install uv, then `uv tool install -p 3.13 serena-agent` and `serena init`. Project config: `.mcp.json` (`serena start-mcp-server --context claude-code --project-from-cwd`) and `.serena/project.yml`. Only code-reviewer, test-writer, theory-checker and architecture-reviewer get its tools.
+- **Context7** (github.com/upstash/context7): MCP server that fetches current library docs on demand. No install; configured in `.mcp.json` as an HTTP server. Optional API key: set the environment variable `CONTEXT7_API_KEY` (never commit a key). Only test-writer and architecture-reviewer get its tools.
+- **ccusage** (ccusage.com): reads local Claude Code logs and reports tokens and cost. Run `npx ccusage@latest daily` or `session`; the project status line runs `npx -y ccusage@20.1.2 statusline`. Telemetry is disabled through `CCUSAGE_TELEMETRY_DISABLED=1` in `.claude/settings.json`.
+
+Claude Code asks you to approve the project MCP servers on first start (`/mcp` shows their status). Baseline and results: `docs/token-budget/`.
+
 ## Project rules
 
 - [Constitution v2.3.0](.specify/memory/constitution.md): the highest authority

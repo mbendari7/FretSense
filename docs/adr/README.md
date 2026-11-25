@@ -25,6 +25,7 @@ more than one package, it adds a dependency, or it trades off accuracy, latency 
 | [0010](0010-svg-fretboard.md) | SVG fretboard rendering | Proposed | 2026-11-21 |
 | [0011](0011-constitution-v2-3-product-north-star.md) | Constitution v2.3.0: `docs/PRODUCT.md` as the product north star; every spec names its release | Proposed | 2026-11-21 |
 | [0012](0012-constitution-v3-ai-authored.md) | Constitution v3.0.0: AI-authored, owner-directed; task groups and standing approval | Proposed | 2026-11-22 |
+| [0013](0013-token-budget.md) | Token budget: model tiering, scoped reads, diff-only re-reviews, gate selection, RTK/Serena/Context7 | Accepted | 2026-11-25 |
 
 ## Template
 

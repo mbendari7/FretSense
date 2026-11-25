@@ -49,3 +49,8 @@ One row per review round (CLAUDE.md "Review rules"). Sign-off is filled in by th
   - add9: "R-3-5-9, 9th above (Recommended)"
   - Small calls: "Copy import drops deleted, Avoid F♭-style references"
 | 2026-11-22 | security-reviewer (T093) | r3 | PASS WITH NOTES | 0 / 0 | |
+- 2026-11-25: standing approval for the token-budget work (ADR-0013), copied word for word in [2026-11-25-owner-standing-approval-token-budget.md](2026-11-25-owner-standing-approval-token-budget.md). It covers the spec split and one Phase 5 `/task-cycle`; it does not mark ADR-0013 Accepted.
+| 2026-11-25 | spec-reviewer (spec split, structure only) | r1 | PASS WITH NOTES | 0 / 0 (4 MINOR: 3 applied, 1 deferred) || 2026-11-25 (chat) |
+| 2026-11-25 | code-reviewer (T099a) | r1 | APPROVE | 0 / 0 (5 MINOR: 4 applied, 1 deferred) || 2026-11-25 (chat) |
+| 2026-11-25 | theory-checker (T099a) | r1 | PASS WITH NOTES | 0 / 0 (2 MINOR: both applied) || 2026-11-25 (chat) |
+- 2026-11-25 (owner, chat, word for word): "for waiting on me i approve everything start and makt it all". It signs off ADR-0013, the 2026-11-25 rounds above, the FR-062 move to US1, the docs and skill updates, and turning off the PowerShell tool.

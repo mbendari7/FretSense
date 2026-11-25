@@ -226,13 +226,16 @@ export function functionOrdinal(fn: string): string {
   const suffix = digit === '2' ? 'nd' : digit === '3' ? 'rd' : 'th';
   return `the ${fn}${suffix}`;
 }
-const WINDOW = 4; // FR-036 default window width
+/** FR-036 default chord-tone window width. */
+export const CHORD_TONE_WINDOW_DEFAULT = 4;
+const WINDOW = CHORD_TONE_WINDOW_DEFAULT;
 
 function chordTone(p: InstrumentProfile, s: DrillSettings): Candidate[] | string {
   const r = rangeOf(s, p);
   const roots = (s.roots?.length ? s.roots : ['C', 'D', 'E', 'F', 'G', 'A', 'B']).map(parsePc).filter((x): x is PitchClassNote => !!x);
   const qualities = s.qualities?.length ? s.qualities : ['major', 'minor', 'dom7'];
-  const w = Math.min(WINDOW, r.toFret - r.fromFret + 1);
+  const asked = Number.isFinite(s.windowWidth) ? Math.trunc(s.windowWidth!) : WINDOW;
+  const w = Math.max(1, Math.min(asked, r.toFret - r.fromFret + 1));
   const starts = Array.from({ length: r.toFret - r.fromFret - w + 2 }, (_, i) => r.fromFret + i);
   const out: Candidate[] = [];
   for (const qid of qualities) {

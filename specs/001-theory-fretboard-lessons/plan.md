@@ -97,6 +97,7 @@ devices), which blocks the benchmark tasks, not the design. No Complexity Tracki
 ```text
 specs/001-theory-fretboard-lessons/
 ├── spec.md
+├── spec-*.md           # spec parts: user stories, shared requirements, clarifications (ADR-0013)
 ├── plan.md              # this file
 ├── research.md          # Phase 0
 ├── data-model.md        # Phase 1

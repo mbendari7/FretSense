@@ -10,6 +10,14 @@ user-invocable: true
 disable-model-invocation: false
 ---
 
+> **Gates (ADR-0013).** Read `.claude/rules/workflow.md` for the gate that follows this step,
+> the review rules and the ledger format (moved there from CLAUDE.md).
+
+> **Split specs (ADR-0013).** If the feature folder has `spec-*.md` files next to `spec.md`, then
+> `spec.md` is the index (overview, FR → file map, Success Criteria, Assumptions) and the parts hold
+> the user stories, requirements and Clarifications. Treat the index plus every part as the spec.
+> Grep for an FR-ID to find its part. Write each change into the part that holds that section.
+
 
 ## User Input
 

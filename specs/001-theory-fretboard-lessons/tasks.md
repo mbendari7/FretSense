@@ -15,7 +15,7 @@ green, then the listed gates run. Commits reference `[Txxx][FR-xxx]` and are mad
 **Notation**
 - `[P]`: can run in parallel with other `[P]` tasks in the same phase (different files, no pending
   dependency). This parallelism applies to planning only; execution is sequential within a group.
-- `[USn]`: user story from spec.md.
+- `[USn]`: user story from spec.md (the index; story N is in `spec-usN-*.md`, ADR-0013).
 - `→ gates:` the agents that must pass before the task is done. `code-reviewer` applies to every
   implementation task, even where it isn't repeated.
 - **blocked-on-owner (Ox)**: can't finish until the owner resolves the open item in research.md.
@@ -219,7 +219,7 @@ Spec changes FN-2..FN-11, R2-*, R3-*, A2-* (spec.md, provisional or owner-approv
 - [ ] T097 Implement T096 in `apps/web/src/ui/screens/DrillRunner.tsx`, `LessonScreens.tsx`, `HomeScreen.tsx` [FR-028, FR-034] → gates: code-reviewer
 - [ ] T091a FR-031 note sets and FR-035/FR-036 UI defaults (theory-checker T091 r1 #3, #8, #9): test-writer red tests for the 4 note sets (letters only, the default of 7 naturals; letters and sharps; letters and flats; all 17 spellings), with prompts spelled by the chosen set; DrillsScreen defaults (intervals {M2,m3,M3,P4,P5,P8}, all 7 natural roots, a d5 chip); one stable spelling per rfo group label; then implement [FR-031, FR-035, FR-036, FR-041] → gates: theory-checker, code-reviewer
 - [ ] T093a Legacy drill-id migration (code-reviewer T091 r1 #4; product-owner decision, provisional): test-writer red tests (a v0.1-shaped export with `bass-*` ids imports with zero rejections; stored legacy attempts load; re-export writes the migrated ids; old rfo keys and octave-shapes attempts land under the legacy id, count toward totals and are never offered or used for mastery; unmapped unknown ids still reject the file); then implement one versioned migration step on load and import; data-model §3.1 [FR-043, FR-041, SC-013] → gates: code-reviewer, privacy-auditor
-- [ ] T099a FR-036 window-width setting (code-reviewer r1 #10; backlog, needed before the v0.1 release): test-writer red tests for the setting, its default 4 and its clamp to the fret range; then implement [FR-036] → gates: theory-checker, code-reviewer
+- [x] T099a FR-036 window-width setting (code-reviewer r1 #10; backlog, needed before the v0.1 release): test-writer red tests for the setting, its default 4 and its clamp to the fret range; then implement [FR-036] → gates: theory-checker, code-reviewer
 - [ ] T100 Mode B2 fix group (product-owner triage, provisional CRs): test-writer red tests, then implement:
   - step indicator states and missed-step summary (FR-057, FR-056; CR-B2-2);
   - string chips with low/high naming and the active instrument named in setup (FR-031; CR-B2-5, CR-B2-8);

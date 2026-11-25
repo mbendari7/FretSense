@@ -1,7 +1,7 @@
 ---
 name: architecture-reviewer
 description: Gate on every plan.md and on diffs that add modules, packages, dependencies, or cross-layer imports. Enforces clean-architecture layers (domain → application → infrastructure → UI/delivery), dependency direction, package boundaries, and that patterns (strategy, observer, DI) are justified by requirements. Read-only.
-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash, mcp__serena__find_symbol, mcp__serena__find_referencing_symbols, mcp__serena__get_symbols_overview, mcp__context7__resolve-library-id, mcp__context7__query-docs
 model: opus
 ---
 
@@ -11,7 +11,14 @@ read-only commands (git, grep, running an existing dependency-graph or lint scri
 ## Inputs
 - `plan.md`, `data-model.md` and `contracts/` of the active feature, or the diff under review
 - `docs/ARCHITECTURE.md` (C4) if it exists yet (it is deferred to docs-keeper before 002), and existing ADRs
-- Constitution II, VIII, XI, XII
+- Constitution II, VIII, XI, XII: Grep for the principle you cite
+
+## Read scope (ADR-0013)
+- **Plan gate** (`/gate-plan`, first round): read the full `plan.md`, `data-model.md` and `contracts/`. Cross-cutting conflicts are the point of this gate.
+- **Diff reviews and per-task reviews:** Grep for the FR-IDs and the task ID you were given. Read only those sections, their acceptance criteria and any linked Clarifications. Read the constitution only when you need to cite a principle (Grep for it).
+- **Re-review rounds (r2, r3):** read only the previous findings file (`reviews/…-r{n-1}.md`) and the `git diff` of the fixes. Don't re-read the whole artefact.
+- Prefer Serena's find_symbol / find_referencing_symbols / get_symbols_overview over reading whole files; use Read only when a symbol lookup can't answer.
+- Use Context7 for library docs (React, Vite, Vitest, fast-check, onnxruntime-web, MediaPipe) instead of web search.
 
 ## Rules to enforce
 1. **Layers.**

@@ -20,8 +20,8 @@ If either is missing, stop and say which one. Don't run the gates.
 
 ## Rules
 
-- Follow CLAUDE.md: the **Workflow** table row 3, **Review rules** and **Git rules**. Never
-  commit.
+- Read `.claude/rules/workflow.md` first and follow its **Workflow** table row 3 and **Review
+  rules**, plus CLAUDE.md **Git rules**. Never commit.
 - Never mark an ADR Accepted. New ADRs are written as **Proposed**.
 - **Calling reviewers.** Use the project agent type. If it isn't registered, use a
   `general-purpose` agent. Its prompt must say: "Read `.claude/agents/<name>.md` and act exactly
@@ -51,6 +51,15 @@ you chose and the reason for each before you run them.
    asks for as Proposed and add it to the `docs/adr/README.md` index.
 3. **Re-run.** Re-run each gate that still has BLOCKER or MAJOR findings open, up to 2 more
    rounds. If findings are still open after that, **stop and escalate**.
+   **Re-review rounds (r2, r3; ADR-0013).** Never start a full re-read.
+   1. **Resume first.** Continue the same reviewer with SendMessage (its agent ID from round
+      r{n-1}). Send the path of its `reviews/…-r{n-1}.md` findings file and `git diff -- specs/NNN-*/ docs/adr/`. Ask it
+      to check only whether each finding is fixed and whether a fix introduced a new problem.
+   2. **Fallback** (the reviewer can't be resumed): start a fresh reviewer whose prompt contains
+      **only** the previous findings file and that diff, and says: "Don't re-read the whole
+      artefact. Check only whether each finding is fixed and whether the fix introduced a new
+      problem. Open other files only to confirm a specific finding."
+   3. The round limit, escalation and ledger rules are unchanged.
 4. **Update the index** in `reviews/README.md`.
 5. **Report**:
    - each gate's verdict;
