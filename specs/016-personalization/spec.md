@@ -6,6 +6,8 @@
 
 **Status**: Draft
 
+**Release** (Constitution VI; docs/PRODUCT.md): v0.1 for US1, US3 (no gear step), US4, US5, FR-016, and the instrument part of US2 plus the gear-entry record schema for every kind. v0.2 (with 015): interface, amp and output UI and the FR-007 presets. v0.4 (with 008): camera UI and US6/FR-017. Each story and FR below is tagged with its release.
+
 **Input**: User description: "FretSense is personalised for every user, like a customisable app, not built around my setup. Any user, any gear: users build a 'My Gear' setup (instruments with type, strings, tuning, fret count, name; audio interface or amp; camera; output). Free-flowing lessons, no locked content; the curriculum recommends, never forces. User-defined learning paths: onboarding asks about goals (e.g. 'learn to solo over blues', 'play songs by bands I like', 'understand chord theory'), instrument, level, genres and practice time, then generates a suggested path the user can edit, reorder, add to or remove from; users can save several paths and switch. Custom lesson structure (stages and order, saved as default). Curriculum packs: the built-in track is general theory; users create packs mapping lessons to any book or course. Multiple local profiles per device, each with its own gear, settings, paths and progress; offline-first, no account. Adaptive quality tiers (low/medium/high) chosen from a quick device benchmark, user-changeable; minimum target a laptop with integrated graphics. Design the profile, gear, path and progress data models so they can sync later with no migration pain."
 
 **Practice-session value**: a new user answers five questions and is practising within two
@@ -23,7 +25,7 @@ decides how users reach lessons.
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 - Local Profiles (Priority: P1)
+### User Story 1 - Local Profiles (Priority: P1) *[v0.1]*
 
 Several people share one laptop. Each creates a local profile with a name. Switching profile
 switches gear, settings, paths, packs and progress. There is no account and no network.
@@ -51,7 +53,7 @@ others are untouched.
 
 ---
 
-### User Story 2 - My Gear (Priority: P1)
+### User Story 2 - My Gear (Priority: P1) *[v0.1 instruments; v0.2 interfaces, amps, outputs; v0.4 cameras]*
 
 The user records their instruments (001), audio interfaces and amps, cameras and outputs. Devices
 start from editable presets (e.g. Scarlett Solo 4th Gen, Scarlett 2i2 4th Gen, Katana:GO, a generic
@@ -64,9 +66,8 @@ verify validation, persistence per profile and that no preset is applied unless 
 
 **Acceptance Scenarios**:
 
-1. **Given** an empty profile, **When** My Gear opens, **Then** it shows empty sections (Instruments,
-   Interfaces & amps, Cameras, Outputs) with "add" actions, and no preset preselected.
-2. **Given** the user adds an interface from the "Scarlett 2i2 4th Gen" preset, **When** they edit
+1. **Given** an empty profile, **When** My Gear opens, **Then** it shows an empty section for each gear kind whose consuming feature has shipped (v0.1: Instruments only), with "add" actions, and no preset preselected.
+2. *[v0.2]* **Given** the user adds an interface from the "Scarlett 2i2 4th Gen" preset, **When** they edit
    its input channel names, its signal type (dry or processed) and its monitoring capability,
    **Then** the edited entry is saved as their own, and the shipped preset is unchanged.
 3. **Given** the user creates a device profile from scratch for an unknown interface, **Then** it
@@ -76,12 +77,14 @@ verify validation, persistence per profile and that no preset is applied unless 
 
 ---
 
-### User Story 3 - Onboarding (Priority: P1)
+### User Story 3 - Onboarding (Priority: P1) *[v0.1]*
 
 A new profile is offered a short onboarding: goals, instrument(s), level, favourite genres and
 practice time per week. It can be skipped and redone at any time.
 
 **Why this priority**: It turns a generic curriculum into a personal starting point.
+
+**Ownership**: 018 (FR-005, FR-006) owns the onboarding flow, screens, skip, resume, the completion flag and re-run. 016 owns the questions and answer options, the answer record, the goal list and mapping, path generation and the default path. 018's instrument step answers FR-010's instrument question.
 
 **Independent Test**: Run onboarding with fixture answers and verify the stored answers, the
 generated path (US4) and that skipping leaves a usable app.
@@ -94,14 +97,13 @@ generated path (US4) and that skipping leaves a usable app.
    level "beginner", genre "blues", 2 h/week, **Then** a suggested path is generated (US4) with a
    short reason per item ("matches your goal: soloing over blues").
 3. **Given** the user skips onboarding, **Then** the library works fully, the explorer and drills
-   open after a one-tap instrument pick (001 FR-053), and a "build my path" action remains
-   available.
+   open after a one-tap instrument pick (001 FR-053), the default path (FR-011a) is active with a next step, and a "build my path" action remains available.
 4. **Given** the user redoes onboarding, **Then** a new suggested path is created alongside the
    existing ones; nothing is overwritten.
 
 ---
 
-### User Story 4 - Learning Paths (Priority: P1)
+### User Story 4 - Learning Paths (Priority: P1) *[v0.1]*
 
 A path is an ordered list of lessons and drills. The suggested path can be edited, reordered,
 extended or trimmed. Users can keep several paths (e.g. "Blues soloing", "Bass basics") and switch
@@ -129,7 +131,7 @@ verify persistence, ordering and that every lesson stays reachable outside the p
 
 ---
 
-### User Story 5 - Curriculum Packs (Priority: P2)
+### User Story 5 - Curriculum Packs (Priority: P2) *[v0.1]*
 
 The built-in General Theory pack (001) is the default. A user creates their own pack that maps
 lessons to the book or course they follow (e.g. the owner's *Guitar Theory for Dummies* pack):
@@ -155,7 +157,7 @@ and verify the library groups lessons by the pack.
 
 ---
 
-### User Story 6 - Quality Tier Setting (Priority: P3)
+### User Story 6 - Quality Tier Setting (Priority: P3) *[v0.4]*
 
 The app keeps a quality tier (low, medium, high, or "automatic") per local profile and device, which
 the user can override in settings. The benchmark that picks the automatic tier is built with its
@@ -200,14 +202,14 @@ per (local profile, device) and the read interface.
 
 **Local profiles**
 
-- **FR-001**: Users MUST be able to create, rename, switch and delete local profiles, with no account
+- **FR-001** *[v0.1]*: Users MUST be able to create, rename, switch and delete local profiles, with no account
   and no network. Every user record MUST belong to exactly one profile (001 FR-066).
-- **FR-002**: Switching local profile MUST change every profile-scoped view within 1 s at p95 at the
+- **FR-002** *[v0.1]*: Switching local profile MUST change every profile-scoped view within 1 s at p95 at the
   FR-015 scale, and MUST NOT show data from another profile.
-- **FR-003**: Deleting a profile MUST tombstone its records after confirmation. "Erase permanently"
+- **FR-003** *[v0.1]*: Deleting a profile MUST tombstone its records after confirmation. "Erase permanently"
   (a separate, double-confirmed action) MUST purge all of the profile's records, tombstones
   included. If the last profile is deleted or erased, a new empty one is created.
-- **FR-004**: Users MUST be able to export a whole profile (gear, settings, paths, packs, onboarding
+- **FR-004** *[v0.1]*: Users MUST be able to export a whole profile (gear, settings, paths, packs, onboarding
   answers, progress) in the 001 **profile export format** (001 FR-043), extended with 016's record
   types, and import it on any device:
   - if the file's local profile id exists on this device (live or tombstoned), the import is a
@@ -222,78 +224,76 @@ per (local profile, device) and the read interface.
 
 **My Gear**
 
-- **FR-005**: My Gear MUST hold, per profile: instruments (001 FR-053), audio interfaces and amps,
+- **FR-005** *[v0.1]*: My Gear MUST hold, per profile: instruments (001 FR-053), audio interfaces and amps,
   cameras and outputs, each with a user-given name. Each entry is a profile-scoped, sync-ready
   record (001 FR-066).
-- **FR-006**: An audio interface or amp entry MUST record: name, optional name pattern for device
+- **FR-006** *[v0.1]*: An audio interface or amp entry MUST record: name, optional name pattern for device
   matching (a case-insensitive substring, ≤ 64 characters, never a regular expression), input channels (index, user label, instrument/line/mic hint), signal type (dry or
   processed, per channel where relevant), monitoring capability (hardware direct available or
   not), and optional notes. 015 reads these fields (015 FR-004).
-- **FR-007**: The app MUST ship editable gear presets: Focusrite Scarlett Solo 4th Gen, Focusrite
+- **FR-007** *[v0.2]*: The app MUST ship editable gear presets: Focusrite Scarlett Solo 4th Gen, Focusrite
   Scarlett 2i2 4th Gen, Boss Katana:GO, and "Generic class-compliant interface". Choosing a preset
   creates the user's own copy; presets are never applied implicitly. Every feature MUST work
-  identically with a user-created entry.
-- **FR-008**: Camera and output entries MUST record a name and an optional device-name pattern (as in
+  identically with a user-created entry. Presets ship only after their hardware facts (input channels, direct monitoring) are checked against the manufacturers' published data and recorded with a source in 015's research.md.
+- **FR-008** *[v0.2 outputs; v0.4 cameras; the record schema is v0.1]*: Camera and output entries MUST record a name and an optional device-name pattern (as in
   FR-006); the camera entry also stores placement notes. Handedness is a player setting in 001's
   profile settings record (001 FR-067), never stored per camera.
-- **FR-009**: Users MUST be able to mark a default instrument, interface, camera and output per local
+- **FR-009** *[v0.1]*: Users MUST be able to mark a default instrument, interface, camera and output per local
   profile. They are fields of 001's profile settings record (the default instrument is 001's
   "active instrument").
 
 **Onboarding**
 
-- **FR-010**: Onboarding MUST ask, on at most 5 screens: goals (multi-select from a built-in,
-  owner-curated goal list, each goal mapped to lesson tags in the 001 FR-068 vocabulary; at least
-  "solo over blues", "play songs by bands I like" (mapped through genres and lessons' songs),
-  "understand chord theory", "learn the notes on the neck", "bass grooves and lines"), instrument(s) (pick from My Gear or add one), level (beginner / intermediate /
+- **FR-010** *[v0.1]*: Onboarding MUST ask, on at most 5 screens: goals (multi-select from the owner-approved v0.1 goal list (Clarifications 2026-11-25); each goal maps only to lesson tags in content/tags.yaml (001 FR-068 vocabulary); the style goal 'Play the styles I like' maps to the genres chosen in the genre question), instrument(s) (pick from My Gear or add one), level (beginner / intermediate /
   advanced), genres (multi-select), and practice time per week. Every question is skippable;
   answers are stored per profile and can be edited later. The instrument step is skippable only if
   the profile already has an instrument. Practice time per week sets the path's pacing estimate
-  ("about N weeks at your pace", from the lessons' estimated durations) and 006's default session
-  length (hours per week ÷ 5 sessions, rounded to the nearest planner preset).
+  ("about N weeks at your pace", from the lessons' estimated durations) and is stored for 006 (v0.3) to derive its default session
+  length (hours per week ÷ 5 sessions, rounded to the nearest planner preset). The 5-screen limit counts question screens only (instrument, goals, level, genres, practice time). Welcome, profile name and the suggested-path screen (018 FR-005) don't count.
 
 **Learning paths**
 
-- **FR-011**: From onboarding answers and the active pack, System MUST generate a suggested path: an
+- **FR-011** *[v0.1]*: From onboarding answers and the active pack, System MUST generate a suggested path: an
   ordered list of lessons and drills whose instruments match the user's instruments, whose level is
   the chosen level or one step below, and that carry at least one tag mapped from the goals or
   genres. Pack items come first in pack order; matching lessons outside the pack follow, ordered by
   number of matching tags (descending), then lesson id. Each item carries a one-line reason. The
   path has no length cap. Generation MUST be deterministic for the same answers and content and
   complete in < 500 ms. It MUST fall back as described in Edge Cases.
-- **FR-012**: Users MUST be able to edit any path: rename, reorder (drag and keyboard), add any
+- **FR-011a** *[v0.1]*: **Default path**: when the user skips onboarding or the goals step, System MUST create one path named "Start here" (origin: default). It holds the active pack's lessons in pack order, filtered to the active instrument's family. Each item has the reason "part of <pack name>". It is a normal, editable path (FR-012) and the active path until the user picks another. Generating it follows FR-011's determinism and < 500 ms rules.
+- **FR-012** *[v0.1]*: Users MUST be able to edit any path: rename, reorder (drag and keyboard), add any
   lesson or drill from the library, remove items, and delete the path. Users MUST be able to keep
   several paths and choose the active one. Paths are profile-scoped, sync-ready records. Path items
   reference a lesson, or a drill by (lesson id, drill id) (001 FR-068). Merging two divergent copies
   of a path (001 FR-066a generic merge) MUST keep the union of items, let removals (tombstones) win
   over moves, and order ties by item id, deterministically (the order-key scheme is chosen in
   plan.md).
-- **FR-013**: A path MUST show a "next step" (the first incomplete item) and path progress. It MUST
+- **FR-013** *[v0.1]*: A path MUST show a "next step" (the first incomplete item) and path progress. It MUST
   NOT hide, disable or gate any item or any lesson outside the path (Constitution XIII). When 006's
   adaptive recommendations are on, the path's next step is chosen by 006 **among the path's
   incomplete items** (006 FR-005); still non-binding.
 
 **Curriculum packs**
 
-- **FR-014**: Users MUST be able to create, edit, duplicate, delete, export and import curriculum
+- **FR-014** *[v0.1]*: Users MUST be able to create, edit, duplicate, delete, export and import curriculum
   packs in the 001 pack format (001 FR-063), and choose the active pack per profile. Import MUST
   validate the schema and enforce these limits (owner to confirm): file ≤ 1 MB, ≤ 500 sections,
   ≤ 200 lessons per section, ≤ 200 characters per text field, unknown fields rejected. All text is
   rendered as plain text. A pack whose id matches the built-in pack or an existing pack is imported
   as a copy with a new id. Lessons missing on this device are listed, not fatal.
-- **FR-015**: The scale bound for 016 is ≤ 10 profiles, ≤ 50 paths per profile, ≤ 1,000 items per
+- **FR-015** *[v0.1]*: The scale bound for 016 is ≤ 10 profiles, ≤ 50 paths per profile, ≤ 1,000 items per
   path, ≤ 50 packs per profile (a performance envelope, not a hard cap). Path reorder, path or pack
   switch, and save operations MUST each complete in < 100 ms at p95 at that scale on the reference
   laptop (001 Clarifications); a local-profile switch gets 1 s (FR-002).
 
 **Lesson structure**
 
-- **FR-016**: The stage preference (001 FR-064) MUST be editable from settings and from inside any
+- **FR-016** *[v0.1]*: The stage preference (001 FR-064) MUST be editable from settings and from inside any
   lesson ("use this order as my default").
 
 **Quality tiers**
 
-- **FR-017**: System MUST store a quality-tier setting (automatic | low | medium | high) per (local
+- **FR-017** *[v0.4]*: System MUST store a quality-tier setting (automatic | low | medium | high) per (local
   profile, device id), where the device id is a random local identifier, so a synced setting never
   applies to another device. It MUST expose one read interface returning the effective tier and its
   source (automatic | user). The benchmark that produces the automatic tier, its workloads and its
@@ -301,13 +301,13 @@ per (local profile, device) and the read interface.
 
 **Cross-cutting**
 
-- **FR-018**: Everything in this feature MUST work offline and on the device; no data leaves it
+- **FR-018** *[v0.1]*: Everything in this feature MUST work offline and on the device; no data leaves it
   (Constitution IX). Every screen MUST work at 390 px and with keyboard and screen reader (verified
   by automated accessibility checks plus a manual NVDA pass on Windows), and drag-and-drop MUST have
   a keyboard alternative.
-- **FR-019**: All records introduced here (profiles, gear entries, onboarding answers, paths, path
+- **FR-019** *[v0.1]*: All records introduced here (profiles, gear entries, onboarding answers, paths, path
   items, packs, tier setting) MUST carry the 001 FR-066 fields.
-- **FR-020**: Writes MUST be atomic per user action: on a storage error (quota, eviction), nothing
+- **FR-020** *[v0.1]*: Writes MUST be atomic per user action: on a storage error (quota, eviction), nothing
   partial is saved and the user gets a clear message. 001 FR-045's persistent-storage request and
   export reminder apply.
 
@@ -354,6 +354,7 @@ per (local profile, device) and the read interface.
 
 - The goal list and its goal → tag mapping are owner-curated content (like lessons); agents may
   propose the schema only.
+- v0.1 goals (**owner-approved 2026-11-25**, "Approve all 6 (Recommended)"): know-the-neck, chord-theory, solo-over-blues, soloing-general, bass-lines, songs-i-like (genre-mapped), with the tag mapping in the product-owner loop-C ledger for 2026-11-25.
 - The owner's laptop is the development benchmark machine (model, CPU, GPU and RAM to be recorded
   in plan.md). The minimum target is a laptop with integrated graphics.
 - Profiles are a convenience, not a security boundary.
@@ -375,3 +376,30 @@ per (local profile, device) and the read interface.
   (FR-010, SC-002), < 500 ms generation (FR-011), the FR-015 scale and timings, ≥ 90% tag match
   (SC-003); and have the preset hardware facts (channels, direct monitoring) checked against the
   manufacturers' data.
+
+### Session 2026-11-25 (owner)
+
+- **OPEN (owner) numbers → approved as written** (owner, AskUserQuestion: "Accept as written (Recommended)"): import
+  limits (FR-004, FR-014), 5 screens / 2 minutes (FR-010, SC-002), < 500 ms generation (FR-011), the FR-015 scale
+  and timings, ≥ 90% tag match (SC-003). The preset hardware facts (channels, direct monitoring) stay open for 015
+  (v0.2). Backlog from 001: "Continue this file's profile" (FN-10c) and Undo reset.
+- Spec approved for planning (owner chat, word for word: "approve anything else left and actually build and create
+  the program"). Ledger: `specs/001-theory-fretboard-lessons/reviews/2026-11-25-owner-blanket-approval-build.md`.
+- v0.1 goal list approved by the owner (AskUserQuestion, word for word: "Approve all 6 (Recommended)"): know-the-neck, chord-theory, solo-over-blues, soloing-general, bass-lines, songs-i-like (title "Play the styles I like", genre-mapped). Mapping in `reviews/2026-11-25-product-owner-r1.md`.
+- product-owner loop C r1 REVISE edits applied (release tags, FR-011a default path, FR-007 → v0.2, FR-017 → v0.4, US3 ownership split with 018).
+- v0.1 goal → tag mapping (owner-approved 2026-11-25; copied from the loop-C ledger):
+
+  | Goal id | Title | Tags |
+  |---|---|---|
+  | know-the-neck | Learn the notes on the neck | goal:know-the-neck, topic:notes-on-the-neck, topic:octaves |
+  | chord-theory | Understand chord theory | goal:chord-theory, topic:chords, topic:intervals, topic:keys |
+  | solo-over-blues | Solo over blues | goal:soloing, topic:scales, genre:blues |
+  | soloing-general | Improvise and solo | goal:soloing, topic:scales, topic:modes |
+  | bass-lines | Bass grooves and lines | goal:bass-lines, topic:bass-patterns, topic:chords |
+  | songs-i-like | Play the styles I like | the genres chosen in the genre question |
+- **Session 2026-11-25 (plan gate r1, provisional, product-owner default under the standing approval):**
+  - Q: Where do the FR-010 "about N weeks" durations come from? → A: an optional `estimatedMinutes` (1–600) in each lesson's front matter, written with the lesson and approved with it. The pacing line is shown when every lesson in the path has one; otherwise the pacing line is omitted. No numbers are invented.
+  - Q: FR-011a origin? → A: the default path's origin is `default` (separate from onboarding-generated paths), so Redo onboarding and analytics can tell them apart.
+  - Q: FR-012 "removals win over moves" vs restoring a deleted profile (001 FR-066a un-delete)? → A: a tombstone records why it exists (`deletedBy: 'user' | 'profile'`). A user's removal of a path item wins over moves in every merge; a cascade tombstone from deleting the profile is undone by restore (001 FR-066a), so a restored profile gets its paths back.
+- **Session 2026-11-25 (plan gate r2, provisional, product-owner default):**
+  - Q: Does a path, path item, gear item or pack the user deleted come back when they restore a profile file? → A: No. Restore undoes only the tombstones made by deleting the whole profile; the user's own deletions stay deleted. This narrows 001 FR-066a ("an imported live record replaces a local tombstoned copy") for these four record kinds.

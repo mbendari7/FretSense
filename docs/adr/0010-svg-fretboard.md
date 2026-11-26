@@ -1,6 +1,6 @@
 # 0010. SVG Fretboard Rendering
 
-- Status: Proposed (pending owner approval)
+- **Status**: Accepted (owner approval 2026-11-25, recorded in "Owner approvals recorded" below; earlier status: Proposed (pending owner approval))
 - Date: 2026-11-21
 - Deciders: owner
 - Related: specs/001 FR-011–FR-018, FR-047–FR-049, FR-062, SC-003, SC-006; research R8; ADR-0003
@@ -29,3 +29,7 @@ scrolls inside its own container at 390 px.
 
 ## AI involvement
 _To be written by the owner._
+
+## Owner approvals recorded
+
+- Accepted 2026-11-25, owner in chat (copied word for word): "approve anything else left and actually build and create the program". Ledger: `specs/001-theory-fretboard-lessons/reviews/2026-11-25-owner-blanket-approval-build.md`.

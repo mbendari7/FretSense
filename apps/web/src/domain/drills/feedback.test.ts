@@ -212,3 +212,25 @@ describe('FR-032 one spelling per question across prompt and feedback', () => {
     expect(fb(std6, q!, { string: 6, fret: 2 }, false)).toBe('Incorrect. You tapped Gb2 at string 6 fret 2; Ab2 is at string 6 fret 4');
   });
 });
+
+// T098a CR-B3-6 (theory-checker r1 #3): chord-tone lock names the chord's tones in the chord's
+// spelling. Expected tones are the textbook triads of F major's I–vi–ii–V (F A C, D F A, G Bb D,
+// C E G), written here by hand, not taken from the implementation.
+describe('CR-B3-6 chord-tone lock feedback lists the chord tones (F major)', () => {
+  const bass = presetById('bass4-standard')!.profile;
+  const qs = gen(bass, { type: 'chord-tone-lock', strings: [1, 2, 3, 4], fromFret: 0, toFret: 12, count: 5, octaveMode: 'any', key: { tonic: 'F', mode: 'major' } });
+  const expected = [['F', 'F, A, C'], ['Dm', 'D, F, A'], ['Gm', 'G, Bb, D'], ['C', 'C, E, G']] as const;
+  // Bass 4 standard, open strings E1 A1 D2 G2 (string 4 = E). A at string 3 fret 0; Bb at string 3 fret 1.
+  it('names the tones for each chord, right or wrong', () => {
+    expected.forEach(([sym, tones], i) => {
+      const q = qs[i]!;
+      expect(q.group).toBe(sym);
+      expect(fb(bass, q, { string: 3, fret: 0 }, true)).toContain(`(${tones})`);
+      expect(fb(bass, q, { string: 3, fret: 0 }, false)).toContain(`${sym} is ${tones}.`);
+    });
+  });
+  it('spells a wrong Bb tap over C as Bb, and a correct Bb over Gm as a chord tone', () => {
+    expect(fb(bass, qs[3]!, { string: 3, fret: 1 }, false)).toBe('Incorrect. You tapped Bb; C is C, E, G.');
+    expect(fb(bass, qs[2]!, { string: 3, fret: 1 }, true)).toBe('Correct, Bb is a chord tone of Gm (G, Bb, D)');
+  });
+});

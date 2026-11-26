@@ -1,6 +1,6 @@
 # 0003. InstrumentProfile as the Single Source of Instrument Geometry
 
-- Status: Proposed
+- **Status**: Accepted (owner approval 2026-11-25, recorded in "Owner approvals recorded" below; earlier status: Proposed)
 - Date: 2026-11-21
 - Deciders: owner
 - Related: Constitution II, VIII; spec 001 (FR-008, FR-009, FR-051–FR-056); ADR-0002
@@ -37,3 +37,7 @@ enforce this.
 
 ## AI involvement
 _To be written by the owner._
+
+## Owner approvals recorded
+
+- Accepted 2026-11-25, owner in chat (copied word for word): "approve anything else left and actually build and create the program". Ledger: `specs/001-theory-fretboard-lessons/reviews/2026-11-25-owner-blanket-approval-build.md`.

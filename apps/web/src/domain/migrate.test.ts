@@ -31,7 +31,8 @@
  */
 import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
-import { presets, presetById, type InstrumentProfile } from '@fretsense/theory';
+import { pitchClass, positionsOf, presets, presetById, type InstrumentProfile } from '@fretsense/theory';
+import { buildLine, lineAttempts } from './drills/walkingBass';
 import { DRILL_TYPE_RENAMES, LEGACY_DRILL_TYPE, migrateAttempt } from './migrate';
 import { DRILL_TYPES, ITEM_KEY_PATTERN, attemptSchema } from './records';
 import { PAYLOAD_FIELDS, payloadOf } from './canonicalJson';
@@ -276,6 +277,21 @@ const settings = (p: InstrumentProfile, type: string, over: Partial<DrillSetting
   type: type as DrillSettings['type'], strings: allStrings(p), fromFret: 0, toFret: Math.min(12, p.fretCount), count: 40, octaveMode: 'any', ...over,
 });
 const WALK = { key: { tonic: 'C', mode: 'major' as const }, chords: [{ root: 'C', quality: 'major' }, { root: 'A', quality: 'minor' }, { root: 'D', quality: 'minor' }, { root: 'G', quality: 'dom7' }] };
+
+/**
+ * T098: walking bass is one looping line (FR-058), not a generated question list. Its recorded items
+ * come from lineAttempts on a filled line: each bar's slots hold that bar's chord root.
+ */
+function walkItems(p: InstrumentProfile, s: DrillSettings): { drillType: string; itemKey: string; prompt: { drillType: string }; context: { qualityId: string } }[] {
+  const b = buildLine(p, s);
+  if (!b.ok) throw new Error(b.reason);
+  const entries = Array.from({ length: b.line.slotCount }, (_, i) => {
+    const c = b.line.chords[Math.floor(i / 4)]!;
+    return positionsOf(p, { pitchClass: pitchClass(c.root) }, { fromFret: b.line.fromFret, toFret: b.line.toFret, strings: b.line.strings })[0];
+  });
+  return lineAttempts(p, b.line, entries).map((a, i) => ({ drillType: 'walking-bass', itemKey: a.itemKey, prompt: a.prompt, context: { qualityId: b.line.chords[Math.floor(i / 4)]!.quality } }));
+}
+
 function gen(p: InstrumentProfile, s: DrillSettings, histories: Map<string, { attempts: number; misses: number }>, seed: number): Question[] | undefined {
   const r = generateQuestions({ profile: p, settings: s, rng: mulberry32(seed), histories, adaptive: true });
   return r.ok ? r.questions : undefined;
@@ -330,7 +346,7 @@ describe('FR-041 T093a renamed attempts keep feeding weighting (their keys are l
     expect(keys.has(migrated(OLD.arp).attempt.itemKey)).toBe(true);
   });
   it('a migrated bass-walking dom7 attempt keys to the current walking-bass dom7 item', () => {
-    const keys = new Set((gen(bass4, settings(bass4, 'walking-bass', WALK), new Map(), 1) ?? []).map((q) => q.itemKey));
+    const keys = new Set(walkItems(bass4, settings(bass4, 'walking-bass', WALK)).map((q) => q.itemKey));
     expect(keys.has(migrated(OLD.walk).attempt.itemKey)).toBe(true);
   });
 });

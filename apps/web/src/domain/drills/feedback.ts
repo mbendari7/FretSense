@@ -1,4 +1,4 @@
-import { chordSymbol, chromaticLabel, defaultSpelling, spellInContext, formatPitchClass, midi, openString, type FretPosition, type InstrumentProfile, type PitchClassNote } from '@fretsense/theory';
+import { buildChord, chordSymbol, chromaticLabel, defaultSpelling, spellInContext, formatPitchClass, midi, openString, type FretPosition, type InstrumentProfile, type PitchClassNote } from '@fretsense/theory';
 import type { Question } from './types';
 
 const LETTER_PC: Record<string, number> = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
@@ -28,6 +28,15 @@ export function feedbackText(input: { profile: InstrumentProfile; question: Ques
   const octaves = !noteFinding || q.prompt.midi !== null;
   const named = (pos: FretPosition) => (octaves ? withOct(pos) : name);
 
+  // CR-B3-6 (FR-059): chord-tone lock names the chord's tones, in the chord's spelling, either way.
+  if (q.drillType === 'chord-tone-lock' && q.context?.qualityId) {
+    const tones = buildChord(q.context.root, q.context.qualityId);
+    const list = tones.ok ? tones.value.map((t) => formatPitchClass(t)).join(', ') : '';
+    const sym = q.group;
+    const tp = ((midiAt(tap) % 12) + 12) % 12;
+    const tn = formatPitchClass(spellTapped(q, q.context.root, tp));
+    return correct ? `Correct, ${tn} is a chord tone of ${sym} (${list})` : `Incorrect. You tapped ${tn}; ${sym} is ${list}.`;
+  }
   if (correct) return `Correct, ${named(tap)} on string ${tap.string} fret ${tap.fret}`;
 
   // CR-B2-15: name the tapped note first, spelled by FR-060 relative to the prompted note, with

@@ -1,6 +1,6 @@
 # 0006. Constitution v2.2.0: Personalised for Every User, No Locked Content, Curriculum Packs
 
-- Status: Proposed (pending owner approval)
+- **Status**: Accepted (owner approval 2026-11-25, recorded in "Owner approvals recorded" below; earlier status: Proposed (pending owner approval))
 - Date: 2026-11-21
 - Deciders: owner
 - Related: `.specify/memory/constitution.md` (preamble, VI, VIII, IX, XI, XIII), ADR-0001 (book-part
@@ -54,3 +54,7 @@ recommendations on top of 016's paths.
 
 ## AI involvement
 _To be written by the owner._
+
+## Owner approvals recorded
+
+- Accepted 2026-11-25, owner in chat (copied word for word): "approve anything else left and actually build and create the program". Ledger: `specs/001-theory-fretboard-lessons/reviews/2026-11-25-owner-blanket-approval-build.md`.

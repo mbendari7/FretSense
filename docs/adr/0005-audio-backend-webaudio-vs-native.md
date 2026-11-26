@@ -1,6 +1,6 @@
 # 0005. AudioBackend: WebAudio (Browser, Default) vs Native Tauri + Rust/cpal
 
-- Status: Proposed. **Native backend is a stretch goal, out of scope this term** (owner, 2026-11-21).
+- **Status**: Accepted (owner approval 2026-11-25, recorded in "Owner approvals recorded" below; earlier status: Proposed. **Native backend is a stretch goal, out of scope this term** (owner, 2026-11-21).)
   The browser backend ships first; the native numbers are measured only if the stretch goal is taken up.
 - Date: 2026-11-21
 - Deciders: owner
@@ -50,3 +50,7 @@ on the reference setup, or WebAudio fails an ADR-0002 budget that native meets.
 
 ## AI involvement
 _To be written by the owner._
+
+## Owner approvals recorded
+
+- Accepted 2026-11-25, owner in chat (copied word for word): "approve anything else left and actually build and create the program". Ledger: `specs/001-theory-fretboard-lessons/reviews/2026-11-25-owner-blanket-approval-build.md`.

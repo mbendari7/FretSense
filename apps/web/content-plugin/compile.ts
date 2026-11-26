@@ -9,8 +9,8 @@ import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import rehypeStringify from 'rehype-stringify';
 import { visit } from 'unist-util-visit';
 import {
-  lessonFrontmatterSchema, packSchema, tagVocabularySchema,
-  type CompiledContent, type CompiledLesson, type CurriculumPack, type TagVocabulary,
+  goalsFileSchema, lessonFrontmatterSchema, packSchema, tagVocabularySchema,
+  type CompiledContent, type Goal, type CompiledLesson, type CurriculumPack, type TagVocabulary,
 } from '../src/domain/content/schemas';
 
 /** Research R7: build-time compile + validate. Every error names file and field (FR-023). */
@@ -86,7 +86,34 @@ export function compilePack(text: string, file: string): CurriculumPack {
   return parsed.data;
 }
 
-/** Compiles content/ (lessons, packs, tags) and cross-checks references. */
+function parseYamlOrThrow(text: string, file: string): unknown {
+  try {
+    return parseYaml(text, YAML_OPTS);
+  } catch (e) {
+    throw new ContentError(`${file}: ${(e as Error).message}`);
+  }
+}
+
+/** 016 FR-010 / research R5: goals (core YAML, no aliases), each tag present in tags.yaml. */
+export function compileGoals(goalsYaml: string, tagsYaml: string, file = 'content/goals.yaml'): Goal[] {
+  if (Buffer.byteLength(goalsYaml) > MAX_BYTES) throw new ContentError(`${file}: larger than 256 kB`);
+  const tags = tagVocabularySchema.safeParse(parseYamlOrThrow(tagsYaml, 'content/tags.yaml'));
+  if (!tags.success) throw new ContentError(issues('content/tags.yaml', tags.error));
+  const parsed = goalsFileSchema.safeParse(parseYamlOrThrow(goalsYaml, file));
+  if (!parsed.success) throw new ContentError(issues(file, parsed.error));
+  const seen = new Set<string>();
+  parsed.data.goals.forEach((g, i) => {
+    if (seen.has(g.id)) throw new ContentError(`${file}: goals.${i}.id: duplicate goal id "${g.id}"`);
+    seen.add(g.id);
+    g.tags.forEach((t, j) => {
+      const [ns, v] = t.split(':') as [keyof TagVocabulary, string];
+      if (!tags.data[ns]?.includes(v)) throw new ContentError(`${file}: goals.${i}.tags.${j}: "${t}" is not in content/tags.yaml`);
+    });
+  });
+  return parsed.data.goals;
+}
+
+/** Compiles content/ (lessons, packs, tags, goals) and cross-checks references. */
 export function compileContent(contentDir: string): CompiledContent {
   const rel = (f: string) => relative(join(contentDir, '..'), f).replace(/\\/g, '/');
   const tagsFile = join(contentDir, 'tags.yaml');
@@ -114,5 +141,7 @@ export function compileContent(contentDir: string): CompiledContent {
       }));
       return p;
     });
-  return { lessons, packs, tags };
+  const goalsFile = join(contentDir, 'goals.yaml');
+  const goals = existsSync(goalsFile) ? compileGoals(readFileSync(goalsFile, 'utf8'), existsSync(tagsFile) ? readFileSync(tagsFile, 'utf8') : '{}', rel(goalsFile)) : [];
+  return { lessons, packs, tags, goals };
 }

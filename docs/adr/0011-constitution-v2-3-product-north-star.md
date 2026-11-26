@@ -1,6 +1,6 @@
 # 0011. Constitution v2.3.0: `docs/PRODUCT.md` as the Product North Star; Every Spec Names Its Release
 
-- Status: Proposed (pending owner approval)
+- **Status**: Accepted (owner approval 2026-11-25, recorded in "Owner approvals recorded" below; earlier status: Proposed (pending owner approval))
 - Date: 2026-11-21
 - Deciders: owner
 - Related: `.specify/memory/constitution.md`, `docs/PRODUCT.md`, specs 012, 017, 018
@@ -44,3 +44,7 @@ MINOR bump to **2.3.0**:
 
 ## AI involvement
 _To be written by the owner._
+
+## Owner approvals recorded
+
+- Accepted 2026-11-25, owner in chat (copied word for word): "approve anything else left and actually build and create the program". Ledger: `specs/001-theory-fretboard-lessons/reviews/2026-11-25-owner-blanket-approval-build.md`.

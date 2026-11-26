@@ -11,6 +11,7 @@ import { useApp, useAppState } from '../hooks';
 import { contextMarkers, describePosition, prettyNote } from '../markers';
 import { clampWindow, parsePc, pretty, useDisplay, CHORDS, SCALES } from '../common';
 import { DrillRunner } from './DrillRunner';
+import { WalkingBassRunner } from './WalkingBassRunner';
 import { defaultSettings } from './DrillsScreen';
 import { NotFound } from './NotFound';
 
@@ -222,6 +223,11 @@ function DrillStage({ lesson, drillId }: { lesson: CompiledLesson; drillId?: str
         const base = defaultSettings(active.type, inst.profile, s.settings!.octaveMode);
         const settings = toSettings(active, base);
         const clamped = { ...settings, toFret: Math.min(settings.toFret, inst.profile.fretCount), fromFret: Math.min(settings.fromFret, inst.profile.fretCount) };
+        // FR-058: a lesson's walking-bass drill is one looping line over the lesson's progression and key.
+        if (active.type === 'walking-bass') {
+          return <WalkingBassRunner key={active.id} profile={inst.profile} instrumentId={inst.id} settings={clamped} lessonId={lesson.id} drillId={active.id}
+            onExit={(r) => { if (r.completed) void app.markStage(lesson.id, 'drill'); nav(`/lessons/${lesson.id}/drill`); }} />;
+        }
         return <DrillRunner key={active.id} profile={inst.profile} instrumentId={inst.id} settings={clamped} lessonId={lesson.id} drillId={active.id}
           onComplete={() => void app.markStage(lesson.id, 'drill')} onExit={() => nav(`/lessons/${lesson.id}/drill`)} />;
       }

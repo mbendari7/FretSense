@@ -1,7 +1,7 @@
 # 0001. Constitution v2.0.0: Scope Expansion to Bass, Vision, ML and Engineering Showcase
 
-- Status: Proposed (pending owner approval). Its "book part → lesson track" mapping is replaced by
-  curriculum packs in ADR-0006.
+- **Status**: Accepted (owner approval 2026-11-25, recorded in "Owner approvals recorded" below; earlier status: Proposed (pending owner approval). Its "book part → lesson track" mapping is replaced by
+  curriculum packs in ADR-0006.)
 - Date: 2026-11-21
 - Deciders: owner
 - Related: `.specify/memory/constitution.md`, ADR-0002, ADR-0003, specs 001, 006–013
@@ -45,3 +45,7 @@ Bump to **2.0.0 (MAJOR)**. Changes:
 
 ## AI involvement
 _To be written by the owner._
+
+## Owner approvals recorded
+
+- Accepted 2026-11-25, owner in chat (copied word for word): "approve anything else left and actually build and create the program". Ledger: `specs/001-theory-fretboard-lessons/reviews/2026-11-25-owner-blanket-approval-build.md`.

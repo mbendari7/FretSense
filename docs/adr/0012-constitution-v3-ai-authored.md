@@ -1,6 +1,6 @@
 # ADR-0012: Constitution v3.0.0, AI-authored and owner-directed
 
-- **Status**: Proposed (the owner accepts or rejects it; it is not Accepted until the owner says so)
+- **Status**: Accepted (owner approval 2026-11-25, recorded in "Owner approvals recorded" below; earlier status: Proposed (the owner accepts or rejects it; it is not Accepted until the owner says so))
 - **Date**: 2026-11-22
 - **Deciders**: the owner (Mahmoud); drafted by the main AI agent at the owner's request
 
@@ -48,3 +48,7 @@ Specs, tests-first, reviewer gates, ADRs and the release order (v0.1 → v0.4 vi
   agents cannot write lessons.
 - Reviewers check for independent verification of core algorithms and for copied text in lessons
   instead of checking who wrote them.
+
+## Owner approvals recorded
+
+- Accepted 2026-11-25, owner in chat (copied word for word): "approve anything else left and actually build and create the program". Ledger: `specs/001-theory-fretboard-lessons/reviews/2026-11-25-owner-blanket-approval-build.md`.

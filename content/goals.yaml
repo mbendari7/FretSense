@@ -1,0 +1,23 @@
+# v0.1 onboarding goals (016 FR-010). Owner-approved 2026-11-25; the table is in
+# specs/016-personalization/spec.md, Clarifications. Each goal maps only to tags in tags.yaml.
+# The style goal has no tags of its own: it uses the genres picked in the genre question.
+goals:
+  - id: know-the-neck
+    title: Learn the notes on the neck
+    tags: [goal:know-the-neck, topic:notes-on-the-neck, topic:octaves]
+  - id: chord-theory
+    title: Understand chord theory
+    tags: [goal:chord-theory, topic:chords, topic:intervals, topic:keys]
+  - id: solo-over-blues
+    title: Solo over blues
+    tags: [goal:soloing, topic:scales, genre:blues]
+  - id: soloing-general
+    title: Improvise and solo
+    tags: [goal:soloing, topic:scales, topic:modes]
+  - id: bass-lines
+    title: Bass grooves and lines
+    tags: [goal:bass-lines, topic:bass-patterns, topic:chords]
+  - id: songs-i-like
+    title: Play the styles I like
+    tags: []
+    genreMapped: true

@@ -1,6 +1,6 @@
 # 0002. Per-Instrument Latency Budgets
 
-- Status: Proposed (owner to confirm the numbers in the clarify batch)
+- **Status**: Accepted (owner approval 2026-11-25, recorded in "Owner approvals recorded" below; earlier status: Proposed (owner to confirm the numbers in the clarify batch))
 - Date: 2026-11-21
 - Deciders: owner
 - Related: Constitution V, VIII; features 002, 003, 004; ADR-0003
@@ -52,3 +52,7 @@ Higher notes may confirm sooner. The budget is the worst case for the profile.
 
 ## AI involvement
 _To be written by the owner._
+
+## Owner approvals recorded
+
+- Accepted 2026-11-25, owner in chat (copied word for word): "approve anything else left and actually build and create the program". Ledger: `specs/001-theory-fretboard-lessons/reviews/2026-11-25-owner-blanket-approval-build.md`.

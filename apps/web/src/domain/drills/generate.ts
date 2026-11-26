@@ -9,6 +9,7 @@ import { itemKey } from '../records';
 import { pickIndex, weightedPick, type Rng } from '../prng';
 import { itemWeight, type ItemHistory } from '../weighting';
 import type { DrillSettings, Question, RfoShape, Step } from './types';
+import { buildLine } from './walkingBass';
 
 export interface GenerateInput {
   readonly profile: InstrumentProfile;
@@ -419,57 +420,42 @@ function arpeggio(p: InstrumentProfile, s: DrillSettings): Candidate[] | string 
   return out.length ? out : 'No chosen chord fits its arpeggio inside this fret range. Widen the range or add strings.';
 }
 
-/** Walking bass (FR-058): per chord, beat 1 root, beats 2–3 chord tones, beat 4 an approach note. */
-function walking(p: InstrumentProfile, s: DrillSettings): Candidate[] | string {
+/**
+ * Chord-tone lock (FR-059): one note per chord of a progression with a declared key (absent chords
+ * → the FR-058 built-in | I | vi | ii | V |). Questions follow the progression in bar order, so the
+ * line is musical; any chord tone in the strings and fret range is correct, otherwise the chord's
+ * tones are revealed (the step's valid set).
+ */
+function chordToneLockQuestions(p: InstrumentProfile, s: DrillSettings, count: number): Question[] | string {
+  const built = buildLine(p, s);
+  if (!built.ok) return built.reason;
+  const line = built.line;
   const r = rangeOf(s, p);
-  const tonic = parsePc(s.key?.tonic ?? 'C');
-  const mode = s.key?.mode ?? 'major';
-  const chords = s.chords?.length ? s.chords : [{ root: 'C', quality: 'maj7' }, { root: 'A', quality: 'min7' }, { root: 'D', quality: 'min7' }, { root: 'G', quality: 'dom7' }];
-  if (!tonic) return 'The progression needs a key.';
-  if (chords.length < 2 || chords.length > 8) return 'A progression needs 2 to 8 chords.';
-  const scale = buildScale(tonic, mode === 'major' ? 'major' : 'natural-minor');
-  const scalePcs = scale.ok ? scale.value.map(pitchClass) : [];
-  const parsed = chords.map((c) => ({ root: parsePc(c.root), quality: c.quality }));
-  if (parsed.some((c) => !c.root)) return 'A chord in the progression has an unknown root.';
-  const out: Candidate[] = [];
-  parsed.forEach((c, idx) => {
-    const tones = buildChord(c.root!, c.quality);
-    if (!tones.ok) return;
-    const tonePcs = tones.value.map(pitchClass);
-    const next = parsed[(idx + 1) % parsed.length]!;
-    const nextRoot = pitchClass(next.root!);
-    const approach = [...new Set([mod(nextRoot - 1, 12), mod(nextRoot + 1, 12), mod(nextRoot - 2, 12), mod(nextRoot + 2, 12), mod(nextRoot + 7, 12), mod(nextRoot - 7, 12)])]
-      .filter((x) => x !== nextRoot);
-    const nextName = formatPitchClass(next.root!);
-    const step = (label: string, pcs: number[], hint: string): Step => ({
-      label,
-      hint,
-      accepts: pcs,
-      valid: pcs.flatMap((pc) => positionsOf(p, { pitchClass: pc }, r)),
-    });
-    const sym = chordSymbol(c.root!, c.quality);
-    const steps = [
-      step('beat 1: root', [tonePcs[0]!], `Beat 1 is the root of ${sym}, ${formatPitchClass(c.root!)}.`),
-      step('beat 2: chord or scale tone', [...new Set([...tonePcs, ...scalePcs])], `Beat 2 is a tone of ${sym} or a note of the key.`),
-      step('beat 3: chord or scale tone', [...new Set([...tonePcs, ...scalePcs])], `Beat 3 is a chord tone or a note of the key.`),
-      step(`beat 4: lead into ${nextName}`, approach, `Beat 4 leads into ${nextName}: one fret above or below it, a whole step away, or its 5th, but not ${nextName} itself.`),
-    ];
-    if (steps.some((st) => !st.valid.length)) return;
-    out.push({
-      key: itemKey.bass('walking-bass', c.quality),
-      make: () => ({
-        drillType: 'walking-bass',
-        itemKey: itemKey.bass('walking-bass', c.quality),
-        prompt: { drillType: 'walking-bass', key: { tonic: formatPitchClass(tonic), mode }, chords: chords.map((x) => ({ root: x.root, quality: x.quality })) },
-        text: `Walk one bar over ${sym} (next chord ${chordSymbol(next.root!, next.quality)})`,
-        steps,
-        reference: [],
-        context: { root: c.root!, qualityId: c.quality },
-        group: sym,
-      }),
-    });
+  const prompt = {
+    drillType: 'chord-tone-lock' as const,
+    key: { tonic: formatPitchClass(line.key.tonic), mode: line.key.mode },
+    chords: line.chords.map((c) => ({ root: formatPitchClass(c.root), quality: c.quality })),
+  };
+  const sort = byPitch(p);
+  const perChord = line.chords.map((c, i) => {
+    const pcs = c.tones.map(pitchClass);
+    const valid = pcs.flatMap((pc) => positionsOf(p, { pitchClass: pc }, r)).sort(sort);
+    const key = itemKey.bass('chord-tone-lock', c.quality);
+    const q: Question = {
+      drillType: 'chord-tone-lock',
+      itemKey: key,
+      prompt,
+      text: `Play one chord tone of ${c.symbol} (bar ${i + 1} of ${line.chords.length})`,
+      steps: [{ label: 'chord tone', valid, accepts: pcs }],
+      reference: [],
+      context: { root: c.root, qualityId: c.quality },
+      group: c.symbol,
+    };
+    return q;
   });
-  return out.length ? out : 'The progression has no playable bar inside this fret range.';
+  const empty = perChord.find((q) => !q.steps[0]!.valid.length);
+  if (empty) return `${empty.group} has no chord tone on the chosen strings and frets. Widen the fret range or add strings.`;
+  return Array.from({ length: count }, (_, i) => perChord[i % perChord.length]!);
 }
 
 function candidatesFor(p: InstrumentProfile, s: DrillSettings): Candidate[] | string {
@@ -478,8 +464,15 @@ function candidatesFor(p: InstrumentProfile, s: DrillSettings): Candidate[] | st
     case 'note-finding': return noteFinding(p, s);
     case 'interval': return intervalDrill(p, s);
     case 'chord-tone': return chordTone(p, s);
-    case 'walking-bass': return walking(p, s);
-    case 'chord-tone-lock': return 'Chord-tone lock is not available yet.';
+    case 'walking-bass': {
+      // FR-058: walking bass is one looping line judged by walkingBass.ts, not a question list.
+      const b = buildLine(p, s);
+      return b.ok ? [] : b.reason;
+    }
+    case 'chord-tone-lock': {
+      const qs = chordToneLockQuestions(p, s, 1);
+      return typeof qs === 'string' ? qs : [];
+    }
     case 'root-fifth-octave': return rootFifthOctave(p, s);
     case 'arpeggio': return arpeggio(p, s);
     default: return 'This drill type is not available.';
@@ -488,7 +481,8 @@ function candidatesFor(p: InstrumentProfile, s: DrillSettings): Candidate[] | st
 
 /** FR-061: rejects settings that can't produce an answerable question, with a reason. */
 export function validateSettings(p: InstrumentProfile, s: DrillSettings): { ok: true } | Fail {
-  if (s.count < 5 || s.count > 100) return { ok: false, reason: 'Choose between 5 and 100 questions.' };
+  // Walking bass is one line of 4 notes per chord; it has no question count (code-reviewer T098 #10).
+  if (s.type !== 'walking-bass' && (s.count < 5 || s.count > 100)) return { ok: false, reason: 'Choose between 5 and 100 questions.' };
   const c = candidatesFor(p, s);
   return typeof c === 'string' ? { ok: false, reason: c } : { ok: true };
 }
@@ -499,6 +493,11 @@ export function generateQuestions(input: GenerateInput): GenResult {
   if (!(DRILL_TYPES as readonly string[]).includes(input.settings.type)) return { ok: false, reason: 'This drill type is not available.' };
   const v = validateSettings(input.profile, input.settings);
   if (!v.ok) return v;
+  if (input.settings.type === 'walking-bass') return { ok: false, reason: 'Walking bass is played as one line; open it from the drills list.' };
+  if (input.settings.type === 'chord-tone-lock') {
+    const qs = chordToneLockQuestions(input.profile, input.settings, input.settings.count);
+    return typeof qs === 'string' ? { ok: false, reason: qs } : { ok: true, questions: qs };
+  }
   const cands = candidatesFor(input.profile, input.settings) as Candidate[];
   const weights = cands.map((c) => itemWeight(input.histories.get(c.key), input.adaptive));
   const questions: Question[] = [];

@@ -301,3 +301,18 @@ legend { font-weight: 700; margin-bottom: 6px; font-size: 0.9rem; }
 .missed { margin: 4px 0 12px; padding-left: 20px; }
 .prompt:focus { outline: none; }
 h1:focus { outline: none; }
+
+/* T098 walking bass (FR-058): bars of 4 slots; state by icon + text + border style, never colour alone. */
+.wb-bars { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin: 12px 0; }
+.wb-bar { border: 1px solid var(--line); border-radius: 10px; padding: 8px; }
+.wb-chord { font-weight: 700; margin-bottom: 6px; }
+.wb-slots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.wb-slot { min-height: 52px; min-width: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border: 1px solid var(--line); border-radius: 8px; background: transparent; color: var(--ink); font: inherit; cursor: pointer; padding: 2px; }
+.wb-slot .wb-beat { font-size: 0.75em; color: var(--ink-soft); }
+.wb-slot .wb-note { font-weight: 600; }
+.wb-slot .wb-icon { font-size: 0.8em; }
+.wb-slot.now { outline: 3px solid var(--m-ref); outline-offset: 1px; font-weight: 700; }
+.wb-slot.ok { border-color: var(--m-ok); }
+.wb-slot.broken { border-color: var(--m-bad); border-style: dashed; border-width: 2px; }
+.wb-slot.pending { border-style: dotted; }
+.wb-reasons { margin: 0 0 10px; padding-left: 1.2em; }

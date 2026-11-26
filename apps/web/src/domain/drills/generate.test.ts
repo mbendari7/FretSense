@@ -10,6 +10,8 @@ import { describe, expect, it } from 'vitest';
 import fc from 'fast-check';
 import { presetById, presets, validateProfile, type FretPosition, type InstrumentProfile, type Note } from '@fretsense/theory';
 import { generateQuestions, intervalName, judgeTap, validateSettings } from './generate';
+import { buildLine, judgeLine } from './walkingBass';
+
 import { mulberry32 } from '../prng';
 import { DrillSession } from './session';
 import { DRILL_LABELS, type DrillSettings, type Question } from './types';
@@ -509,46 +511,26 @@ describe('FR-061 / FR-056 / FR-057 bass shape drills: exact pitches, answerable'
 });
 
 // =============================================================================================
-describe('FR-058 walking bass rules', () => {
-  const s = (chords: { root: string; quality: string }[]): DrillSettings =>
-    base('walking-bass', bass4, { key: { tonic: 'C', mode: 'major' }, chords, count: 20 });
-  const bar1 = (chords: { root: string; quality: string }[]) => gen(bass4, s(chords), 1).find((q) => q.group.startsWith('C'))!;
+// T098: walking bass is one looping line judged by walkingBass.ts (full R1–R4 coverage, with exact
+// messages, is in walkingBass.test.ts). These keep the generator-level FR-058/FR-061 checks.
+describe('FR-058 walking bass rules (line API)', () => {
+  const s = (chords: { root: string; quality: string }[], key: DrillSettings['key'] = { tonic: 'C', mode: 'major' }): DrillSettings =>
+    base('walking-bass', bass4, { key, chords, count: 20 });
+  const line = (st: DrillSettings) => { const b = buildLine(bass4, st); if (!b.ok) throw new Error(b.reason); return b.line; };
   /** A position sounding pitch class pc on 4-string EADG, frets 0–12. */
   const at = (pc: number) => brute(bass4, [1, 2, 3, 4], 0, 12, (m) => pcOf(m) === pc)[0]!;
+  const rulesAt = (st: DrillSettings, entries: (ReturnType<typeof at> | undefined)[], slot: number) =>
+    judgeLine(bass4, line(st), entries)[slot]!.broken.map((x) => x.rule);
 
   it('R1: beat 1 is the chord root, and only the root', () => {
-    const q = bar1([{ root: 'C', quality: 'major' }, { root: 'G', quality: 'major' }]);
-    for (const v of q.steps[0]!.valid) expect(pcOf(posMidi(bass4, v))).toBe(0);
-    expect(judgeTap(q, 0, at(0))).toBe(true);
-    expect(judgeTap(q, 0, at(4))).toBe(false); // E is a chord tone but not the root
+    const st = s([{ root: 'C', quality: 'major' }, { root: 'G', quality: 'major' }]);
+    expect(rulesAt(st, [at(0)], 0)).toEqual([]);
+    expect(rulesAt(st, [at(4)], 0)).toEqual(['R1']); // E is a chord tone but not the root
   });
 
   it('R2: beat 2 accepts a tone of the declared key’s scale (D over C in C major)', () => {
-    const q = bar1([{ root: 'C', quality: 'major' }, { root: 'G', quality: 'major' }]);
-    expect(judgeTap(q, 1, at(2))).toBe(true);
-  });
-
-  it('R3: beat 4 accepts a step of 1–2 semitones to the next root (G): F, F#, G#, A', () => {
-    const q = bar1([{ root: 'C', quality: 'major' }, { root: 'G', quality: 'major' }]);
-    for (const pc of [5, 6, 8, 9]) expect(judgeTap(q, 3, at(pc)), `pc ${pc}`).toBe(true);
-  });
-
-  it('R3: beat 4 accepts the next root’s perfect 5th above (D) or below (C)', () => {
-    const q = bar1([{ root: 'C', quality: 'major' }, { root: 'G', quality: 'major' }]);
-    expect(judgeTap(q, 3, at(2))).toBe(true); // D: P5 above G
-    expect(judgeTap(q, 3, at(0))).toBe(true); // C: P5 below G
-  });
-
-  it('R3: beat 4 rejects a note that is neither a step nor a 5th from the next root', () => {
-    const q = bar1([{ root: 'C', quality: 'major' }, { root: 'G', quality: 'major' }]);
-    expect(judgeTap(q, 3, at(11))).toBe(false); // B: 4 semitones from G
-    expect(judgeTap(q, 3, at(3))).toBe(false); // Eb
-  });
-
-  it('the progression loops: the last bar approaches bar 1', () => {
-    const qs = gen(bass4, s([{ root: 'C', quality: 'major' }, { root: 'G', quality: 'major' }]), 1);
-    const g = qs.find((q) => q.group.startsWith('G'))!;
-    expect(judgeTap(g, 3, at(11))).toBe(true); // B → C is a semitone step
+    const st = s([{ root: 'C', quality: 'major' }, { root: 'G', quality: 'major' }]);
+    expect(rulesAt(st, [undefined, at(2)], 1)).toEqual([]);
   });
 
   it('a progression has 2–8 chords: 1 or 9 chords are rejected', () => {
@@ -557,23 +539,19 @@ describe('FR-058 walking bass rules', () => {
     expect(validateSettings(bass4, s(Array.from({ length: 8 }, () => ({ root: 'C', quality: 'major' })))).ok).toBe(true);
   });
 
-  it('FR-061 property: every walking step has a valid answer inside the area', () => {
+  it('FR-061 property: accepted settings always have every chord root inside the area (beat 1 is answerable)', () => {
     fc.assert(
       fc.property(anyProfile.chain((p) => fc.tuple(fc.constant(p), rangeFor(p))), ([p, r]) => {
         const from = Math.min(r.a, r.b);
         const to = Math.max(r.a, r.b);
         const st: DrillSettings = { type: 'walking-bass', strings: r.strings, fromFret: from, toFret: to, count: r.count, octaveMode: 'any', key: { tonic: 'C', mode: 'major' }, chords: [{ root: 'C', quality: 'major' }, { root: 'A', quality: 'minor' }, { root: 'D', quality: 'minor' }, { root: 'G', quality: 'dom7' }] };
         if (!validateSettings(p, st).ok) return;
-        for (const q of gen(p, st, r.seed)) {
-          expect(q.steps).toHaveLength(4);
-          for (const step of q.steps) {
-            expect(step.valid.length).toBeGreaterThan(0);
-            for (const v of step.valid) {
-              expect(r.strings).toContain(v.string);
-              expect(v.fret).toBeGreaterThanOrEqual(from);
-              expect(v.fret).toBeLessThanOrEqual(to);
-            }
-          }
+        const b = buildLine(p, st);
+        expect(b.ok).toBe(true);
+        if (!b.ok) return;
+        for (const c of b.line.chords) {
+          const rootPc = [0, 2, 4, 5, 7, 9, 11][['C', 'D', 'E', 'F', 'G', 'A', 'B'].indexOf(c.root.letter)]! + c.root.accidental;
+          expect(brute(p, r.strings, from, to, (m) => pcOf(m) === pcOf(rootPc)).length).toBeGreaterThan(0);
         }
       }),
       { numRuns: 60 },
@@ -626,25 +604,26 @@ describe('FR-061 settings that name unknown theory objects are rejected or skipp
     for (const q of gen(bass4, rest as DrillSettings)) expect(q.steps.every((st) => st.valid.length > 0)).toBe(true);
   });
 
-  it('walking bass: an unknown tonic or chord root is rejected; an unknown chord quality yields no bar for it', () => {
+  it('walking bass: an unknown tonic, chord root or chord quality is rejected with a reason (FR-061)', () => {
     const w = (over: Partial<DrillSettings>) => base('walking-bass', bass4, { key: { tonic: 'C', mode: 'major' }, chords: [{ root: 'C', quality: 'major' }, { root: 'G', quality: 'major' }], ...over });
     expect(validateSettings(bass4, w({ key: { tonic: 'H', mode: 'major' } })).ok).toBe(false);
     expect(validateSettings(bass4, w({ chords: [{ root: 'C', quality: 'major' }, { root: 'Q', quality: 'major' }] })).ok).toBe(false);
-    const qs = gen(bass4, w({ chords: [{ root: 'C', quality: 'major' }, { root: 'G', quality: 'nonsense' }] }));
-    for (const q of qs) expect(q.group.startsWith('C')).toBe(true);
-    expect(validateSettings(bass4, w({ chords: [{ root: 'C', quality: 'nonsense' }, { root: 'G', quality: 'nonsense' }] })).ok).toBe(false);
+    expect(validateSettings(bass4, w({ chords: [{ root: 'C', quality: 'major' }, { root: 'G', quality: 'nonsense' }] })).ok).toBe(false);
   });
 
   it('walking bass in a minor key: beat 3 accepts the key’s scale tones (Ab over Cm in C minor)', () => {
-    const s = base('walking-bass', bass4, { key: { tonic: 'C', mode: 'minor' }, chords: [{ root: 'C', quality: 'minor' }, { root: 'G', quality: 'minor' }], count: 20 });
-    const q = gen(bass4, s).find((x) => x.group.startsWith('C'))!;
+    const st = base('walking-bass', bass4, { key: { tonic: 'C', mode: 'minor' }, chords: [{ root: 'C', quality: 'minor' }, { root: 'G', quality: 'minor' }], count: 20 });
+    const b = buildLine(bass4, st);
+    expect(b.ok).toBe(true);
+    if (!b.ok) return;
     const ab = brute(bass4, [1, 2, 3, 4], 0, 12, (m) => pcOf(m) === 8)[0]!;
-    expect(judgeTap(q, 2, ab)).toBe(true);
+    expect(judgeLine(bass4, b.line, [undefined, undefined, ab])[2]!.broken.map((x) => x.rule)).toEqual([]);
   });
 
-  it('walking bass with chords omitted still yields 4-beat bars', () => {
+  it('walking bass with chords omitted uses the built-in I–vi–ii–V: 4 bars of 4 beats', () => {
     const { chords: _c, ...rest } = base('walking-bass', bass4, { key: { tonic: 'C', mode: 'major' }, count: 5 });
-    for (const q of gen(bass4, rest as DrillSettings)) expect(q.steps).toHaveLength(4);
+    const b = buildLine(bass4, rest as DrillSettings);
+    expect(b.ok && b.line.slotCount).toBe(16);
   });
 
   it('every drill type has a display label', () => {

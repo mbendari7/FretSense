@@ -1,6 +1,6 @@
 # 0007. Workspace, Web Stack and Test Toolchain for 001
 
-- Status: Proposed (pending owner approval)
+- **Status**: Accepted (owner approval 2026-11-25, recorded in "Owner approvals recorded" below; earlier status: Proposed (pending owner approval))
 - Date: 2026-11-21
 - Deciders: owner
 - Related: specs/001-theory-fretboard-lessons/plan.md, research.md R1–R3, R10–R12; Constitution II, III, VI, XII
@@ -40,3 +40,7 @@ open.
 
 ## AI involvement
 _To be written by the owner._
+
+## Owner approvals recorded
+
+- Accepted 2026-11-25, owner in chat (copied word for word): "approve anything else left and actually build and create the program". Ledger: `specs/001-theory-fretboard-lessons/reviews/2026-11-25-owner-blanket-approval-build.md`.

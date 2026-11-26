@@ -13,18 +13,18 @@ more than one package, it adds a dependency, or it trades off accuracy, latency 
 
 | # | Title | Status | Date |
 |---|-------|--------|------|
-| [0001](0001-constitution-v2-scope-expansion.md) | Constitution v2.0.0: scope expansion (bass, vision, ML, skills) | Proposed | 2026-11-21 |
-| [0002](0002-per-instrument-latency-budgets.md) | Per-instrument latency budgets (onset ≤ 30 ms; pitch 50/80/90 ms) | Proposed | 2026-11-21 |
-| [0003](0003-instrument-profile-abstraction.md) | InstrumentProfile as the single source of instrument geometry | Proposed | 2026-11-21 |
-| [0004](0004-constitution-v2-1-audio-io-and-git-governance.md) | Constitution v2.1.0: audio I/O ownership, single-performer leakage rule, device indicators, no AI authorship | Proposed | 2026-11-21 |
-| [0005](0005-audio-backend-webaudio-vs-native.md) | AudioBackend: WebAudio (default) vs native Tauri + Rust/cpal | Proposed (native = stretch goal) | 2026-11-21 |
-| [0006](0006-personalised-unlocked-curriculum.md) | Constitution v2.2.0: personalised for every user, no locked content, curriculum packs | Proposed | 2026-11-21 |
-| [0007](0007-web-stack-and-workspace.md) | Workspace, web stack and test toolchain (001) | Proposed | 2026-11-21 |
-| [0008](0008-local-persistence-and-sync-ready-records.md) | Local persistence and sync-ready records (IndexedDB, UUID + HLC, tombstones, geometry ids) | Proposed | 2026-11-21 |
-| [0009](0009-content-pipeline.md) | Content pipeline: lessons, curriculum packs, tags | Proposed | 2026-11-21 |
-| [0010](0010-svg-fretboard.md) | SVG fretboard rendering | Proposed | 2026-11-21 |
-| [0011](0011-constitution-v2-3-product-north-star.md) | Constitution v2.3.0: `docs/PRODUCT.md` as the product north star; every spec names its release | Proposed | 2026-11-21 |
-| [0012](0012-constitution-v3-ai-authored.md) | Constitution v3.0.0: AI-authored, owner-directed; task groups and standing approval | Proposed | 2026-11-22 |
+| [0001](0001-constitution-v2-scope-expansion.md) | Constitution v2.0.0: scope expansion (bass, vision, ML, skills) | Accepted | 2026-11-21 |
+| [0002](0002-per-instrument-latency-budgets.md) | Per-instrument latency budgets (onset ≤ 30 ms; pitch 50/80/90 ms) | Accepted | 2026-11-21 |
+| [0003](0003-instrument-profile-abstraction.md) | InstrumentProfile as the single source of instrument geometry | Accepted | 2026-11-21 |
+| [0004](0004-constitution-v2-1-audio-io-and-git-governance.md) | Constitution v2.1.0: audio I/O ownership, single-performer leakage rule, device indicators, no AI authorship | Accepted | 2026-11-21 |
+| [0005](0005-audio-backend-webaudio-vs-native.md) | AudioBackend: WebAudio (default) vs native Tauri + Rust/cpal | Accepted (native = stretch goal) | 2026-11-21 |
+| [0006](0006-personalised-unlocked-curriculum.md) | Constitution v2.2.0: personalised for every user, no locked content, curriculum packs | Accepted | 2026-11-21 |
+| [0007](0007-web-stack-and-workspace.md) | Workspace, web stack and test toolchain (001) | Accepted | 2026-11-21 |
+| [0008](0008-local-persistence-and-sync-ready-records.md) | Local persistence and sync-ready records (IndexedDB, UUID + HLC, tombstones, geometry ids) | Accepted | 2026-11-21 |
+| [0009](0009-content-pipeline.md) | Content pipeline: lessons, curriculum packs, tags | Accepted | 2026-11-21 |
+| [0010](0010-svg-fretboard.md) | SVG fretboard rendering | Accepted | 2026-11-21 |
+| [0011](0011-constitution-v2-3-product-north-star.md) | Constitution v2.3.0: `docs/PRODUCT.md` as the product north star; every spec names its release | Accepted | 2026-11-21 |
+| [0012](0012-constitution-v3-ai-authored.md) | Constitution v3.0.0: AI-authored, owner-directed; task groups and standing approval | Accepted | 2026-11-22 |
 | [0013](0013-token-budget.md) | Token budget: model tiering, scoped reads, diff-only re-reviews, gate selection, RTK/Serena/Context7 | Accepted | 2026-11-25 |
 
 ## Template

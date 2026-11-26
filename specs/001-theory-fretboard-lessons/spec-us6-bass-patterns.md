@@ -47,6 +47,7 @@ verify the rule-based judgements against fixtures.
 15. **Given** an arpeggio question with Steps 1 and 2 judged, **When** the app is backgrounded and then resumed, **Then** Steps 1 and 2 keep their marks and revealed positions, the drill asks for Step 3, nothing has been recorded yet, and one attempt is recorded when the last step is judged.
 16. **Given** the first arpeggio question with Steps 1 and 2 judged, **When** the user selects "End drill", **Then** the summary reads "No questions answered. Your unfinished question wasn't saved.", nothing is recorded, and the session does not count as abandoned (FR-028).
 *(Scenarios 5–16: product-owner 2026-11-22, provisional)*
+17. **Given** an empty walking-bass line, **When** the user enters C at bar 1 beat 1, **Then** the polite live region announces the entry and its judgement, ending "Now: Bar 1, beat 2, C". After Undo, or after selecting a slot, the announcement also ends with the now-current slot. *(Mode B3 triage, provisional, product-owner 2026-11-25)*
 
 ## Requirements *(mandatory)*
 
@@ -85,12 +86,9 @@ verify the rule-based judgements against fixtures.
   theory-checker verifies the wording); R3 (other cases) "A lead-in is 1–2 semitones from the next bar's
   first note (<next>), or a perfect 5th away; you played <note>." FR-065 and
   SC-012 are met only once walking-bass is reachable, and the v0.1 release does not ship until it
-  is. Interim builds before that release may leave it out; whether they hide it or show a labelled
-  preview is held for the owner (FN-7).
-  *(FN-7, provisional)*
+  is. *(FN-7 resolved, owner 2026-11-25: "Build it now"; walking bass ships in v0.1 and is never hidden.)*
   - **Entry:** the screen shows bars and beats as slots, each with its bar's chord. The current slot
-    is highlighted (not by colour alone) and announced ("Bar 2, beat 3, Am"). Undo removes the last
-    note. Any slot can be selected and re-entered before checking, and re-entering a slot re-judges
+    is highlighted (not by colour alone) and announced ("Bar 2, beat 3, Am"). Undo reverts the last entry: it restores the slot's previous note (or empty), its previous judgement and response time, re-judges its neighbours, and makes that slot current. Undo can be used once per entry made, and is unavailable (disabled, with its accessible name saying so) when there is nothing to undo; it is unavailable after Check line (CR-B3-2). Any slot can be selected and re-entered before checking, and re-entering a slot re-judges
     it and its neighbours.
   - **Judging:** R1, R2 and R4 are judged as each note is entered, within FR-032's budget. R3 for
     bar n is judged as soon as bar n + 1's beat 1 exists (bar 1 for the last bar).
@@ -103,8 +101,18 @@ verify the rule-based judgements against fixtures.
     largest text size (FR-048). *(A2-12, provisional)*
   - **Recording:** "Check line" becomes available once every slot is filled. The line's attempts
     are recorded then, one per note, each with its final judgement (FR-040).
+  - *(Mode B3 triage, provisional, product-owner 2026-11-25)*
+    - **CR-B3-1** After an entry, the current slot advances to the next empty slot, but the reasons and revealed positions of the slot just entered stay on screen, labelled with that slot ("Bar 1, beat 1: …"), until the user enters another note, selects a slot or uses Undo. The final slot behaves the same way.
+    - **CR-B3-3** Activating Check line records the line once, in one transaction. While recording, Check line is unavailable. If the write fails, nothing is recorded, the line stays editable, and "Couldn't save this line. Your notes are still here; try Check line again." is shown and announced.
+    - **CR-B3-4** The slot row is one tab stop. Left/Right move between slots in line order, Home/End go to the first and last slot, and focus doesn't wrap. Enter or Space selects the focused slot and moves focus to the fretboard, at the last focused position. In DOM order the slot row comes directly before the fretboard.
+    - **CR-B3-5** Above the slots, the drill shows: "A walking line plays one note per beat and moves step by step through the chords." The rules list defines each term inline: root ("the note the chord is named after"), chord tone ("a note in the chord, e.g. C, E, G in C"), semitone ("one fret"), lead-in ("the last note of a bar, leading to the next chord"). When the instrument isn't a bass, a line says the drill works on any instrument. A link reads "New to this? Try Chord-tone lock first", opening chord-tone lock in the same key.
+    - **CR-B3-7** When the lead-in has the next beat-1 note's pitch class in another octave, the R3 message is "A lead-in is 1–2 semitones from the next bar's first note (<next with octave>), or a perfect 5th away; you played <note with octave>, the same note an octave away." ("two octaves away" for two). The "itself" case is unchanged.
+    - **CR-B3-8** End drill with at least one unchecked note opens a confirmation, "End drill? Your N unchecked notes won't be saved.", with "Keep playing" (focused) and "End drill" (FR-048 dialog rules). With no notes, or after Check line, End drill ends at once.
+    - **CR-B3-9** Until every slot is filled, the status reads "N of M notes entered. Next empty: Bar b, beat k." While any beat-4 slot is pending it adds "Beat-4 notes marked … are judged once the next bar's first note is in."
+    - Accessibility: the live region ends each entry, Undo and slot-selection announcement with "Now: <slot>" (scenario 17).
 - **FR-059**: The chord-tone lock drill MUST take a progression (with a declared key) and accept one
   note per chord. Chord tones are correct; otherwise the chord's tones are revealed.
+  **CR-B3-6** After each answer, right or wrong, the feedback names the chord's tones spelled in the chord's spelling (FR-060), e.g. "Correct, E is a chord tone of C (C, E, G)" / "Incorrect. You tapped F; C is C, E, G." *(Mode B3 triage, provisional, product-owner 2026-11-25)*
   Walking bass (FR-058) and chord-tone lock (FR-059) take the same strings and fret-range settings
   as the other drills, with the same defaults: all strings, frets 0–12 (clamped to the instrument),
   changeable in the drill's settings. Reveals, the drill-start focus position (FR-049) and the

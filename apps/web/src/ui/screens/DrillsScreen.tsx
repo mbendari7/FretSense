@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Link, useParams } from 'react-router';
+import { Link, useParams, useSearchParams } from 'react-router';
 import { CHORDS, PC_FLAT, pretty } from '../common';
 import { DRILL_TYPES, type DrillType } from '../../domain/records';
 import { DRILL_LABELS, type DrillSettings } from '../../domain/drills/types';
@@ -7,6 +7,9 @@ import { validateSettings, intervalName, stringChipName, CHORD_TONE_WINDOW_DEFAU
 import { InstrumentGate } from '../InstrumentGate';
 import { useAppState } from '../hooks';
 import { DrillRunner } from './DrillRunner';
+import { WalkingBassRunner } from './WalkingBassRunner';
+import { MAJOR_KEYS, builtInProgression } from '../../domain/drills/walkingBass';
+import { chordSymbol, parsePitchClassNote } from '@fretsense/theory';
 import { InstrumentSwitcher } from './GearScreen';
 import type { InstrumentProfile } from '@fretsense/theory';
 import { NotFound } from './NotFound';
@@ -33,7 +36,7 @@ export function DrillsHome() {
           <Link key={t} to={`/drills/${t}`} className="drill-card">
             <strong>{DRILL_LABELS[t]}</strong>
             <span>{BLURB[t]}</span>
-            {t.startsWith('bass') && <span className="tag">Bass pattern</span>}
+            {BASS_PATTERNS.has(t) && <span className="tag">Bass pattern</span>}
           </Link>
         ))}
       </div>
@@ -41,9 +44,9 @@ export function DrillsHome() {
   );
 }
 
-/** FN-7 (provisional): the simplified walking-bass drill is hidden until full FR-058 ships. */
-/** FN-7 / T098: walking bass and chord-tone lock are hidden until full FR-058 / FR-059 ship. */
-const SHIPPED = DRILL_TYPES.filter((t) => t !== 'walking-bass' && t !== 'chord-tone-lock');
+/** T098 (owner 2026-11-25, FN-7 "Build it now"): every drill type ships, walking bass included. */
+const SHIPPED = DRILL_TYPES;
+const BASS_PATTERNS = new Set<DrillType>(['root-fifth-octave', 'arpeggio', 'walking-bass', 'chord-tone-lock']);
 const TYPE_SET = new Set<string>(SHIPPED);
 
 export function DrillScreen() {
@@ -74,20 +77,27 @@ export function defaultSettings(type: DrillType, p: InstrumentProfile, octaveMod
     direction: 'up',
     roots: ['C', 'D', 'E', 'F', 'G', 'A', 'B'], // FR-036 defaults
     qualities: type === 'chord-tone' ? ['major', 'minor', 'dom7'] : ['major', 'minor'],
+    // FR-058: outside a lesson, the built-in | I | vi | ii | V | triads in a chosen major key (default C).
     key: { tonic: 'C', mode: 'major' },
-    chords: [{ root: 'C', quality: 'maj7' }, { root: 'A', quality: 'min7' }, { root: 'D', quality: 'min7' }, { root: 'G', quality: 'dom7' }],
   };
 }
 
 function DrillSetup({ type, profile, instrumentId, instrumentName }: { type: DrillType; profile: InstrumentProfile; instrumentId: string; instrumentName: string }) {
   const st = useAppState();
   const switcher = useRef<HTMLSelectElement>(null);
-  const [s, setS] = useState<DrillSettings>(() => defaultSettings(type, profile, st.settings!.octaveMode));
+  const [search] = useSearchParams();
+  // CR-B3-5: "Try Chord-tone lock first" carries the key as ?key=<tonic>; only the 15 major keys are accepted.
+  const keyParam = search.get('key');
+  const [s, setS] = useState<DrillSettings>(() => {
+    const d = defaultSettings(type, profile, st.settings!.octaveMode);
+    return keyParam && (MAJOR_KEYS as readonly string[]).includes(keyParam) ? { ...d, key: { tonic: keyParam, mode: 'major' } } : d;
+  });
   const [running, setRunning] = useState(false);
   const v = validateSettings(profile, s);
   const set = (p: Partial<DrillSettings>) => setS((x) => ({ ...x, ...p }));
   const toggle = <T,>(list: readonly T[] | undefined, x: T) => (list ?? []).includes(x) ? (list ?? []).filter((y) => y !== x) : [...(list ?? []), x];
 
+  if (running && type === 'walking-bass') return <div className="page"><WalkingBassRunner profile={profile} instrumentId={instrumentId} settings={s} title={DRILL_LABELS[type]} onExit={() => setRunning(false)} /></div>;
   if (running) return <div className="page"><DrillRunner profile={profile} instrumentId={instrumentId} settings={s} title={DRILL_LABELS[type]} onExit={() => setRunning(false)} /></div>;
 
   return (
@@ -108,7 +118,7 @@ function DrillSetup({ type, profile, instrumentId, instrumentName }: { type: Dri
         <div className="inline">
           <label>From fret <input type="number" min={0} max={profile.fretCount} value={s.fromFret} onChange={(e) => set({ fromFret: Math.max(0, Math.min(profile.fretCount, +e.target.value)) })} /></label>
           <label>to fret <input type="number" min={0} max={profile.fretCount} value={s.toFret} onChange={(e) => set({ toFret: Math.max(0, Math.min(profile.fretCount, +e.target.value)) })} /></label>
-          <label>Questions <input type="number" min={5} max={100} value={s.count} onChange={(e) => set({ count: +e.target.value })} /></label>
+          {type !== 'walking-bass' && <label>Questions <input type="number" min={5} max={100} value={s.count} onChange={(e) => set({ count: +e.target.value })} /></label>}
         </div>
         {type === 'note-finding' && (
           <>
@@ -153,12 +163,27 @@ function DrillSetup({ type, profile, instrumentId, instrumentName }: { type: Dri
         {type === 'chord-tone' && (
           <label>Window width <input type="number" min={1} max={Math.max(1, s.toFret - s.fromFret + 1)} value={Math.max(1, Math.min(s.windowWidth ?? CHORD_TONE_WINDOW_DEFAULT, s.toFret - s.fromFret + 1))} onChange={(e) => set({ windowWidth: Math.max(1, Math.min(s.toFret - s.fromFret + 1, Math.trunc(+e.target.value) || 1)) })} /> frets</label>
         )}
-        {type === 'walking-bass' && (
-          <p className="muted">Progression: {s.chords?.map((c) => `${pretty(c.root)}${CHORDS.find((q) => q.id === c.quality)?.symbolSuffix ?? ''}`).join(' → ')} in {s.key?.tonic} {s.key?.mode}. Each chord is one bar of four beats.</p>
+        {(type === 'walking-bass' || type === 'chord-tone-lock') && (
+          <>
+            <label>Key <select value={s.key?.tonic ?? 'C'} onChange={(e) => set({ key: { tonic: e.target.value, mode: 'major' }, chords: undefined })}>
+              {MAJOR_KEYS.map((k) => <option key={k} value={k}>{pretty(k)} major</option>)}
+            </select></label>
+            <p className="muted">Progression: {prettyText(progressionText(s))}. {type === 'walking-bass' ? 'Each chord is one bar of four beats, and the line loops back to bar 1.' : 'One note per chord, in bar order.'}</p>
+          </>
         )}
         {!v.ok && <p className="field-error" role="alert">{v.reason}</p>}
         <button className="primary big" type="submit" disabled={!v.ok}>Start drill</button>
       </form>
     </div>
   );
+}
+
+/** FR-058 progression text, e.g. "C | Am | Dm | G in C major". */
+function progressionText(s: DrillSettings): string {
+  const chords = s.chords?.length ? s.chords : builtInProgression(s.key?.tonic ?? 'C');
+  const sym = (c: { root: string; quality: string }) => {
+    const r = parsePitchClassNote(c.root);
+    return r.ok ? chordSymbol(r.value, c.quality) : c.root;
+  };
+  return `${chords.map(sym).join(' | ')} in ${s.key?.tonic ?? 'C'} ${s.key?.mode ?? 'major'}`;
 }

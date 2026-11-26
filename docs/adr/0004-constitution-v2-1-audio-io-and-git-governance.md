@@ -1,6 +1,6 @@
 # 0004. Constitution v2.1.0: Audio I/O Ownership, Single-Performer Leakage Rule, Device Indicators, No AI Authorship
 
-- Status: Proposed (pending owner approval)
+- **Status**: Accepted (owner approval 2026-11-25, recorded in "Owner approvals recorded" below; earlier status: Proposed (pending owner approval))
 - Date: 2026-11-21
 - Deciders: owner
 - Related: `.specify/memory/constitution.md`, ADR-0001, specs 007, 008, 015
@@ -40,3 +40,7 @@ MINOR bump to **2.1.0**:
 
 ## AI involvement
 _To be written by the owner._
+
+## Owner approvals recorded
+
+- Accepted 2026-11-25, owner in chat (copied word for word): "approve anything else left and actually build and create the program". Ledger: `specs/001-theory-fretboard-lessons/reviews/2026-11-25-owner-blanket-approval-build.md`.

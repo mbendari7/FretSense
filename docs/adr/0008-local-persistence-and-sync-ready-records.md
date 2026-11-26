@@ -1,6 +1,6 @@
 # 0008. Local Persistence and Sync-Ready Records
 
-- Status: Proposed (pending owner approval)
+- **Status**: Accepted (owner approval 2026-11-25, recorded in "Owner approvals recorded" below; earlier status: Proposed (pending owner approval))
 - Date: 2026-11-21
 - Deciders: owner
 - Related: specs/001 FR-040–FR-045, FR-051, FR-053, FR-066, FR-066a, SC-009, SC-013; research R4–R6; data-model.md; ADR-0006; Constitution XIII; spec 013, 016
@@ -41,3 +41,7 @@ between local profiles, and never mix statistics from different tunings.
 
 ## AI involvement
 _To be written by the owner._
+
+## Owner approvals recorded
+
+- Accepted 2026-11-25, owner in chat (copied word for word): "approve anything else left and actually build and create the program". Ledger: `specs/001-theory-fretboard-lessons/reviews/2026-11-25-owner-blanket-approval-build.md`.

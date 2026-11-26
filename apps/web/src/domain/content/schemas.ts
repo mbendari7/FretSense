@@ -39,8 +39,8 @@ const instruments = z.union([z.tuple([z.literal('any')]), z.array(z.enum(['guita
 export const drillDefinitionSchema = z
   .strictObject({
     id,
-    // FN-7 (provisional): walking bass is hidden until full FR-058 ships.
-    type: z.enum(DRILL_TYPES).refine((t) => t !== 'walking-bass' && t !== 'chord-tone-lock', 'walking-bass and chord-tone-lock drills are not available yet'),
+    // T098 (owner 2026-11-25, FN-7 "Build it now"): every drill type, walking bass included, may be used in lessons.
+    type: z.enum(DRILL_TYPES),
     title: z.string().max(120).optional(),
     instruments,
     params: z
@@ -64,6 +64,10 @@ export const drillDefinitionSchema = z
       if (!CHORD_IDS.has(q)) ctx.addIssue({ code: 'custom', path: ['params'], message: `unknown chord quality "${q}"` });
     }
     if (d.params.chords && !d.params.key) ctx.addIssue({ code: 'custom', path: ['params', 'key'], message: 'a progression needs a key' });
+    // FR-058 / FR-059: the declared key is required in the lesson data for progression drills.
+    if ((d.type === 'walking-bass' || d.type === 'chord-tone-lock') && !d.params.key) {
+      ctx.addIssue({ code: 'custom', path: ['params', 'key'], message: `a ${d.type} drill needs a key` });
+    }
   });
 export type DrillDefinition = z.infer<typeof drillDefinitionSchema>;
 
@@ -76,6 +80,8 @@ export const lessonFrontmatterSchema = z
     instruments,
     concepts: z.array(id),
     summary: z.string().max(200).optional(),
+    /** 016 FR-010 pacing: optional, written and approved with the lesson; never invented. */
+    estimatedMinutes: z.number().int().min(1).max(600).optional(),
     fretboard_preset: fretboardPresetSchema.optional(),
     drills: z.array(drillDefinitionSchema),
     songs: z.array(z.strictObject({ title: z.string().max(120), note: z.string().max(200).optional() })).optional(),
@@ -104,8 +110,23 @@ export const packSchema = z.strictObject({
 });
 export type CurriculumPack = z.infer<typeof packSchema>;
 
+/** 016 FR-010: onboarding goals (content/goals.yaml; data-model.md §1 `Goal`). */
+export const goalSchema = z
+  .strictObject({
+    id,
+    title: z.string().min(1).max(80),
+    tags: z.array(z.string().regex(/^(goal|genre|topic|level-hint):[a-z0-9]+(-[a-z0-9]+)*$/, 'tags are namespace:value')),
+    genreMapped: z.literal(true).optional(),
+  })
+  .superRefine((g, ctx) => {
+    if (!g.genreMapped && g.tags.length === 0) ctx.addIssue({ code: 'custom', path: ['tags'], message: 'a goal needs at least one tag unless genreMapped' });
+  });
+export const goalsFileSchema = z.strictObject({ goals: z.array(goalSchema).min(1) });
+export type Goal = z.infer<typeof goalSchema>;
+
 export interface CompiledContent {
   readonly lessons: readonly CompiledLesson[];
   readonly packs: readonly CurriculumPack[];
   readonly tags: TagVocabulary;
+  readonly goals: readonly Goal[];
 }

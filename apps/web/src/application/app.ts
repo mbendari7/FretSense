@@ -271,6 +271,34 @@ export class FretSenseApp {
     await this.quiet(this.commit([{ store: 'attempts', record }]));
   }
 
+  /**
+   * CR-B3-3 / FR-040: records several answers (a walking-bass line) in ONE transaction. Throws on a
+   * storage error; nothing is added to the state unless the write succeeded.
+   */
+  async recordAttempts(list: readonly AnsweredQuestion[], ctx: { instrumentId: string | null; profile: InstrumentProfile; lessonId?: string; drillId?: string }): Promise<void> {
+    const records: AttemptRecord[] = [];
+    for (const a of list) {
+      const base = {
+        ...this.common(),
+        drillType: a.question.drillType,
+        instrumentId: ctx.instrumentId,
+        geometryId: ctx.profile.geometryId,
+        modality: 'tap' as const,
+        prompt: a.question.prompt,
+        answer: a.taps.map((t) => ({ string: t.string, fret: t.fret })),
+        outcome: a.correct ? ('correct' as const) : ('incorrect' as const),
+        responseMs: a.responseMs,
+        timestamp: new Date(this.clock.now()).toISOString(),
+        lessonId: ctx.lessonId ?? null,
+        drillId: ctx.drillId ?? null,
+        itemKey: a.question.itemKey,
+      };
+      records.push({ ...base, payloadHash: await this.hasher.sha256Hex(payloadOf(base)) });
+    }
+    await this.commit(records.map((record) => ({ store: 'attempts' as const, record })));
+    this.set({ attempts: [...this.state.attempts, ...records] });
+  }
+
   // ---- lessons (FR-028: informational only, never gates) ----
   async markStage(lessonId: string, stage: Stage): Promise<void> {
     // Natural key (localProfileId, lessonId) includes tombstones: a reset record is revived, never duplicated.

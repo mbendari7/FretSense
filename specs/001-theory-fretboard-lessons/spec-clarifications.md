@@ -59,13 +59,13 @@
 ### Session 2026-11-22 (v0.1 build, team loop D; provisional under the standing approval, owner review pending)
 
 - Export/import size limit (FN-10a): one 50 MB limit (spec wins); data-model.md and contracts/profile-export.md aligned. (product-owner FN-10)
-- The simplified walking-bass drill is hidden until full FR-058 ships in a later 001 task group; the other three bass drills (root–fifth–octave, arpeggio, chord-tone lock) ship. (FN-7, NEEDS MAHMOUD to confirm hide vs labelled preview)
+- The simplified walking-bass drill is hidden until full FR-058 ships in a later 001 task group; the other three bass drills (root–fifth–octave, arpeggio, chord-tone lock) ship. (FN-7, **owner 2026-11-25: "Build it now"**: full FR-058 ships in v0.1 via T098, never hidden; this supersedes the hide wording)
 - Harmonic-minor alternatives are shown in addition to the natural-minor chords (US5-2 "also shown"); theory API v1.1 adds helper exports (contracts/theory-api.md).
 - 4-string EADG bass preset id: `bass4-standard`.
 - Lesson-completion tombstones (FN-10b, provisional, applied): completion merges as a per-stage union (earliest time per stage kept); restore-import un-deletes a locally tombstoned completion when the file holds it live, keeping the union of both records' stages; an incoming tombstone applies only if its HLC is newer than the local record's last update. SC-009 covers completion as well as attempts.
 - Root–fifth–octave (FR-056, applied): a step counts only within 3 frets of the root, and the finished shape must span at most 4 frets (max − min ≤ 3).
 - Spec change requests FN-2, FN-3, FN-4, FN-5, FN-6, FN-7, FN-10b and FN-11 are written into the FRs (marked provisional) and are in loop A; their code changes wait for loop A to pass.
-- Idempotent copy import (FN-10c) stays **held for the owner** (privacy trade-off: a stable copied id makes copied records traceable to their source; needs privacy-auditor). It is not in FR-043. "Continue this file's profile" also remains held. (NEEDS MAHMOUD)
+- Idempotent copy import (FN-10c) stays **held for the owner** (privacy trade-off: a stable copied id makes copied records traceable to their source; needs privacy-auditor). It is not in FR-043. "Continue this file's profile" also remains held. **Owner 2026-11-25: "Keep fresh ids"**: copy mode keeps re-keying every import (no stable ids); "Continue this file's profile" moves to the 016 backlog.
 - 2026-11-22, owner: "And now you have all my full approval, so keep going." The FN-2 to FN-11 spec change requests are written into the FRs above (marked provisional) and go through loop A now.
 - 2026-11-22, owner (spec gate escalation after spec-reviewer r3): "Apply all 7 fixes (Recommended)". R3-1 to R3-7 applied with spec-reviewer's exact wording.
 - Mode A2 triage (product-owner, 2026-11-22, provisional): fix-now edits A2-1, 2/11, 3, 5, 6, 8 (interim warning), 9, 12, 13, 14 and 15 applied. Held (NEEDS MAHMOUD): A2-7 nut spelling after the answer (would reverse owner-approved R3-2), FN-10c, FN-7. Backlog: "Just looking" (018 FR-005), Undo reset (016), more walking-bass progressions (017).
@@ -78,3 +78,13 @@
 - Q: FR-056a per-tap "accepted or wrong" marks vs the data model → A (provisional, coordinator, 2026-11-22): not stored; the attempt keeps `answer: FretPosition[]` in tap order, so no schema change. Final feedback lines end with a full stop.
 - Q: Arpeggio per-step attempts (FR-040) vs weighting, Progress, pause and End drill → A (provisional, product-owner, 2026-11-22): arpeggio records one attempt per question, like root–fifth–octave (FR-040, FR-057); weighting counts FR-040 attempts (FR-041, R9); the summary and Progress count the same unit and Progress groups name it (FR-034, FR-042); a multi-step question resumes at its next pending step with paused time excluded (Edge Cases); ending early discards an unfinished question with a notice (FR-034); per-string stats use the Step 1 root's string. The per-step wording was a pending proposal, never owner-signed. No frozen-encoding change.
 - Q: Owner decisions 2026-11-22 (copied into reviews/README.md) → A: (1) add9 arpeggio steps R, 3, 5, 9 with the 9th at root + 14 ("R-3-5-9, 9th above"). (2) Copy import (FR-066a copy mode) drops records that are deleted (tombstoned) in the file: they are not written and not counted ("Copy import drops deleted"). (3) Interval drill (FR-035, FR-032): each black-key reference is spelled so that the answer needs no E♯, B♯, C♭, F♭ or double accidental; when one spelling of the reference would give such an answer and the other would not, the other is used; if both would, the question is not asked ("Avoid F♭-style references"). (4) The 10 General Theory lessons are approved to ship ("Approve all 10").
+
+### Session 2026-11-25 (T098 build, standing approval; product-owner defaults, provisional)
+
+- FN-7 resolved by the owner ("Build it now"): FR-058 walking bass ships in v0.1 (T098).
+- FN-10c resolved by the owner ("Keep fresh ids"): copy import keeps re-keying; "Continue this file's profile" → 016 backlog.
+- *(provisional)* Chord-tone lock asks one question per chord **in bar order**, looping the progression for the chosen count; adaptive weighting (FR-041) does not reorder it, because the progression order is the skill being practised.
+- *(provisional)* R2 is judged as soon as a note is entered: a chromatic note is a passing tone only once both neighbours are entered chord/key tones a semitone either side; until then it shows the R2 sentence and is re-judged when a neighbour changes.
+- *(provisional)* R4 also applies across the loop (bar 1 beat 1 after the last bar's beat 4), as R3 does.
+- *(provisional)* Entered notes are spelled by the bar's chord, then the key, then FR-060's map from the key tonic (in C: Db, not C#).
+- *(provisional)* Walking-bass response time (FR-040) per note = time from the previous entry (the line start for slot 1) to that note's entry.

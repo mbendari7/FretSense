@@ -54,3 +54,10 @@ One row per review round (CLAUDE.md "Review rules"). Sign-off is filled in by th
 | 2026-11-25 | code-reviewer (T099a) | r1 | APPROVE | 0 / 0 (5 MINOR: 4 applied, 1 deferred) || 2026-11-25 (chat) |
 | 2026-11-25 | theory-checker (T099a) | r1 | PASS WITH NOTES | 0 / 0 (2 MINOR: both applied) || 2026-11-25 (chat) |
 - 2026-11-25 (owner, chat, word for word): "for waiting on me i approve everything start and makt it all". It signs off ADR-0013, the 2026-11-25 rounds above, the FR-062 move to US1, the docs and skill updates, and turning off the PowerShell tool.
+- 2026-11-25 (owner, chat, word for word): "approve anything else left and actually build and create the program". Signs off every unsigned round above, ADRs 0001–0012 and the provisional CRs; NEEDS MAHMOUD answers in [2026-11-25-owner-blanket-approval-build.md](2026-11-25-owner-blanket-approval-build.md).
+| 2026-11-25 | code-reviewer (T098) | r1 | CHANGES REQUESTED | 2 BLOCKER + 1 MAJOR → all applied (r2 pending) | |
+| 2026-11-25 | theory-checker (T098) | r1 | PASS WITH NOTES | 0 / 0 (5 MINOR: 1 applied, 4 deferred) | |
+| 2026-11-25 | code-reviewer (T098) | r2 | APPROVE | 0 / 0 (3 MINOR: 1 applied, 2 no change) | |
+| 2026-11-25 | user-tester Mode B3 + product-owner triage | r1 | 3.5/5; 4 bugs + 9 CRs fix now (T098a) | 0 BLOCKER; MAJORs → T098a | |
+| 2026-11-25 | code-reviewer | T098a r1 | CHANGES REQUESTED → applied | 0 open | [2026-11-25-code-reviewer-T098a-r1.md](2026-11-25-code-reviewer-T098a-r1.md) | |
+| 2026-11-25 | theory-checker | T098a r1 | PASS WITH NOTES | 0 | [2026-11-25-theory-checker-T098a-r1.md](2026-11-25-theory-checker-T098a-r1.md) | |

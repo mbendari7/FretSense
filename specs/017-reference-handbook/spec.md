@@ -627,3 +627,8 @@ in two PDF readers and as a greyscale print preview.
   6-string guitar Standard preset with a non-blocking Change control (Edge Cases).
 - Q: Confirm the numbers: playback start 150 ms, search 100 ms per keystroke, entry render 300 ms,
   loop drift 5 ms? → A: Confirmed (FR-018, FR-021, FR-039, FR-030).
+
+### Session 2026-11-25 (owner)
+
+- Spec approved for planning, with product-owner r2's wording fix (owner chat, word for word: "approve anything else
+  left and actually build and create the program").

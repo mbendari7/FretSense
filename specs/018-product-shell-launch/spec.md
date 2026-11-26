@@ -567,3 +567,9 @@ check that every shipped destination has a user-guide page.
   approves (Assumptions). Lesson and handbook prose stays owner-only.
 - Q: Minimum colour difference between fretboard marker categories? → A: CIEDE2000 ≥ 20 under each
   of the three simulations (FR-015).
+
+### Session 2026-11-25 (owner)
+
+- Consent scope (product-owner r2 open item) → **per device**, unchanged (owner, AskUserQuestion: "Per device
+  (Recommended)"). Spec approved for planning (owner chat, word for word: "approve anything else left and actually
+  build and create the program").

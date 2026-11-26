@@ -1,6 +1,6 @@
 # 0009. Content Pipeline: Lessons, Curriculum Packs and Tags
 
-- Status: Proposed (pending owner approval)
+- **Status**: Accepted (owner approval 2026-11-25, recorded in "Owner approvals recorded" below; earlier status: Proposed (pending owner approval))
 - Date: 2026-11-21
 - Deciders: owner
 - Related: specs/001 FR-022–FR-025, FR-063, FR-068, SC-008; research R7; contracts/content-formats.md; THREAT-MODEL T3, T13; ADR-0006
@@ -37,3 +37,7 @@ import and 016's pack import validate untrusted files at runtime.
 
 ## AI involvement
 _To be written by the owner._
+
+## Owner approvals recorded
+
+- Accepted 2026-11-25, owner in chat (copied word for word): "approve anything else left and actually build and create the program". Ledger: `specs/001-theory-fretboard-lessons/reviews/2026-11-25-owner-blanket-approval-build.md`.
