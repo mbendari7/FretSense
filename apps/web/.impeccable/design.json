@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-26T00:00:00Z",
+  "title": "Design System: FretSense",
+  "extensions": {
+    "colorMeta": {
+      "accent": { "role": "primary", "displayName": "Okabe Blue", "canonical": "#0072b2", "tonalRamp": ["#00253b", "#003a5c", "#004f7e", "#0072b2", "#2b8fcb", "#56b4e9", "#a3d5f3", "#e3f2fb"] },
+      "slate": { "role": "neutral", "displayName": "Workshop Slate", "canonical": "#24323f", "tonalRamp": ["#0e151c", "#131b23", "#1c2631", "#24323f", "#4d5b69", "#a9b5c1", "#cfd6de", "#eef1f4"] },
+      "paper": { "role": "neutral", "displayName": "Paper", "canonical": "#eef1f4" },
+      "surface": { "role": "neutral", "displayName": "Surface", "canonical": "#ffffff" },
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#1c2733" },
+      "ink-soft": { "role": "neutral", "displayName": "Soft Ink", "canonical": "#4d5b69" },
+      "line": { "role": "neutral", "displayName": "Hairline", "canonical": "#cfd6de" },
+      "rosewood": { "role": "tertiary", "displayName": "Rosewood", "canonical": "#5a3826", "tonalRamp": ["#22150e", "#3f2619", "#5a3826", "#7a523b", "#9c7158", "#bf9b84", "#dfc9bb", "#f4ece6"] },
+      "pearl": { "role": "tertiary", "displayName": "Pearl", "canonical": "#efe9dc" },
+      "marker-root": { "role": "secondary", "displayName": "Vermilion Root", "canonical": "#d55e00" },
+      "marker-tone": { "role": "secondary", "displayName": "Blue Tone", "canonical": "#0072b2" },
+      "marker-reference": { "role": "secondary", "displayName": "Amber Reference", "canonical": "#e69f00" },
+      "marker-correct": { "role": "secondary", "displayName": "Bluish-Green Correct", "canonical": "#009e73" },
+      "marker-incorrect": { "role": "secondary", "displayName": "Reddish-Purple Incorrect", "canonical": "#cc79a7" },
+      "marker-revealed": { "role": "secondary", "displayName": "Sky Revealed", "canonical": "#56b4e9" }
+    },
+    "typographyMeta": {
+      "hero": { "displayName": "Hero", "purpose": "Home headline only." },
+      "display": { "displayName": "Display", "purpose": "Top-level tool screen titles." },
+      "headline": { "displayName": "Headline", "purpose": "Page titles (h1)." },
+      "title": { "displayName": "Title", "purpose": "Section heads (h2)." },
+      "body": { "displayName": "Body", "purpose": "Running text; scales with the text-size setting via --step." },
+      "label": { "displayName": "Label", "purpose": "Legends and field labels." },
+      "numeral": { "displayName": "Numeral", "purpose": "Roman numerals in the key helper only." }
+    },
+    "shadows": [
+      { "name": "rail-indicator", "value": "inset 3px 0 0 var(--m-root)", "purpose": "Active rail item indicator (top edge on phones). Not elevation." }
+    ],
+    "motion": [],
+    "breakpoints": [
+      { "name": "phone", "value": "720px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Default action. Sturdy and plain, 44px minimum.",
+      "html": "<button class=\"ds-btn\">Show all notes</button>",
+      "css": ".ds-btn { min-height: 44px; min-width: 44px; padding: 8px 16px; border-radius: var(--radius-s, 6px); border: 1px solid var(--line, #cfd6de); background: var(--surface, #fff); color: var(--ink, #1c2733); font: inherit; cursor: pointer; } .ds-btn:hover { border-color: var(--ink-soft, #4d5b69); } .ds-btn:focus-visible { outline: 3px solid var(--focus, #e69f00); outline-offset: 2px; }"
+    },
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one main action on a screen.",
+      "html": "<button class=\"ds-btn-primary\">Start drill</button>",
+      "css": ".ds-btn-primary { min-height: 44px; padding: 8px 16px; border-radius: var(--radius-s, 6px); border: 1px solid var(--accent, #0072b2); background: var(--accent, #0072b2); color: var(--accent-ink, #fff); font: inherit; font-weight: 700; cursor: pointer; } .ds-btn-primary:focus-visible { outline: 3px solid var(--focus, #e69f00); outline-offset: 2px; }"
+    },
+    {
+      "name": "Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Text, number and select fields.",
+      "html": "<label class=\"ds-field\">Frets<input class=\"ds-input\" type=\"number\" value=\"22\"></label>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 4px; font-weight: 700; font-size: 0.9rem; } .ds-input { min-height: 44px; padding: 6px 10px; border-radius: var(--radius-s, 6px); border: 1px solid var(--line, #cfd6de); background: var(--surface, #fff); color: var(--ink, #1c2733); font: inherit; font-weight: 400; width: 5.5em; } .ds-input:focus-visible { outline: 3px solid var(--focus, #e69f00); outline-offset: 2px; }"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "custom",
+      "refersTo": "segmented-selected",
+      "description": "Mutually exclusive options; selected inverts to ink.",
+      "html": "<div class=\"ds-seg\" role=\"radiogroup\"><button role=\"radio\" aria-checked=\"true\">Scale</button><button role=\"radio\" aria-checked=\"false\">Chord</button><button role=\"radio\" aria-checked=\"false\">Arpeggio</button></div>",
+      "css": ".ds-seg { display: inline-flex; border: 1px solid var(--line, #cfd6de); border-radius: var(--radius-s, 6px); overflow: hidden; background: var(--surface, #fff); } .ds-seg button { min-height: 44px; padding: 8px 16px; border: none; background: transparent; color: var(--ink, #1c2733); font: inherit; cursor: pointer; } .ds-seg button + button { border-left: 1px solid var(--line, #cfd6de); } .ds-seg button[aria-checked='true'] { background: var(--ink, #1c2733); color: var(--paper, #eef1f4); font-weight: 700; } .ds-seg button:focus-visible { outline: 3px solid var(--focus, #e69f00); outline-offset: -3px; }"
+    },
+    {
+      "name": "Tag",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "Metadata pill.",
+      "html": "<span class=\"ds-tag\">5 min</span>",
+      "css": ".ds-tag { display: inline-block; font-size: 0.8rem; padding: 2px 8px; border-radius: 999px; background: var(--paper, #eef1f4); border: 1px solid var(--line, #cfd6de); color: var(--ink-soft, #4d5b69); }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Navigational tile (lesson, drill, preset).",
+      "html": "<a class=\"ds-card\" href=\"#\"><strong>Find the note</strong><span>Tap every C on the neck.</span></a>",
+      "css": ".ds-card { display: flex; flex-direction: column; gap: 4px; padding: 16px; background: var(--surface, #fff); border: 1px solid var(--line, #cfd6de); border-radius: var(--radius-l, 14px); color: var(--ink, #1c2733); text-decoration: none; } .ds-card span { color: var(--ink-soft, #4d5b69); } .ds-card:hover { border-color: var(--m-root, #d55e00); } .ds-card:focus-visible { outline: 3px solid var(--focus, #e69f00); outline-offset: 2px; }"
+    },
+    {
+      "name": "Rail Navigation",
+      "kind": "nav",
+      "refersTo": "topbar",
+      "description": "Icon-over-label rail; active item gets surface fill and an inset vermilion bar.",
+      "html": "<nav class=\"ds-rail\"><a class=\"active\" href=\"#\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\"><path d=\"M3 11l9-7 9 7v9h-6v-6H9v6H3z\"/></svg>Home</a><a href=\"#\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\"><path d=\"M4 8h16M4 16h16M9 3v18M15 3v18\"/></svg>Explore</a></nav>",
+      "css": ".ds-rail { display: flex; flex-direction: column; gap: 4px; width: 96px; padding: 14px 8px; } .ds-rail a { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px; border-radius: 6px; color: var(--ink-soft, #4d5b69); text-decoration: none; font-size: 0.8rem; min-height: 44px; } .ds-rail svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; stroke-linecap: round; } .ds-rail a.active { color: var(--ink, #1c2733); background: var(--surface, #fff); box-shadow: inset 3px 0 0 var(--m-root, #d55e00); } .ds-rail a:hover { color: var(--ink, #1c2733); }"
+    },
+    {
+      "name": "Fretboard Markers",
+      "kind": "custom",
+      "refersTo": "fretboard",
+      "description": "Signature: rosewood neck with Okabe-Ito markers; every state also has a stroke cue.",
+      "html": "<svg class=\"ds-fb\" viewBox=\"0 0 300 90\" width=\"300\" height=\"90\"><rect x=\"0\" y=\"5\" width=\"300\" height=\"80\" fill=\"#5a3826\" stroke=\"#3f2619\" stroke-width=\"2\"/><line x1=\"4\" y1=\"5\" x2=\"4\" y2=\"85\" stroke=\"#ece6d8\" stroke-width=\"7\"/><line x1=\"100\" y1=\"5\" x2=\"100\" y2=\"85\" stroke=\"#c9ced6\" stroke-width=\"3\"/><line x1=\"200\" y1=\"5\" x2=\"200\" y2=\"85\" stroke=\"#c9ced6\" stroke-width=\"3\"/><line x1=\"0\" y1=\"25\" x2=\"300\" y2=\"25\" stroke=\"#dfe3e8\"/><line x1=\"0\" y1=\"65\" x2=\"300\" y2=\"65\" stroke=\"#dfe3e8\"/><circle cx=\"50\" cy=\"25\" r=\"13\" fill=\"#d55e00\" stroke=\"#fff\" stroke-width=\"3\"/><text x=\"50\" y=\"30\" text-anchor=\"middle\" fill=\"#fff\" font-size=\"13\" font-weight=\"700\">C</text><circle cx=\"150\" cy=\"25\" r=\"13\" fill=\"#0072b2\" stroke=\"#fff\" stroke-width=\"2\"/><text x=\"150\" y=\"30\" text-anchor=\"middle\" fill=\"#fff\" font-size=\"13\" font-weight=\"700\">E</text><circle cx=\"250\" cy=\"65\" r=\"13\" fill=\"#cc79a7\" stroke=\"#fff\" stroke-width=\"3\" stroke-dasharray=\"4 3\"/><text x=\"250\" y=\"70\" text-anchor=\"middle\" fill=\"#fff\" font-size=\"13\" font-weight=\"700\">G</text></svg>",
+      "css": ".ds-fb { display: block; font-family: 'Atkinson Hyperlegible Next', system-ui, sans-serif; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Luthier's Bench",
+    "overview": "FretSense looks like a well-kept workbench. The surroundings are plain, cool and orderly: slate, paper and a single blue. The instrument on the bench is the only rich material in the room: a rosewood board, nickel frets, a bone nut and pearl inlays. Colour that carries meaning appears only as note markers on that board, and those markers use the Okabe-Ito palette so they stay distinguishable for colour-blind players.",
+    "keyCharacteristics": [
+      "One neutral frame (slate top bar, icon rail, paper canvas) and one accent blue for actions and links.",
+      "The fretboard is drawn as a real instrument in SVG: rosewood, nickel, bone, pearl.",
+      "Okabe-Ito markers for root, tone, reference, correct, incorrect and revealed. State is never shown by colour alone.",
+      "One humanist, high-legibility typeface (Atkinson Hyperlegible Next) at two weights.",
+      "Flat surfaces, 1px borders, two radii. No shadows."
+    ],
+    "rules": [
+      { "name": "The Instrument-Only Rule", "body": "Wood, nickel, bone and pearl belong to the drawn neck and the brand mark. They never become UI chrome, backgrounds or buttons.", "section": "colors" },
+      { "name": "The Never-Colour-Alone Rule", "body": "Every marker or state colour is paired with a second cue: a dashed or dotted stroke, an icon, a text label, or border width. Removing the colour must leave the state readable.", "section": "colors" },
+      { "name": "The Marker Meaning Rule", "body": "An Okabe-Ito hue carries one meaning across the whole app. Vermilion is \"root/selected\", bluish-green is \"correct/done\". Don't reuse them for decoration.", "section": "colors" },
+      { "name": "The One-Step Rule", "body": "Type sizes are multiples of --step, never fixed px or rem, so the user's text-size setting scales everything.", "section": "typography" },
+      { "name": "The Tabular Rule", "body": "Counts, tunings, fret ranges and stats use font-variant-numeric: tabular-nums.", "section": "typography" },
+      { "name": "The Flat Bench Rule", "body": "Nothing floats. Use a border, a tonal surface step or a marker colour instead of a drop shadow.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do take every new colour from the tokens above. Add a token to :root and both dark blocks before using a new value.",
+      "Do pair every state colour with a stroke style, icon or text label (Never-Colour-Alone).",
+      "Do keep every interactive target at least 44 × 44px.",
+      "Do size type as a multiple of --step so the text-size setting reaches it.",
+      "Do draw instrument geometry from the InstrumentProfile, never a fixed 6 strings or fret count."
+    ],
+    "donts": [
+      "Don't add drop shadows, glows or gradients. Depth is tonal (Flat Bench).",
+      "Don't use rosewood, nickel or pearl outside the drawn instrument and the brand mark.",
+      "Don't reuse a marker hue for something unrelated to its meaning.",
+      "Don't add a second accent colour or a second sans typeface.",
+      "Don't use a one-sided coloured stripe on a rounded box (the current .notice does this; it's flagged for replacement with a full border or tinted background)."
+    ]
+  }
+}
