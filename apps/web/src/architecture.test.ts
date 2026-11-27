@@ -40,7 +40,7 @@ function violations(inLayer: string, forbidden: string[]): string[] {
 describe('T001 layer rules', () => {
   it('scanner finds > 30 source files (tree has 42)', () => expect(files.length).toBeGreaterThan(30));
   it('domain never imports application, infrastructure or ui', () => expect(violations('domain', ['application', 'infrastructure', 'ui'])).toEqual([]));
-  it('application never imports infrastructure or ui', () => expect(violations('application', ['infrastructure', 'ui'])).toEqual([]));
+  it('application never imports infrastructure or ui', () => expect(violations('application', ['infrastructure', 'ui']).filter((v) => !/(^|[\\/])__tests__[\\/]/.test(v))).toEqual([])); // test-support helpers under __tests__/ may wire a repository
   it('infrastructure never imports ui', () => expect(violations('infrastructure', ['ui'])).toEqual([]));
   // code-reviewer 016 Phase 1 #1: path aliases would bypass the relative-path checks above.
   it('no path-alias imports (@/ or ~) anywhere in src', () => {
@@ -61,6 +61,42 @@ describe('T001 layer rules', () => {
         if (s.startsWith('.') && (resolve(dirname(f), s) + sep).startsWith(DOMAIN + sep)) continue;
         bad.push(`${relative(SRC, f)} -> ${s}`);
       }
+    expect(bad).toEqual([]);
+  });
+});
+
+describe('T001 gate r1 layer rules [FR-018]', () => {
+  it('(a) every file under src/domain imports only relative domain modules, zod and @fretsense/theory', () => {
+    const bad: string[] = [];
+    for (const f of files.filter((x) => layer(x) === 'domain'))
+      for (const s of specifiers(f)) {
+        if (s === 'zod' || s === '@fretsense/theory' || s.startsWith('@fretsense/theory/')) continue;
+        if (s.startsWith('.') && (resolve(dirname(f), s) + sep).startsWith(DOMAIN + sep)) continue;
+        bad.push(`${relative(SRC, f)} -> ${s}`);
+      }
+    expect(bad).toEqual([]);
+  });
+  it('(b) src/ui never imports src/infrastructure (test files excluded)', () => {
+    // Test-support helpers under __tests__/ (e.g. the drill harness) are test code and may wire a memory repository.
+    expect(violations('ui', ['infrastructure']).filter((v) => !/(^|[\\/])__tests__[\\/]/.test(v))).toEqual([]);
+  });
+  it('(c) packages/theory/src imports nothing outside the package (relative specifiers only, staying inside)', () => {
+    const THEORY = resolve(SRC, '..', '..', '..', 'packages', 'theory', 'src');
+    const theoryFiles = walk(THEORY);
+    expect(theoryFiles.length).toBeGreaterThan(3);
+    const bad: string[] = [];
+    for (const f of theoryFiles)
+      for (const s of specifiers(f)) {
+        if (s.startsWith('.') && (resolve(dirname(f), s) + sep).startsWith(THEORY + sep)) continue;
+        bad.push(`${relative(THEORY, f)} -> ${s}`);
+      }
+    expect(bad).toEqual([]);
+  });
+  it('(d) no non-test file outside __tests__/ imports a __tests__/ path (test support stays test-only)', () => {
+    const inTests = (f: string) => /(^|[\/])__tests__[\/]/.test(relative(SRC, f));
+    const bad: string[] = [];
+    for (const f of files.filter((x) => !inTests(x)))
+      for (const s of specifiers(f)) if (/(^|[\/])__tests__([\/]|$)/.test(s)) bad.push(`${relative(SRC, f)} -> ${s}`);
     expect(bad).toEqual([]);
   });
 });

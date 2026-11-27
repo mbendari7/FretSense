@@ -20,6 +20,13 @@ export interface GenerateInput {
 }
 
 type Fail = { ok: false; reason: string };
+/** The setup field a rejection is about, so the form can link and mark it (FR-048, T109). */
+export type SetupField = 'strings' | 'frets' | 'count';
+export type SettingsFail = Fail & { readonly field?: SetupField };
+/** Rejections that are not about the chosen strings or frets (no field to mark). */
+const UNKNOWN_QUALITIES = 'None of the chosen chord qualities is known.';
+const UNKNOWN_TYPE = 'This drill type is not available.';
+const NO_STRINGS = 'Choose at least one string.';
 export type GenResult = { ok: true; questions: Question[] } | Fail;
 
 /** A candidate item: its key and a factory that builds a concrete question for it. */
@@ -301,7 +308,7 @@ const addUnique = (xs: FretPosition[], x: FretPosition) => { if (!xs.some((y) =>
 function rootFifthOctave(p: InstrumentProfile, s: DrillSettings): Candidate[] | string {
   const r = rangeOf(s, p);
   const qids = (s.qualities?.length ? s.qualities : ['major', 'minor']).filter((qid) => chordQuality(qid).ok);
-  if (!qids.length) return 'None of the chosen chord qualities is known.';
+  if (!qids.length) return UNKNOWN_QUALITIES;
   const all = allPositions(p, r);
   // FR-056a reveal order: root at the lower fret, then on the higher string number.
   const order = (a: FretPosition, b: FretPosition) => a.fret - b.fret || b.string - a.string;
@@ -459,7 +466,7 @@ function chordToneLockQuestions(p: InstrumentProfile, s: DrillSettings, count: n
 }
 
 function candidatesFor(p: InstrumentProfile, s: DrillSettings): Candidate[] | string {
-  if (!rangeOf(s, p).strings.length) return 'Choose at least one string.';
+  if (!rangeOf(s, p).strings.length) return NO_STRINGS;
   switch (s.type) {
     case 'note-finding': return noteFinding(p, s);
     case 'interval': return intervalDrill(p, s);
@@ -475,16 +482,20 @@ function candidatesFor(p: InstrumentProfile, s: DrillSettings): Candidate[] | st
     }
     case 'root-fifth-octave': return rootFifthOctave(p, s);
     case 'arpeggio': return arpeggio(p, s);
-    default: return 'This drill type is not available.';
+    default: return UNKNOWN_TYPE;
   }
 }
 
 /** FR-061: rejects settings that can't produce an answerable question, with a reason. */
-export function validateSettings(p: InstrumentProfile, s: DrillSettings): { ok: true } | Fail {
+export function validateSettings(p: InstrumentProfile, s: DrillSettings): { ok: true } | SettingsFail {
   // Walking bass is one line of 4 notes per chord; it has no question count (code-reviewer T098 #10).
-  if (s.type !== 'walking-bass' && (s.count < 5 || s.count > 100)) return { ok: false, reason: 'Choose between 5 and 100 questions.' };
+  if (s.type !== 'walking-bass' && (s.count < 5 || s.count > 100)) return { ok: false, reason: 'Choose between 5 and 100 questions.', field: 'count' };
   const c = candidatesFor(p, s);
-  return typeof c === 'string' ? { ok: false, reason: c } : { ok: true };
+  if (typeof c !== 'string') return { ok: true };
+  // Every other rejection means no answerable position fits the chosen strings and frets.
+  if (c === NO_STRINGS) return { ok: false, reason: c, field: 'strings' };
+  if (c === UNKNOWN_QUALITIES || c === UNKNOWN_TYPE) return { ok: false, reason: c };
+  return { ok: false, reason: c, field: 'frets' };
 }
 
 /** Generates the questions for a session; weighted by item history when adaptive (FR-041). */

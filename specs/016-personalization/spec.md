@@ -348,7 +348,7 @@ per (local profile, device) and the read interface.
   (local profile, device id).
 - **SC-008**: With gear entries created from scratch (no preset), 100% of 015 and 008 acceptance
   scenarios that don't depend on a named device pass (verified when those features land).
-- **SC-009**: Erase permanently leaves 0 records of the erased profile in any store (automated scan).
+- **SC-009**: Erase permanently leaves 0 records of the erased profile in any store **or `meta`** (automated scan for its id and writer id, with no exceptions; and for its display name in every field except a live profile's own `displayName`, tested with a distinctive name).
 
 ## Assumptions
 
@@ -397,7 +397,20 @@ per (local profile, device) and the read interface.
   | soloing-general | Improvise and solo | goal:soloing, topic:scales, topic:modes |
   | bass-lines | Bass grooves and lines | goal:bass-lines, topic:bass-patterns, topic:chords |
   | songs-i-like | Play the styles I like | the genres chosen in the genre question |
-- **Session 2026-11-25 (plan gate r1, provisional, product-owner default under the standing approval):**
+- **Session 2026-11-27 (T012/T013 red tests, provisional, product-owner default under the standing approval; **approved by the owner 2026-11-27**):**
+  - The 001 stores also carry optional `deletedBy`, so a profile-deleted record is marked like any other and v1 records still parse.
+  - Deleting a profile leaves records the user already deleted untouched (`deletedBy: 'user'`, `updated` unchanged), so they stay deleted after a restore (R3).
+  - Creating a profile does not switch to it; the "Add profile" screen switches straight after (US1 scenario 1).
+  - Erasing the last live profile purges in one transaction and creates the new default in a second one; the startup fallback heals a crash in between (R8 revised).
+  - Deleting or erasing the active profile moves to the most recently updated live profile (ties: lowest id), with a short "Now using <name>" notice and a switch shortcut.
+  - Duplicate profile names are allowed (the dialog hints, never blocks); non-NFC names are normalised, not rejected.
+  - **Resolved by the owner 2026-11-27:** the SC-009 name scan skips a live profile's own `displayName`; previously open: whether the SC-009 scan for the erased display name may skip a live profile's own `displayName` (the new default "Me", or another profile with the same name). The id and writer-id scan has no exceptions either way.
+- **Session 2026-11-27 (Phase 2 gates, provisional, product-owner default under the standing approval; **approved by the owner 2026-11-27**):**
+  - Onboarding answer arrays are capped (goals, instrumentIds, genres ≤ 32 each, no duplicates; genre tags ≤ 96 characters) so an imported file can't carry unbounded lists (security-reviewer 016 Phase 2 #1). Interface channel indexes are 1–32 and unique.
+  - Names (instrument, gear, path) must contain a visible character; whitespace-only names are rejected (code-reviewer 016 Phase 2 #2).
+  - Free text also rejects soft hyphen, Mongolian vowel separator, line/paragraph separators, U+2060–U+2064 and Unicode tag characters (extends research R6's set; security-reviewer #5, code-reviewer #3).
+  - profileSettings migrate to schemaVersion 2 on read; new profiles start at 2; a merge keeps the higher schemaVersion (code-reviewer #1, research R2).
+- **Session 2026-11-25 (plan gate r1, provisional, product-owner default under the standing approval; **approved by the owner 2026-11-27**):**
   - Q: Where do the FR-010 "about N weeks" durations come from? → A: an optional `estimatedMinutes` (1–600) in each lesson's front matter, written with the lesson and approved with it. The pacing line is shown when every lesson in the path has one; otherwise the pacing line is omitted. No numbers are invented.
   - Q: FR-011a origin? → A: the default path's origin is `default` (separate from onboarding-generated paths), so Redo onboarding and analytics can tell them apart.
   - Q: FR-012 "removals win over moves" vs restoring a deleted profile (001 FR-066a un-delete)? → A: a tombstone records why it exists (`deletedBy: 'user' | 'profile'`). A user's removal of a path item wins over moves in every merge; a cascade tombstone from deleting the profile is undone by restore (001 FR-066a), so a restored profile gets its paths back.

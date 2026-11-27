@@ -1,6 +1,7 @@
-import { useCallback, useId, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState, type FocusEvent, type KeyboardEvent, type Ref } from 'react';
+import { useCallback, useContext, useId, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState, type FocusEvent, type KeyboardEvent, type Ref } from 'react';
 import { fretX, formatPitchClass, openString, type FretPosition, type InstrumentProfile } from '@fretsense/theory';
 import { jumpSegments, rangeText } from './range';
+import { fretboardMetrics, TextSizeContext } from './scale';
 
 /** Marker categories (FR-013): each differs by shape/outline/label as well as colour. */
 export type MarkerKind = 'tone' | 'root' | 'reference' | 'correct' | 'incorrect' | 'revealed' | 'outline';
@@ -61,12 +62,6 @@ export interface FretboardProps {
 
 const INLAYS = [3, 5, 7, 9, 15, 17, 19, 21];
 const DOUBLE = [12, 24];
-const STRING_GAP = 46;
-const TOP = 30;
-/** Nut column: open-string names, then (when fret 0 is in the range) the fret-0 targets. */
-const NAME_W = 26;
-const OPEN_CELL = 50;
-const MIN_CELL = 52;
 const RIGHT_PAD = 16;
 
 const SUFFIX: Record<MarkerKind, string> = {
@@ -83,6 +78,16 @@ const pretty = (s: string) => s.replace(/bb/g, '𝄫').replace(/##/g, '𝄪').re
  */
 export function Fretboard(p: FretboardProps) {
   const { profile, from, to } = p;
+  // T103 (FR-048): sizes follow the text-size setting; the neck grows and scrolls instead of shrinking.
+  const size = useContext(TextSizeContext);
+  const M = useMemo(() => fretboardMetrics(size), [size]);
+  const STRING_GAP = M.stringGap;
+  /** Nut column: open-string names, then (when fret 0 is in the range) the fret-0 targets. */
+  const NAME_W = M.nameW;
+  const OPEN_CELL = M.openCell;
+  const MIN_CELL = M.minCell;
+  const pad = M.markerR + 2;
+  const TOP = pad + 12;
   const left = p.handedness === 'left';
   const showOpen = from === 0;
   const first = Math.max(1, from);
@@ -90,11 +95,11 @@ export function Fretboard(p: FretboardProps) {
   /** Width of the nut column (kept visible while the neck scrolls). */
   const colW = NAME_W + (showOpen ? OPEN_CELL : 0);
   const width = Math.max(340, colW + frets * MIN_CELL + RIGHT_PAD);
-  const height = TOP + (profile.stringCount - 1) * STRING_GAP + 40;
+  const height = TOP + (profile.stringCount - 1) * STRING_GAP + pad + M.fretNumPx + 12;
   const neckLeft = colW;
   const neckRight = width - RIGHT_PAD;
-  const boardTop = TOP - 18;
-  const boardH = (profile.stringCount - 1) * STRING_GAP + 36;
+  const boardTop = TOP - pad;
+  const boardH = (profile.stringCount - 1) * STRING_GAP + 2 * pad;
 
   /** Unmirrored x of a fret line (fret n = the wire after fret n's space). */
   const lineX = useMemo(() => {
@@ -322,9 +327,9 @@ export function Fretboard(p: FretboardProps) {
         onMouseDown={() => setKb(false)}
         onFocus={() => { setFocus(pos); ensureVisible(pos); }}
       >
-        <rect className="fb-hit" x={x - 24} y={y - 22} width="48" height="44" rx="10" />
-        {m && <MarkerShape kind={m.kind} x={x} y={y} />}
-        {m && m.label && <text className="fb-label" x={x} y={y + 5} textAnchor="middle">{m.label}</text>}
+        <rect className="fb-hit" x={x - M.hitW / 2} y={y - M.hitH / 2} width={M.hitW} height={M.hitH} rx="10" />
+        {m && <MarkerShape kind={m.kind} x={x} y={y} r={M.markerR} />}
+        {m && m.label && <text className="fb-label" x={x} y={y + M.labelPx * 0.36} textAnchor="middle" fontSize={M.labelPx}>{m.label}</text>}
       </g>
     );
   };
@@ -378,7 +383,7 @@ export function Fretboard(p: FretboardProps) {
               />
             ))}
             {Array.from({ length: frets }, (_, i) => first + i).map((f) => (
-              <text key={f} className={`fb-fretnum${INLAYS.includes(f) || DOUBLE.includes(f) ? ' strong' : ''}`} x={mirror(cellX(f))} y={height - 8} textAnchor="middle">{f}</text>
+              <text key={f} className={`fb-fretnum${INLAYS.includes(f) || DOUBLE.includes(f) ? ' strong' : ''}`} x={mirror(cellX(f))} y={height - 8} textAnchor="middle" fontSize={M.fretNumPx}>{f}</text>
             ))}
             {fretted.map(renderPos)}
             {/* Nut column: string names and fret 0, kept at its physical edge while the neck scrolls. */}
@@ -393,7 +398,7 @@ export function Fretboard(p: FretboardProps) {
               ))}
               <line className={showOpen ? 'fb-nut' : 'fb-coledge'} x1={mirror(colW)} x2={mirror(colW)} y1={boardTop} y2={boardTop + boardH} />
               {visibleStrings.map((s) => (
-                <text key={s} className="fb-nutname" data-nut-string={s} x={mirror(NAME_W / 2)} y={stringY(s) + 5} textAnchor="middle">{nutName(s)}</text>
+                <text key={s} className="fb-nutname" data-nut-string={s} x={mirror(NAME_W / 2)} y={stringY(s) + M.nutNamePx * 0.36} textAnchor="middle" fontSize={M.nutNamePx}>{nutName(s)}</text>
               ))}
               {showOpen && visibleStrings.map((s) => renderPos({ string: s, fret: 0 }))}
             </g>
@@ -427,21 +432,24 @@ function Chevron({ dir }: { dir: 'left' | 'right' }) {
   );
 }
 
-function MarkerShape({ kind, x, y }: { kind: MarkerKind; x: number; y: number }) {
+/** Marker shapes scale with the label (T103); each kind keeps its own shape and stroke (FR-013). */
+function MarkerShape({ kind, x, y, r }: { kind: MarkerKind; x: number; y: number; r: number }) {
+  const h = r; // half side of square markers
+  const d = Math.round(r * 0.94); // the rotated root square reads as the same size as a circle
   switch (kind) {
     case 'root':
-      return <rect className="mk mk-root" x={x - 15} y={y - 15} width="30" height="30" rx="4" transform={`rotate(45 ${x} ${y})`} />;
+      return <rect className="mk mk-root" x={x - d} y={y - d} width={2 * d} height={2 * d} rx="4" transform={`rotate(45 ${x} ${y})`} />;
     case 'reference':
-      return <rect className="mk mk-reference" x={x - 16} y={y - 16} width="32" height="32" rx="6" />;
+      return <rect className="mk mk-reference" x={x - h} y={y - h} width={2 * h} height={2 * h} rx="6" />;
     case 'correct':
-      return <circle className="mk mk-correct" cx={x} cy={y} r="17" />;
+      return <circle className="mk mk-correct" cx={x} cy={y} r={r + 1} />;
     case 'incorrect':
-      return <rect className="mk mk-incorrect" x={x - 16} y={y - 16} width="32" height="32" rx="2" />;
+      return <rect className="mk mk-incorrect" x={x - h} y={y - h} width={2 * h} height={2 * h} rx="2" />;
     case 'revealed':
-      return <circle className="mk mk-revealed" cx={x} cy={y} r="17" />;
+      return <circle className="mk mk-revealed" cx={x} cy={y} r={r + 1} />;
     case 'outline':
-      return <circle className="mk mk-outline" cx={x} cy={y} r="16" />;
+      return <circle className="mk mk-outline" cx={x} cy={y} r={r} />;
     default:
-      return <circle className="mk mk-tone" cx={x} cy={y} r="16" />;
+      return <circle className="mk mk-tone" cx={x} cy={y} r={r} />;
   }
 }

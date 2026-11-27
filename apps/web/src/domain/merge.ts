@@ -4,20 +4,26 @@ import {
 } from './records';
 
 /** FR-066a merge rules (data-model §4). Pure; `freshUpdated` supplies a new local HLC when needed. */
+/** A restored record is live again: it drops the tombstone reason (016 R3; code-reviewer T013 #5). */
+function live<T extends { deletedBy?: unknown }>(r: T): T {
+  const { deletedBy: _reason, ...rest } = r;
+  return rest as T;
+}
+
 export type MergeResult<T> = { kind: 'keep' } | { kind: 'write'; record: T; change: 'added' | 'restored' | 'updated' | 'hidden' } | { kind: 'conflict'; reason: string };
 
 export function mergeAttempt(local: AttemptRecord | undefined, incoming: AttemptRecord, freshUpdated: () => Hlc): MergeResult<AttemptRecord> {
   // FR-066a (6): no local copy and an incoming tombstone hides nothing: not written, not counted.
   if (!local) return incoming.deleted ? { kind: 'keep' } : { kind: 'write', record: incoming, change: 'added' };
   if (local.payloadHash !== incoming.payloadHash) return { kind: 'conflict', reason: `attempt ${incoming.id} has different content in the file` };
-  if (local.deleted && !incoming.deleted) return { kind: 'write', record: { ...local, deleted: false, updated: freshUpdated() }, change: 'restored' };
+  if (local.deleted && !incoming.deleted) return { kind: 'write', record: live({ ...local, deleted: false, updated: freshUpdated() }), change: 'restored' };
   if (!local.deleted && incoming.deleted && compareHlc(incoming.updated, local.updated) > 0) return { kind: 'write', record: { ...local, deleted: true, updated: incoming.updated }, change: 'hidden' };
   return { kind: 'keep' };
 }
 
 export function mergeInstrument(local: InstrumentRecord | undefined, incoming: InstrumentRecord, freshUpdated: () => Hlc): MergeResult<InstrumentRecord> {
   if (!local) return incoming.deleted ? { kind: 'keep' } : { kind: 'write', record: incoming, change: 'added' }; // FR-066a (6)
-  if (local.deleted && !incoming.deleted) return { kind: 'write', record: { ...incoming, updated: freshUpdated() }, change: 'restored' };
+  if (local.deleted && !incoming.deleted) return { kind: 'write', record: live({ ...incoming, updated: freshUpdated() }), change: 'restored' };
   if (local.deleted && incoming.deleted) return { kind: 'keep' }; // FR-066a (5)
   if (compareHlc(incoming.updated, local.updated) > 0) return { kind: 'write', record: incoming, change: incoming.deleted ? 'hidden' : 'updated' };
   return { kind: 'keep' };
@@ -37,7 +43,9 @@ export function mergeSettings(local: ProfileSettingsRecord, incoming: ProfileSet
   }
   if (!changed) return { kind: 'keep' };
   const updated = Object.values(out.fieldUpdated as Record<string, Hlc>).reduce(maxHlc, local.updated);
-  return { kind: 'write', record: { ...(out as ProfileSettingsRecord), updated }, change: 'updated' };
+  // 016 R2: the merged record is at least as new as either side's schema.
+  const schemaVersion = Math.max(local.schemaVersion, incoming.schemaVersion) as ProfileSettingsRecord['schemaVersion'];
+  return { kind: 'write', record: { ...(out as ProfileSettingsRecord), updated, schemaVersion }, change: 'updated' };
 }
 
 export function mergeCompletion(local: LessonCompletionRecord | undefined, incoming: LessonCompletionRecord): MergeResult<LessonCompletionRecord> {
@@ -56,7 +64,7 @@ export function mergeCompletion(local: LessonCompletionRecord | undefined, incom
       const a = local.stages[s], b = incoming.stages[s];
       if (b && (!a || compareHlc(b, a) < 0)) stages[s] = b;
     }
-    return { kind: 'write', record: { ...local, deleted: false, stages, updated: maxHlc(local.updated, incoming.updated) }, change: 'restored' };
+    return { kind: 'write', record: live({ ...local, deleted: false, stages, updated: maxHlc(local.updated, incoming.updated) }), change: 'restored' };
   }
   const stages = { ...local.stages };
   let changed = false;

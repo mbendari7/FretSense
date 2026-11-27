@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router';
 import { useAppState } from './hooks';
+import { TextSizeContext } from './fretboard/scale';
 
 const NAV = [
   { to: '/', label: 'Home', icon: 'M4 11 12 4l8 7v9h-5v-6H9v6H4z', end: true },
@@ -54,7 +55,7 @@ export function Layout() {
           <p className="notice" role="status">This browser isn’t letting FretSense save data, so progress won’t be kept after you close the page.</p>
         )}
         {s.error && <p className="notice error" role="alert">{s.error}</p>}
-        <Outlet />
+        <TextSizeContext.Provider value={size}><Outlet /></TextSizeContext.Provider>
       </main>
     </div>
   );

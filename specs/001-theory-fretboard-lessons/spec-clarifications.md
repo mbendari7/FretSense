@@ -88,3 +88,13 @@
 - *(provisional)* R4 also applies across the loop (bar 1 beat 1 after the last bar's beat 4), as R3 does.
 - *(provisional)* Entered notes are spelled by the bar's chord, then the key, then FR-060's map from the key tonic (in C: Db, not C#).
 - *(provisional)* Walking-bass response time (FR-040) per note = time from the previous entry (the line start for slot 1) to that note's entry.
+
+### Phase 12 convergence (Impeccable audit P1s, 2026-11-27)
+
+- *(provisional, product-owner default under standing approval)* Instrument editor (FR-048 vs FR-053): the editor is a dialog, so on Cancel, Escape **and** a successful save focus returns to the control that opened it (Edit, or the Custom instrument tile); the save message is still announced as a status. FR-053's "the status message receives focus" rule keeps applying to adding a preset and to deleting an instrument.
+- *(provisional, revised by product-owner triage 2026-11-27)* Export downloads directly and announces a status; it opens no dialog. T108 verifies that no dialog opens. Proposed FR-048 wording (awaiting owner approval, not yet applied): "Dialogs (instrument editor, import preview, reset, and any other confirmation such as walking-bass End drill)".
+- *(provisional)* Marker labels use a fixed near-black (`#0e151c`) on the root, reference, correct and incorrect fills and white on tone, so every label clears 4.5:1 at every text size. Marker hues and shapes are unchanged (FR-013).
+- *(provisional, revised by product-owner triage 2026-11-27)* At the largest text size every fretboard label class (marker labels, fret numbers, nut string names, revealed-answer labels) is at least 24 CSS px; smaller sizes may go down to 19 px (marker labels, bold) and 15 px (fret numbers, nut names). Markers, cells and string gaps grow with them, so labels never overlap or truncate (FR-048, FR-047). Tests assert each label class's size at each text size.
+- *(provisional)* After a destructive confirmation (reset, delete) the dialog's opener may no longer be usable; focus then moves to the section's heading and a polite status names the result ("Progress cleared."). Proposed FR-048 clause awaiting owner approval.
+- *(provisional)* FR-049's "focus is always visible" covers the selected state of every control (selected root, current walking-bass slot): a selected-state outline never replaces the focus ring.
+- *(provisional)* Instrument editor: on a failed save, focus moves to the first invalid field — backlog T114.

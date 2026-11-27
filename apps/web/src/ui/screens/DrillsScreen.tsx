@@ -1,9 +1,9 @@
-import { useRef, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router';
 import { CHORDS, PC_FLAT, pretty } from '../common';
 import { DRILL_TYPES, type DrillType } from '../../domain/records';
 import { DRILL_LABELS, type DrillSettings } from '../../domain/drills/types';
-import { validateSettings, intervalName, stringChipName, CHORD_TONE_WINDOW_DEFAULT } from '../../domain/drills/generate';
+import { validateSettings, type SetupField, intervalName, stringChipName, CHORD_TONE_WINDOW_DEFAULT } from '../../domain/drills/generate';
 import { InstrumentGate } from '../InstrumentGate';
 import { useAppState } from '../hooks';
 import { DrillRunner } from './DrillRunner';
@@ -94,6 +94,10 @@ function DrillSetup({ type, profile, instrumentId, instrumentName }: { type: Dri
   });
   const [running, setRunning] = useState(false);
   const v = validateSettings(profile, s);
+  // FR-048 (T109): the setup error is linked to the field it is about and announced.
+  const errId = useId();
+  const errField = v.ok ? undefined : v.field;
+  const err = (f: SetupField) => (errField === f ? { 'aria-invalid': true as const, 'aria-describedby': errId } : {});
   const set = (p: Partial<DrillSettings>) => setS((x) => ({ ...x, ...p }));
   const toggle = <T,>(list: readonly T[] | undefined, x: T) => (list ?? []).includes(x) ? (list ?? []).filter((y) => y !== x) : [...(list ?? []), x];
 
@@ -110,15 +114,15 @@ function DrillSetup({ type, profile, instrumentId, instrumentName }: { type: Dri
           <span>Instrument: <strong>{instrumentName}</strong></span>{' '}
           <button type="button" className="link" onClick={() => switcher.current?.focus()}>Change</button>
         </p>
-        <fieldset className="inline"><legend>Strings</legend>
+        <fieldset className="inline" aria-describedby={errField === 'strings' ? errId : undefined}><legend>Strings</legend>
           {Array.from({ length: profile.stringCount }, (_, i) => i + 1).map((n) => (
             <label key={n} className="chip"><input type="checkbox" checked={s.strings.includes(n)} onChange={() => set({ strings: toggle(s.strings, n).sort() })} /> {prettyText(stringChipName(profile, n))}</label>
           ))}
         </fieldset>
         <div className="inline">
-          <label>From fret <input type="number" min={0} max={profile.fretCount} value={s.fromFret} onChange={(e) => set({ fromFret: Math.max(0, Math.min(profile.fretCount, +e.target.value)) })} /></label>
-          <label>to fret <input type="number" min={0} max={profile.fretCount} value={s.toFret} onChange={(e) => set({ toFret: Math.max(0, Math.min(profile.fretCount, +e.target.value)) })} /></label>
-          {type !== 'walking-bass' && <label>Questions <input type="number" min={5} max={100} value={s.count} onChange={(e) => set({ count: +e.target.value })} /></label>}
+          <label>From fret <input type="number" {...err('frets')} min={0} max={profile.fretCount} value={s.fromFret} onChange={(e) => set({ fromFret: Math.max(0, Math.min(profile.fretCount, +e.target.value)) })} /></label>
+          <label>to fret <input type="number" {...err('frets')} min={0} max={profile.fretCount} value={s.toFret} onChange={(e) => set({ toFret: Math.max(0, Math.min(profile.fretCount, +e.target.value)) })} /></label>
+          {type !== 'walking-bass' && <label>Questions <input type="number" {...err('count')} min={5} max={100} value={s.count} onChange={(e) => set({ count: +e.target.value })} /></label>}
         </div>
         {type === 'note-finding' && (
           <>
@@ -126,7 +130,7 @@ function DrillSetup({ type, profile, instrumentId, instrumentName }: { type: Dri
               {NOTE_SETS.map((ns) => (
                 <label key={ns.id} className="radio-row">
                   <input type="radio" name="note-set" checked={(s.noteSet ?? 'naturals') === ns.id} onChange={() => set({ noteSet: ns.id, notes: undefined })} />
-                  {' '}{ns.label} <span className="muted">{ns.detail}</span>
+                  <span className="radio-text">{ns.label} <span className="muted">{ns.detail}</span></span>
                 </label>
               ))}
             </fieldset>
@@ -171,7 +175,7 @@ function DrillSetup({ type, profile, instrumentId, instrumentName }: { type: Dri
             <p className="muted">Progression: {prettyText(progressionText(s))}. {type === 'walking-bass' ? 'Each chord is one bar of four beats, and the line loops back to bar 1.' : 'One note per chord, in bar order.'}</p>
           </>
         )}
-        {!v.ok && <p className="field-error" role="alert">{v.reason}</p>}
+        {!v.ok && <p className="field-error" id={errId} role="alert">{v.reason}</p>}
         <button className="primary big" type="submit" disabled={!v.ok}>Start drill</button>
       </form>
     </div>

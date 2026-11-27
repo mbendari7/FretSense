@@ -30,8 +30,18 @@ colors:
   marker-correct: "#009e73"
   marker-incorrect: "#cc79a7"
   marker-revealed: "#56b4e9"
-  focus: "#e69f00"
+  focus: "#8a4b00"
+  focus-dark: "#e69f00"
+  focus-on-dark: "#e69f00"
   danger-ink: "#a8325e"
+  danger-ink-dark: "#f08cb8"
+  ok-ink: "#007a59"
+  ok-ink-dark: "#3fc79a"
+  control-line: "#7b8794"
+  control-line-dark: "#6f7f8f"
+  marker-ink-light: "#ffffff"
+  marker-ink-dark: "#0e151c"
+  neck-ink: "#efe9dc"
 typography:
   hero:
     fontFamily: "Atkinson Hyperlegible Next, system-ui, sans-serif"
@@ -148,7 +158,9 @@ The neutrals are a cool, desaturated slate, and the colour sits on the instrumen
 - **Paper** (`paper`) / **Night Paper** (`paper-dark`): the page canvas, and the fill of tags and chips.
 - **Surface** (`surface`) / **Night Surface** (`surface-dark`): cards, inputs, buttons and the active rail item.
 - **Ink** (`ink`) and **Soft Ink** (`ink-soft`): body text and secondary text (captions, degrees, metadata).
-- **Hairline** (`line`): every 1px border, divider and table rule.
+- **Hairline** (`line`): decorative dividers, card edges and table rules.
+- **Control Line** (`control-line` / `control-line-dark`): the boundary of anything you operate (buttons, inputs, selects, segmented controls), at least 3:1 against paper and surface in both themes (FR-048).
+- **Status inks** (`danger-ink`, `ok-ink`, each with a `-dark` value): error and success *text*, at least 4.5:1 in both themes. Marker hues are never used as text.
 
 ### Instrument materials
 - **Rosewood** (`rosewood`, edged with `rosewood-edge`): the fingerboard, and the brand mark.
@@ -157,7 +169,7 @@ The neutrals are a cool, desaturated slate, and the colour sits on the instrumen
 ### Markers (Okabe-Ito, FR-013)
 - **Vermilion Root** (`marker-root`): the root note, the active rail indicator, the selected root and chord, and hover borders on drill and preset cards.
 - **Blue Tone** (`marker-tone`): any other chord or scale tone.
-- **Amber Reference** (`marker-reference`): the drill's reference note and prompted string. Also the focus ring (`focus`) and the notice stripe.
+- **Amber Reference** (`marker-reference`): the drill's reference note and prompted string, and the notice border. The focus ring keeps the amber family: deep amber (`focus`) on light paper, amber (`focus-dark`) in dark mode, and `focus-on-dark` over the neck and the slate bar, so it clears 3:1 everywhere.
 - **Bluish-Green Correct** (`marker-correct`): correct answers, progress bars and the active instrument.
 - **Reddish-Purple Incorrect** (`marker-incorrect`): wrong answers and error notices. It is paired with a dashed stroke, and `danger-ink` is used where it appears as text.
 - **Sky Revealed** (`marker-revealed`): an answer shown after a miss, and the practice-window outline.
@@ -166,6 +178,8 @@ The neutrals are a cool, desaturated slate, and the colour sits on the instrumen
 **The Instrument-Only Rule.** Wood, nickel, bone and pearl belong to the drawn neck and the brand mark. They never become UI chrome, backgrounds or buttons.
 
 **The Never-Colour-Alone Rule.** Every marker or state colour is paired with a second cue: a dashed or dotted stroke, an icon, a text label, or border width. Removing the colour must leave the state readable.
+
+**The Neck-Fixed Ink Rule.** Anything drawn on the neck uses neck-fixed inks that never re-theme: `marker-ink-dark` on root, reference, correct and incorrect fills, `marker-ink-light` on tone, and `neck-ink` (pearl) for labels drawn straight on the wood. Every label clears 4.5:1 against what is behind it.
 
 **The Marker Meaning Rule.** An Okabe-Ito hue carries one meaning across the whole app. Vermilion is "root/selected", bluish-green is "correct/done". Don't reuse them for decoration.
 
@@ -219,7 +233,7 @@ Sturdy and plain.
 - **Default:** surface fill, hairline border, ink text. Hover darkens the border to soft ink.
 - **Primary:** Okabe Blue fill and border, accent-ink text, bold.
 - **Big:** 12px × 28px padding at 1.1× step, for the main call to action on a screen.
-- **Link / Danger:** link buttons are borderless underlined accent text. Danger buttons use `danger-ink` text with a pink hairline.
+- **Link / Danger:** link buttons are borderless underlined accent text. Danger buttons use `danger-ink` text and border.
 - **Disabled:** 50% opacity with a not-allowed cursor.
 - **Focus:** a 3px amber outline with 2px offset, everywhere.
 
@@ -241,7 +255,11 @@ Sturdy and plain.
 ### Inputs / Fields
 - **Style:** surface fill, hairline, small radius, 44px minimum height. Checkboxes and radios are 20px with an accent tint.
 - **Focus:** the global amber ring.
-- **Error:** `danger-ink` bold text. The notice gets a reddish-purple side stripe.
+- **Error:** `danger-ink` bold text right under the field, linked with `aria-describedby` and announced; the field itself gets `aria-invalid` and a 2px danger-ink border. An error notice gets a full danger-ink border.
+
+### Dialogs
+- One primitive (`Dialog.tsx`): a flat slate scrim and a surface panel with a 2px control-line border (amber for confirmations), large radius, no shadow.
+- Focus goes to the heading on open, stays inside, and returns to the opener; Escape closes (not while an import is being written). The safe action comes first, so a destructive one is never focused first.
 
 ### Navigation
 - **Top bar:** slate, brand mark plus wordmark on the left, text links (My Gear, Settings) on the right. Active and hover links get a 12% white wash.
@@ -264,4 +282,5 @@ An SVG neck drawn to the active `InstrumentProfile` (ADR-0003): rosewood board, 
 - **Don't** use rosewood, nickel or pearl outside the drawn instrument and the brand mark.
 - **Don't** reuse a marker hue for something unrelated to its meaning.
 - **Don't** add a second accent colour or a second sans typeface.
-- **Don't** use a one-sided coloured stripe on a rounded box (the current `.notice` does this; it's flagged for replacement with a full border or tinted background).
+- **Don't** use a one-sided coloured stripe on a rounded box. Notices use a full 1px border.
+- **Don't** fix fretboard label or marker sizes in px; they come from `fretboardMetrics(textSize)` (19 / 20 / 24 px labels) so the neck grows with the text-size setting.

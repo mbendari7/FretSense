@@ -77,3 +77,12 @@ export function migrateAttempt(raw: unknown): Result {
   const next = DRILL_TYPE_RENAMES[old]!;
   return validated({ ...rest, drillType: next, prompt: { ...prompt, drillType: next }, itemKey: `bs|${next}|${quality}` }, true);
 }
+
+/**
+ * 016 research R2: read-time profileSettings v1 → v2. The v2 fields are optional and absent on a v1
+ * record, so only the schemaVersion changes; v2 passes through. Pure and idempotent; never mutates.
+ */
+export function migrateSettings<T extends { schemaVersion: number }>(record: T): T & { schemaVersion: 2 } {
+  if (record.schemaVersion === 2) return record as T & { schemaVersion: 2 };
+  return { ...record, schemaVersion: 2 };
+}

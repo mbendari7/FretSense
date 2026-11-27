@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { InstrumentProfile } from '@fretsense/theory';
+import { FORBIDDEN_CHARS, safeText } from './safeText';
 
 /** Persisted records (data-model §3). Every record carries the FR-066 common fields. */
 export const HLC_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z-\d{4}-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
@@ -11,9 +12,9 @@ const hlc = z.string().regex(HLC_PATTERN).refine((h) => !Number.isNaN(Date.parse
  * U+061C (Arabic letter mark), zero-width and bidi controls, and U+FEFF. Used for stored names and
  * for every reason text echoed to the UI.
  */
-export const UNSAFE_CHARS = /[\u0000-\u001f\u007f-\u009f\u061c\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]/;
+export const UNSAFE_CHARS = FORBIDDEN_CHARS;
 export const hasUnsafeChars = (s: string): boolean => UNSAFE_CHARS.test(s);
-export const stripUnsafeChars = (s: string): string => s.replace(new RegExp(UNSAFE_CHARS.source, 'g'), '');
+export const stripUnsafeChars = (s: string): string => s.replace(new RegExp(UNSAFE_CHARS.source, 'gu'), '');
 /** Display names: NFC, no control or invisible characters (FR-053, threat model). */
 export const safeName = z.string().min(1).max(60)
   .refine((s) => s === s.normalize('NFC'), 'name must be NFC')
@@ -27,8 +28,11 @@ export const commonShape = {
   updated: hlc,
   schemaVersion: z.literal(1),
   deleted: z.boolean(),
+  /** Why a tombstone exists (016 data-model line 5, R3): set with every tombstone, absent on v1 records. */
+  deletedBy: z.enum(['user', 'profile']).optional(),
 };
-export type Common = { id: string; localProfileId: string; created: string; updated: string; schemaVersion: 1; deleted: boolean };
+export type DeletedBy = 'user' | 'profile';
+export type Common = { id: string; localProfileId: string; created: string; updated: string; schemaVersion: 1; deleted: boolean; deletedBy?: DeletedBy };
 
 export const STAGES = ['read', 'see', 'drill'] as const;
 export type Stage = (typeof STAGES)[number];
@@ -55,12 +59,22 @@ export type ExplorerState = z.infer<typeof explorerStateSchema>;
 
 export const SETTINGS_FIELDS = [
   'activeInstrumentId', 'octaveMode', 'adaptiveWeighting', 'stagePreference', 'activePackId', 'display', 'explorer', 'autoAdvanceMs',
+  // 016 (schemaVersion 2, research R2): optional, each with its own fieldUpdated entry when set.
+  'activePathId', 'defaultInterfaceId', 'defaultCameraId', 'defaultOutputId',
 ] as const;
+/** The four optional profileSettings fields added in schemaVersion 2 (016 data-model §2). */
+export const SETTINGS_V2_FIELDS = ['activePathId', 'defaultInterfaceId', 'defaultCameraId', 'defaultOutputId'] as const;
 export type SettingsField = (typeof SETTINGS_FIELDS)[number];
 
 export const profileSettingsSchema = z.strictObject({
   ...commonShape,
-  fieldUpdated: z.record(z.enum(SETTINGS_FIELDS), hlc),
+  schemaVersion: z.union([z.literal(1), z.literal(2)]),
+  // The 001 fields are always stamped; the v2 fields only once set (016 R2).
+  fieldUpdated: z.strictObject({
+    activeInstrumentId: hlc, octaveMode: hlc, adaptiveWeighting: hlc, stagePreference: hlc,
+    activePackId: hlc, display: hlc, explorer: hlc, autoAdvanceMs: hlc,
+    activePathId: hlc.optional(), defaultInterfaceId: hlc.optional(), defaultCameraId: hlc.optional(), defaultOutputId: hlc.optional(),
+  }),
   activeInstrumentId: uuid.nullable(),
   octaveMode: z.enum(['any', 'exact']),
   adaptiveWeighting: z.boolean(),
@@ -69,6 +83,15 @@ export const profileSettingsSchema = z.strictObject({
   display: displaySchema,
   explorer: explorerStateSchema,
   autoAdvanceMs: z.union([z.literal(0), z.literal(600), z.literal(1500)]),
+  activePathId: uuid.optional(),
+  defaultInterfaceId: uuid.optional(),
+  defaultCameraId: uuid.optional(),
+  defaultOutputId: uuid.optional(),
+}).superRefine((s, ctx) => {
+  // Per-field LWW needs a stamp for every field that is set (016 data-model §2).
+  for (const k of SETTINGS_V2_FIELDS) {
+    if (s[k] !== undefined && !s.fieldUpdated[k]) ctx.addIssue({ code: 'custom', path: ['fieldUpdated', k], message: `${k} needs its own fieldUpdated entry` });
+  }
 });
 export type ProfileSettingsRecord = z.infer<typeof profileSettingsSchema>;
 
@@ -189,3 +212,92 @@ export const itemKey = {
   /** FR-041: arpeggio, walking-bass and chord-tone-lock items are (drill type, quality). */
   bass: (drillType: DrillType, qualityId: string) => `bs|${drillType}|${qualityId}`,
 };
+
+// ---------------------------------------------------------------------------------------------
+// 016 personalisation v2 stores (data-model §2). New stores: schemaVersion 1, optional deletedBy
+// (research R3), every free-text field through safeText (research R6, T004).
+
+/** Common fields of the stores added in v2: 001's common fields plus the tombstone origin. */
+export const v2CommonShape = commonShape;
+/** A display name: 1–60 characters after NFC, no control or invisible characters. */
+const name60 = z.string().min(1).pipe(safeText(60)).refine((s) => s.trim().length > 0, 'name needs a visible character');
+const kebab = (max: number) => z.string().max(max).regex(ID_PATTERN);
+/** data-model §1 `OrderKey`. */
+export const ORDER_KEY_PATTERN = /^[0-9A-Za-z]{0,23}[1-9A-Za-z]$/;
+const tag = z.string().max(96).regex(/^(goal|genre|topic|level-hint):[a-z0-9]+(-[a-z0-9]+)*$/);
+
+const gearBase = {
+  ...v2CommonShape,
+  name: name60,
+  presetOrigin: contentId.optional(),
+  namePattern: safeText(64).optional(),
+  notes: safeText(200).optional(),
+};
+const channelSchema = z.strictObject({
+  index: z.number().int().min(1).max(32),
+  label: safeText(40),
+  hint: z.enum(['instrument', 'line', 'mic']),
+  signal: z.enum(['dry', 'processed']),
+});
+export const gearSchema = z.discriminatedUnion('kind', [
+  z.strictObject({
+    ...gearBase, kind: z.literal('interface'), directMonitoring: z.boolean(),
+    channels: z.array(channelSchema).max(32).refine((cs) => new Set(cs.map((c) => c.index)).size === cs.length, 'channel numbers must not repeat'),
+  }),
+  z.strictObject({ ...gearBase, kind: z.literal('camera'), placement: safeText(200).optional() }),
+  z.strictObject({ ...gearBase, kind: z.literal('output') }),
+]);
+export type GearRecord = z.infer<typeof gearSchema>;
+
+export const LEVELS = ['beginner', 'intermediate', 'advanced'] as const;
+/** A bounded list without duplicates (016 Phase 2 security #1: imported answers can't be unbounded). */
+function uniqueArray<T extends z.ZodType<string>>(item: T, max: number) {
+  return z.array(item).max(max).refine((xs) => new Set(xs).size === xs.length, 'entries must not repeat');
+}
+export const ONBOARDING_FIELDS = ['goals', 'instrumentIds', 'level', 'genres', 'practiceHoursPerWeek'] as const;
+export const onboardingSchema = z.strictObject({
+  ...v2CommonShape,
+  goals: uniqueArray(kebab(64), 32),
+  instrumentIds: uniqueArray(uuid, 32),
+  level: z.enum(LEVELS).optional(),
+  genres: uniqueArray(tag, 32),
+  practiceHoursPerWeek: z.number().min(0).max(40).refine((v) => Number.isInteger(v * 2), 'hours go in steps of 0.5').optional(),
+  answeredAt: hlc,
+  fieldUpdated: z.partialRecord(z.enum(ONBOARDING_FIELDS), hlc),
+});
+export type OnboardingRecord = z.infer<typeof onboardingSchema>;
+
+export const pathSchema = z.strictObject({
+  ...v2CommonShape,
+  name: name60,
+  origin: z.enum(['generated', 'default', 'manual']),
+});
+export type PathRecord = z.infer<typeof pathSchema>;
+
+export const pathItemRefSchema = z.discriminatedUnion('kind', [
+  z.strictObject({ kind: z.literal('lesson'), lessonId: contentId }),
+  z.strictObject({ kind: z.literal('drill'), lessonId: contentId, drillId: contentId }),
+]);
+export type PathItemRef = z.infer<typeof pathItemRefSchema>;
+export const pathItemSchema = z.strictObject({
+  ...v2CommonShape,
+  pathId: uuid,
+  ref: pathItemRefSchema,
+  reason: safeText(200),
+  fallback: z.boolean(),
+  orderKey: z.string().regex(ORDER_KEY_PATTERN),
+});
+export type PathItemRecord = z.infer<typeof pathItemSchema>;
+
+export const userPackSchema = z.strictObject({
+  ...v2CommonShape,
+  packId: kebab(64),
+  title: safeText(120),
+  source: safeText(200).optional(),
+  sections: z.array(z.strictObject({
+    title: safeText(120),
+    label: safeText(40).optional(),
+    lessons: z.array(contentId).max(200),
+  })).max(500),
+});
+export type UserPackRecord = z.infer<typeof userPackSchema>;

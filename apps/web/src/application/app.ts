@@ -1,7 +1,7 @@
 import { presetById, validateProfile, type InstrumentProfile, type InstrumentProfileInput } from '@fretsense/theory';
-import { formatHlc, hlcReceive, hlcSend, parseHlc, type Hlc, type HlcState } from '../domain/hlc';
+import { formatHlc, hlcReceive, parseHlc, type Hlc } from '../domain/hlc';
 import { payloadOf } from '../domain/canonicalJson';
-import { isV01Attempt, migrateAttempt } from '../domain/migrate';
+import { isV01Attempt, migrateAttempt, migrateSettings } from '../domain/migrate';
 import type { AnsweredQuestion } from '../domain/drills/session';
 import { EXPORT_FORMAT, MAX_IMPORT_BYTES, parseExport, safeReason, type ProfileExport } from '../domain/exportFormat';
 import { mergeAttempt, mergeCompletion, mergeInstrument, mergeSettings, type MergeResult } from '../domain/merge';
@@ -10,18 +10,13 @@ import type {
   SettingsField, Stage,
 } from '../domain/records';
 import type { Clock, DeviceMeta, Hasher, IdGenerator, Repository, WriteOp } from './ports';
+import { createSession, type AppState, type Session } from './session';
+import { newSettingsRecord } from './profileDefaults';
+import { createProfileService, type ProfileService } from './ProfileService';
 
-/** Application state read by the UI through useSyncExternalStore (research R3). */
-export interface AppState {
-  readonly status: 'loading' | 'ready';
-  readonly durable: boolean;
-  readonly profile?: LocalProfileRecord;
-  readonly settings?: ProfileSettingsRecord;
-  readonly instruments: readonly InstrumentRecord[];
-  readonly attempts: readonly AttemptRecord[];
-  readonly completion: readonly LessonCompletionRecord[];
-  readonly error?: string;
-}
+export { DEFAULT_SETTINGS } from './profileDefaults';
+
+export type { AppState } from './session';
 
 export type SettingsPatch = Partial<Pick<ProfileSettingsRecord, SettingsField>>;
 
@@ -47,16 +42,6 @@ export interface ImportOptions {
 /** FR-066a: nothing new when added, restored, updated and hidden are all 0 (unchanged may be > 0). */
 export const nothingNew = (c: ImportPreview['counts']) => c.added + c.restored + c.updated + c.hidden === 0;
 
-export const DEFAULT_SETTINGS = {
-  activeInstrumentId: null,
-  octaveMode: 'any',
-  adaptiveWeighting: true,
-  stagePreference: ['read', 'see', 'drill'],
-  activePackId: 'general-theory',
-  display: { window: [0, 12], handedness: 'right', labelMode: 'notes', textSize: 2, fretSpacing: 'uniform', theme: 'system' },
-  explorer: { root: 'C', kind: 'scale', typeId: 'major' },
-  autoAdvanceMs: 600,
-} as const satisfies Pick<ProfileSettingsRecord, SettingsField>;
 
 const emptyByKind = (): Record<ImportCountKind, Record<ImportRecordKind, number>> => {
   const z = () => ({ attempts: 0, instruments: 0, lessonCompletion: 0, profileSettings: 0 });
@@ -66,27 +51,32 @@ const emptyByKind = (): Record<ImportCountKind, Record<ImportRecordKind, number>
 const hasDuplicateIds = (xs: readonly { id: string }[]) => new Set(xs.map((x) => x.id)).size !== xs.length;
 
 export class FretSenseApp {
-  private state: AppState = { status: 'loading', durable: false, instruments: [], attempts: [], completion: [] };
-  private listeners = new Set<() => void>();
-  private meta!: DeviceMeta;
-  private queue: Promise<unknown> = Promise.resolve();
+  /** The shared core (016 R13): state, meta/HLC and the commit queue live in one Session. */
+  private readonly session: Session;
 
   constructor(
     private readonly repo: Repository,
     private readonly clock: Clock,
     private readonly ids: IdGenerator,
     private readonly hasher: Hasher,
-  ) {}
+  ) {
+    this.session = createSession({ repo, clock, ids, meta: { deviceId: '', writerIds: {}, hlc: { wall: 0, counter: 0 } } });
+    this.profiles = createProfileService({ session: this.session, repo, ids, loadAttempts: (a) => this.migrateStored(a) });
+  }
+
+  /** Local profiles (016 US1) on this app's session: one startup and one load path. */
+  readonly profiles: ProfileService;
+
+  private get state(): AppState { return this.session.getState(); }
+  private set state(next: AppState) { this.session.replace(next); }
+  private get meta(): DeviceMeta { return this.session.getMeta(); }
+  private set meta(m: DeviceMeta) { this.session.setMeta(m); }
 
   // ---- observable store ----
-  subscribe = (fn: () => void) => {
-    this.listeners.add(fn);
-    return () => this.listeners.delete(fn);
-  };
-  getState = () => this.state;
+  subscribe = (fn: () => void) => this.session.subscribe(fn);
+  getState = () => this.session.getState();
   private set(patch: Partial<AppState>) {
-    this.state = { ...this.state, ...patch };
-    for (const l of this.listeners) l();
+    this.session.set(patch);
   }
 
   // ---- clock ----
@@ -104,23 +94,14 @@ export class FretSenseApp {
   }
 
   private stamp(): Hlc {
-    const next: HlcState = hlcSend(this.meta.hlc, this.clock.now());
-    this.meta = { ...this.meta, hlc: next };
-    return formatHlc(next.wall, next.counter, this.writerId());
+    return this.session.stamp(this.state.profile!.id);
   }
   private common(): Common {
-    const t = this.stamp();
-    return { id: this.ids.uuid(), localProfileId: this.state.profile!.id, created: t, updated: t, schemaVersion: 1, deleted: false };
+    return this.session.common(this.state.profile!.id);
   }
   /** Serialises writes so each user action is one transaction, in order. */
   private commit(ops: WriteOp[]): Promise<void> {
-    const meta = this.meta;
-    const p = this.queue.then(() => this.repo.write(ops, meta));
-    this.queue = p.catch(() => undefined);
-    return p.catch((e: unknown) => {
-      this.set({ error: `Couldn’t save: ${(e as Error).message}` });
-      throw e;
-    });
+    return this.session.write(ops);
   }
   /** For fire-and-forget UI calls: the error is already shown in the app's notice. */
   private quiet(p: Promise<void>): Promise<void> {
@@ -129,39 +110,11 @@ export class FretSenseApp {
 
   // ---- bootstrap (FR-066, FR-067) ----
   async bootstrap(): Promise<void> {
-    const meta = await this.repo.loadMeta();
-    this.meta = meta ?? { deviceId: this.ids.uuid(), writerIds: {}, hlc: { wall: 0, counter: 0 } };
-    const profiles = (await this.repo.listProfiles()).filter((p) => !p.deleted);
-    let profile = profiles[0];
-    if (!profile) {
-      const id = this.ids.uuid();
-      this.meta = { ...this.meta, writerIds: { ...this.meta.writerIds, [id]: this.ids.uuid() } };
-      this.state = { ...this.state, profile: { id } as LocalProfileRecord };
-      const t = this.stamp();
-      profile = { id, localProfileId: id, created: t, updated: t, schemaVersion: 1, deleted: false, displayName: 'Me' };
-      this.state = { ...this.state, profile };
-      const settings = this.newSettings();
-      await this.repo.write([{ store: 'localProfiles', record: profile }, { store: 'profileSettings', record: settings }], this.meta);
-    } else if (!this.meta.writerIds[profile.id]) {
-      this.meta = { ...this.meta, writerIds: { ...this.meta.writerIds, [profile.id]: this.ids.uuid() } };
-    }
-    const data = await this.repo.loadProfile(profile.id);
-    const attempts = await this.migrateStored(data?.attempts ?? []);
-    this.set({
-      status: 'ready',
-      durable: this.repo.durable,
-      profile,
-      settings: data?.settings ?? this.newSettings(),
-      instruments: data?.instruments ?? [],
-      attempts,
-      completion: data?.completion ?? [],
-    });
+    await this.profiles.start();
   }
 
   private newSettings(): ProfileSettingsRecord {
-    const c = this.common();
-    const fieldUpdated = Object.fromEntries(Object.keys(DEFAULT_SETTINGS).map((k) => [k, c.created])) as ProfileSettingsRecord['fieldUpdated'];
-    return structuredClone({ ...c, ...DEFAULT_SETTINGS, fieldUpdated }) as unknown as ProfileSettingsRecord;
+    return newSettingsRecord(this.common());
   }
 
   // ---- settings (per-field LWW stamps) ----
@@ -645,7 +598,7 @@ export class FretSenseApp {
 
   private async reload(): Promise<void> {
     const data = await this.repo.loadProfile(this.state.profile!.id);
-    if (data) this.set({ settings: data.settings ?? this.state.settings, instruments: data.instruments, attempts: await this.migrateStored(data.attempts), completion: data.completion });
+    if (data) this.set({ settings: data.settings ? migrateSettings(data.settings) : this.state.settings, instruments: data.instruments, attempts: await this.migrateStored(data.attempts), completion: data.completion });
   }
 
   dismissError(): void {

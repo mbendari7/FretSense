@@ -47,6 +47,8 @@ function spyRepo() {
     loadMeta: () => inner.loadMeta(),
     listProfiles: () => inner.listProfiles(),
     loadProfile: (id) => inner.loadProfile(id),
+    purgeProfile: (id, meta) => inner.purgeProfile(id, meta),
+    findForeignIds: (store, ids, pid) => inner.findForeignIds(store, ids, pid),
     write: async (ops, meta) => {
       writes.push([...ops]);
       await inner.write(ops, meta);

@@ -169,7 +169,7 @@ content pipeline); nothing here adds a runtime dependency.
   `write` only puts). Per-profile state outside IndexedDB is not allowed (no localStorage or Cache
   Storage keyed by profile). SC-009 is an automated scan of every store **and `meta`** after erase
   for the profile id, its writer id and its display name. If no
-  live profile remains, a new default profile is created in the same transaction.
+  live profile remains, a new default profile is created immediately after the purge (a separate transaction); a crash between the two is healed by the startup fallback (data-model lifecycle, Active profile). *(Revised 2026-11-27, provisional: `purgeProfile` writes no records.)*
 - **Alternatives rejected**: tombstone-then-compact (leaves tombstones, failing SC-009).
 
 ## R9. Quality tier setting (FR-017, US6): **v0.4, not built now**

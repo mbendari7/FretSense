@@ -6,6 +6,7 @@ import { DRILL_LABELS } from '../../domain/drills/types';
 import type { AttemptRecord } from '../../domain/records';
 import { DRILL_TYPES, type DrillType } from '../../domain/records';
 import { useApp, useAppState } from '../hooks';
+import { Dialog } from '../Dialog';
 
 const DAY = 86_400_000;
 const pct = (n: number) => `${Math.round(n * 100)}%`;
@@ -154,6 +155,9 @@ function ExportImport() {
   }
   const [msg, setMsg] = useState<string>();
   const input = useRef<HTMLInputElement>(null);
+  const importBtn = useRef<HTMLButtonElement>(null);
+  /** Close without writing; a re-preview landing later must not reopen the dialog. */
+  const closePreview = () => { if (applyingRef.current) return; request.current++; setPending(false); setPreview(undefined); };
   const framed = window.top !== window.self;
 
   function doExport() {
@@ -174,7 +178,7 @@ function ExportImport() {
       <label className="switch"><input type="checkbox" checked={includeSettings} onChange={(e) => setInclude(e.target.checked)} /> Include my settings</label>
       <div className="row-actions">
         <button onClick={doExport}>Export progress</button>
-        {!framed && <button onClick={() => input.current?.click()}>Import a file</button>}
+        {!framed && <button ref={importBtn} onClick={() => input.current?.click()}>Import a file</button>}
         <input ref={input} type="file" accept="application/json,.json" hidden onChange={async (e) => {
           const f = e.target.files?.[0];
           e.target.value = '';
@@ -186,7 +190,8 @@ function ExportImport() {
         }} />
       </div>
       {preview && (
-        <div className="confirm" role="dialog" aria-modal="false" aria-labelledby="imp-h">
+        // FR-048 (T107): Escape closes, except while the import is being written.
+        <Dialog titleId="imp-h" className="confirm" onClose={closePreview} closeOnEscape={!applying} returnFocus={importBtn}>
           <h3 id="imp-h">{preview.mode === 'restore' ? 'Restore from file' : 'Copy from file'}</h3>
           <p>{preview.mode === 'restore'
             ? 'This file came from this profile, so its records merge back in.'
@@ -205,13 +210,15 @@ function ExportImport() {
           {nothingNew(preview.counts) ? (
             // FR-066a (CR-B2-14): nothing new, so the only action is Close, which writes nothing.
             <div className="row-actions">
-              <button onClick={() => { request.current++; setPending(false); setPreview(undefined); }}>Close</button>
+              <button onClick={closePreview}>Close</button>
             </div>
           ) : (
           <div className="row-actions">
             <button className="primary" disabled={pending || applying} onClick={async () => {
               if (applyingRef.current) return;
               applyingRef.current = true;
+              // FR-048: the buttons disable while writing, so keep focus inside on the heading.
+              document.getElementById('imp-h')?.focus({ preventScroll: true });
               setApplying(true);
               request.current++; // a re-preview landing now must not reopen the dialog
               const empty = nothingNew(preview.counts);
@@ -225,10 +232,10 @@ function ExportImport() {
               setApplying(false);
               setPreview(undefined);
             }}>Import</button>
-            <button onClick={() => { request.current++; setPending(false); setPreview(undefined); }}>Cancel</button>
+            <button disabled={applying} onClick={closePreview}>Cancel</button>
           </div>
           )}
-        </div>
+        </Dialog>
       )}
       {msg && <p role="status">{msg}</p>}
     </section>
@@ -237,18 +244,29 @@ function ExportImport() {
 
 function Reset({ disabled, onReset }: { disabled: boolean; onReset: () => void }) {
   const [asking, setAsking] = useState(false);
+  const [cleared, setCleared] = useState(false);
+  const opener = useRef<HTMLButtonElement>(null);
+  const heading = useRef<HTMLHeadingElement>(null);
+  /** Where the dialog returns focus: the opener, or the heading once clearing disables the opener (FR-048). */
+  const backTo = useRef<HTMLElement | null>(null);
   if (window.top !== window.self) return null;
   return (
     <section className="card" aria-labelledby="rs-h">
-      <h2 id="rs-h">Start fresh</h2>
+      <h2 id="rs-h" ref={heading} tabIndex={-1}>Start fresh</h2>
       <p className="muted">Clears your answers and lesson progress on this device. Instruments and settings stay.</p>
-      {asking ? (
-        <div className="row-actions" role="group" aria-label="Confirm reset">
-          <span>Clear all progress? Export first if you might want it back.</span>
-          <button className="danger" onClick={() => { onReset(); setAsking(false); }}>Clear progress</button>
-          <button onClick={() => setAsking(false)}>Keep it</button>
-        </div>
-      ) : <button className="danger" disabled={disabled} onClick={() => setAsking(true)}>Clear progress…</button>}
+      <button ref={opener} className="danger" disabled={disabled} onClick={() => { backTo.current = opener.current; setCleared(false); setAsking(true); }}>Clear progress…</button>
+      {cleared && <p role="status">Progress cleared.</p>}
+      {asking && (
+        // FR-048 (T107): the safe choice comes first; focus starts on the heading, never on Clear progress.
+        <Dialog titleId="rs-confirm-h" className="confirm" onClose={() => setAsking(false)} returnFocus={backTo}>
+          <h3 id="rs-confirm-h">Clear all progress?</h3>
+          <p>Your answers and lesson progress on this device will be gone. Export first if you might want them back.</p>
+          <div className="row-actions">
+            <button className="primary" onClick={() => setAsking(false)}>Keep it</button>
+            <button className="danger" onClick={() => { backTo.current = heading.current; onReset(); setCleared(true); setAsking(false); }}>Clear progress</button>
+          </div>
+        </Dialog>
+      )}
     </section>
   );
 }
